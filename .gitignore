@@ -41,3 +41,7 @@ app-example
 # generated native folders
 /ios
 /android
+
+# add these lines to your .gitignore file
+credentials.json
+credentials/

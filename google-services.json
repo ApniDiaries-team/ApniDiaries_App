@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "690502753445",
+    "project_id": "apnidiaries-2ab18",
+    "storage_bucket": "apnidiaries-2ab18.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690502753445:android:9d8d28265d53afd67f414c",
+        "android_client_info": {
+          "package_name": "com.apnidiaries.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbd2gC6ct2dx3H7pBevAdX9jPrbgVwlfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:690502753445:android:7de3873cfcdf18ad7f414c",
+        "android_client_info": {
+          "package_name": "com.samanvya.nativeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbd2gC6ct2dx3H7pBevAdX9jPrbgVwlfM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

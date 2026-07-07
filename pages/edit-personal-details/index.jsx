@@ -198,7 +198,15 @@ const EditPersonalDetails = () => {
         data.append("languages", item)
       );
 
-      // Handle images
+      // Handle images.
+      // NOTE: previously the "removed photo" case (formData.profilePhoto === "")
+      // fell through both branches below and the "profile_photo" field was
+      // never appended to the FormData at all. Since the backend only updates
+      // fields that are present in the request body, omitting the field meant
+      // "remove photo" silently did nothing — the old photo stayed in place.
+      // We now always send the field, including an explicit empty string,
+      // which the backend correctly treats as "clear the photo" (falling
+      // back to the default avatar).
       if (formData.profilePhoto && formData.profilePhoto.startsWith("file:")) {
         const uriParts = formData.profilePhoto.split(".");
         const fileType = uriParts[uriParts.length - 1];
@@ -207,8 +215,8 @@ const EditPersonalDetails = () => {
           name: `profile.${fileType}`,
           type: `image/${fileType === "jpg" ? "jpeg" : fileType}`,
         });
-      } else if (formData.profilePhoto) {
-        data.append("profile_photo", formData.profilePhoto);
+      } else {
+        data.append("profile_photo", formData.profilePhoto || "");
       }
 
       if (formData.coverPhoto && formData.coverPhoto.startsWith("file:")) {
@@ -219,8 +227,8 @@ const EditPersonalDetails = () => {
           name: `cover.${fileType}`,
           type: `image/${fileType === "jpg" ? "jpeg" : fileType}`,
         });
-      } else if (formData.coverPhoto) {
-        data.append("cover_photo", formData.coverPhoto);
+      } else {
+        data.append("cover_photo", formData.coverPhoto || "");
       }
 
       const res = await updateUserDetails(data);

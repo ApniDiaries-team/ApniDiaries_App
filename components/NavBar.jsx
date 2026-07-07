@@ -145,6 +145,7 @@ const NavBar = () => {
           )} */}
 
           <Pressable
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             onPress={() => {
               const isProfilePage = pathname.includes("personal-profile");
               if (menuOpen) {
@@ -175,6 +176,7 @@ const NavBar = () => {
                   height: 26,
                   alignItems: "center",
                   justifyContent: "center",
+                  overflow: "visible",
                 }}
               >
                 <Feather

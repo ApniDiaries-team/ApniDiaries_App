@@ -13,6 +13,7 @@ import {
   Play,
   Send,
   Share2,
+  Trash2,
   UserPlus,
   X,
 } from "lucide-react-native";
@@ -46,6 +47,7 @@ import { getProfilePhotoUrl } from "../../helper/DefaultImageUrl";
 import { formatLastActive } from "../../helper/LastActiveFormatter";
 import {
   addComment,
+  deleteComment,
   deletePost,
   getComments,
   getUsersByPostLike,
@@ -965,7 +967,7 @@ const LikesModal = ({
 };
 
 // ─── Comment Row ──────────────────────────────────────────────────────────────
-const CommentRow = ({ comment, onPressUser, isDarkMode }) => {
+const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) => {
   const dk = isDarkMode;
   const ini = comment?.name
     ?.split(" ")
@@ -1030,6 +1032,15 @@ const CommentRow = ({ comment, onPressUser, isDarkMode }) => {
           {formatLastActive(comment?.created_at)}
         </Text>
       </View>
+      {canDelete && (
+        <Pressable
+          onPress={() => onDelete?.(comment?.id)}
+          hitSlop={10}
+          style={{ padding: 4 }}
+        >
+          <Trash2 size={15} color={dk ? "#64748b" : "#94a3b8"} />
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -1299,6 +1310,19 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
       setCommentLoading(false);
     }
   };
+  const handleDeleteComment = async (commentId) => {
+    if (!commentId) return;
+    // Optimistic update: remove immediately, restore if the request fails.
+    const previous = comments;
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+    setCommentCount((prev) => Math.max(0, prev - 1));
+    try {
+      await deleteComment(post.id, commentId);
+    } catch {
+      setComments(previous);
+      setCommentCount(previous.length);
+    }
+  };
 
   // ── Delete ──────────────────────────────────────────────────────────────────
   const handleDelete = async () => {
@@ -1556,6 +1580,121 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
   );
 
   // ── Comments Drawer ──────────────────────────────────────────────────────────
+  const CommentsDrawer = () =>
+    showComments ? (
+      <View style={{ paddingHorizontal: 14, paddingBottom: 16 }}>
+        <View
+          style={{ height: 1, backgroundColor: borderCol, marginBottom: 12 }}
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 10,
+            marginBottom: 16,
+          }}
+        >
+          <View
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: 15,
+              overflow: "hidden",
+              backgroundColor: "#FF6B35",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {user?.avatar ? (
+              <Image
+                source={{ uri: getProfilePhotoUrl(user.avatar) }}
+                style={{ width: 30, height: 30 }}
+              />
+            ) : (
+              <Text
+                style={{
+                  color: "#fff",
+                  fontFamily: Fonts.inter.extrabold,
+                  fontSize: 10,
+                }}
+              >
+                {myInitials}
+              </Text>
+            )}
+          </View>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              alignItems: "center",
+              paddingHorizontal: 14,
+              paddingVertical: 8,
+              borderRadius: 20,
+              backgroundColor: dk
+                ? "rgba(255,255,255,0.06)"
+                : "rgba(0,0,0,0.05)",
+              borderWidth: 1,
+              borderColor: borderCol,
+              gap: 8,
+            }}
+          >
+            <TextInput
+              value={commentText}
+              onChangeText={setCommentText}
+              placeholder="Add a comment…"
+              placeholderTextColor={subColor}
+              style={{
+                flex: 1,
+                fontSize: 14,
+                fontFamily: Fonts.inter.regular,
+                color: textPrimary,
+                paddingVertical: 0,
+              }}
+              onSubmitEditing={submitComment}
+              returnKeyType="send"
+            />
+            <Pressable
+              onPress={submitComment}
+              disabled={!commentText.trim() || commentLoading}
+              hitSlop={8}
+              style={{
+                opacity: !commentText.trim() || commentLoading ? 0.2 : 1,
+              }}
+            >
+              {commentLoading ? (
+                <ActivityIndicator size="small" color={ORANGE} />
+              ) : (
+                <Send size={15} color={ORANGE} />
+              )}
+            </Pressable>
+          </View>
+        </View>
+        {comments.length > 0 ? (
+          comments.map((c) => (
+            <CommentRow
+              key={c.id}
+              comment={c}
+              onPressUser={goUserProfile}
+              isDarkMode={dk}
+              canDelete={user?.id === c.user_id || user?.id === post?.user?.id}
+              onDelete={handleDeleteComment}
+            />
+          ))
+        ) : (
+          <View style={{ alignItems: "center", paddingVertical: 16 }}>
+            <Text
+              style={{
+                fontSize: 12,
+                fontFamily: Fonts.inter.bold,
+                color: subColor,
+              }}
+            >
+              No comments yet
+            </Text>
+          </View>
+        )}
+      </View>
+    ) : null;
 
   // ════════════════════════════════════════════════════════════════════════════
   return (

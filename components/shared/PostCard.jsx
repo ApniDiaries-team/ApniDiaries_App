@@ -13,6 +13,7 @@ import {
   Play,
   Send,
   Share2,
+  Trash2,
   UserPlus,
   X,
 } from "lucide-react-native";
@@ -39,6 +40,7 @@ import { getProfilePhotoUrl } from "../../helper/DefaultImageUrl";
 import { formatLastActive } from "../../helper/LastActiveFormatter";
 import {
   addComment,
+  deleteComment,
   deletePost,
   getComments,
   getUsersByPostLike,
@@ -937,7 +939,7 @@ const LikesModal = ({
 };
 
 // ─── Comment Row ──────────────────────────────────────────────────────────────
-const CommentRow = ({ comment, onPressUser, isDarkMode }) => {
+const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) => {
   const dk = isDarkMode;
   const ini = comment?.name
     ?.split(" ")
@@ -1002,6 +1004,15 @@ const CommentRow = ({ comment, onPressUser, isDarkMode }) => {
           {formatLastActive(comment?.created_at)}
         </Text>
       </View>
+      {canDelete && (
+        <Pressable
+          onPress={() => onDelete?.(comment?.id)}
+          hitSlop={10}
+          style={{ padding: 4 }}
+        >
+          <Trash2 size={15} color={dk ? "#64748b" : "#94a3b8"} />
+        </Pressable>
+      )}
     </View>
   );
 };
@@ -1245,6 +1256,19 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
     } catch {
     } finally {
       setCommentLoading(false);
+    }
+  };
+  const handleDeleteComment = async (commentId) => {
+    if (!commentId) return;
+    // Optimistic update: remove immediately, restore if the request fails.
+    const previous = comments;
+    setComments((prev) => prev.filter((c) => c.id !== commentId));
+    setCommentCount((prev) => Math.max(0, prev - 1));
+    try {
+      await deleteComment(post.id, commentId);
+    } catch {
+      setComments(previous);
+      setCommentCount(previous.length);
     }
   };
 
@@ -1600,6 +1624,8 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
               comment={c}
               onPressUser={goUserProfile}
               isDarkMode={dk}
+              canDelete={user?.id === c.user_id || user?.id === post?.user?.id}
+              onDelete={handleDeleteComment}
             />
           ))
         ) : (
@@ -2072,5 +2098,3 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
 };
 
 export default memo(PostCard);
-
-

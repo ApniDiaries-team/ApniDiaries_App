@@ -11,6 +11,7 @@ import {
 import {
   Animated,
   FlatList,
+  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -715,7 +716,8 @@ const CommunityPosts = () => {
         onEndReached={handleEndReached}
         onEndReachedThreshold={0.4}
         showsVerticalScrollIndicator={false}
-        removeClippedSubviews={true}
+        keyboardShouldPersistTaps="handled"
+        removeClippedSubviews={Platform.OS === "android"}
         maxToRenderPerBatch={5}
         windowSize={10}
         initialNumToRender={4}

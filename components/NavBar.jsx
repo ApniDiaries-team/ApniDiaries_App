@@ -146,6 +146,7 @@ const NavBar = () => {
           )} */}
 
           <Pressable
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             onPress={() => {
               const isProfilePage = pathname.includes("personal-profile");
               if (menuOpen) {
@@ -170,7 +171,22 @@ const NavBar = () => {
                 color={iconColor(isDarkMode, isUserLoggedIn)}
               />
             ) : (
-              <View>
+              // Fixed-size, overflow-visible wrapper: on iOS a bare <View> that
+              // sizes itself purely from the icon glyph's own font metrics can
+              // end up with a tighter bounding box than on Android, clipping
+              // the badge (or part of the icon itself) that is positioned
+              // absolutely relative to it. Giving it an explicit box matching
+              // the icon size, with overflow left visible, guarantees both the
+              // icon and the badge always have room to render fully.
+              <View
+                style={{
+                  width: 26,
+                  height: 26,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "visible",
+                }}
+              >
                 <Feather
                   name="heart"
                   size={26}

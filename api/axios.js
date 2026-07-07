@@ -18,14 +18,14 @@ api.interceptors.request.use(
       const token = await AsyncStorage.getItem("token");
       if (token) {
         // Match the same logic used in lib/sockets.js
-        config.headers.Cookie = `token=${token}`;
+        config.headers.Authorization = `Bearer ${token}`;
       }
     } catch (e) {
       console.warn("[axios] Could not inject token cookie:", e.message);
     }
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => Promise.reject(error),
 );
 
 // ✅ Response Interceptor: Extract token cookie and manage auth state
@@ -67,7 +67,7 @@ api.interceptors.response.use(
       }
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export default api;

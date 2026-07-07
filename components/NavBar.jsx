@@ -87,7 +87,6 @@ const NavBar = () => {
       <View
         style={{
           paddingTop: insets.top,
-          paddingBottom: insets.bottom,
           height: 45 + insets.top,
           paddingHorizontal: 16,
           flexDirection: "row",
@@ -170,7 +169,14 @@ const NavBar = () => {
                 color={iconColor(isDarkMode, isUserLoggedIn)}
               />
             ) : (
-              <View>
+              <View
+                style={{
+                  width: 26,
+                  height: 26,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
                 <Feather
                   name="heart"
                   size={26}

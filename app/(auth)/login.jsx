@@ -69,6 +69,9 @@ export default function Login() {
     try {
       const res = await api.post("/api/user/login", { email, password });
       if (res.data.success) {
+        if (res.data.token) {
+          await AsyncStorage.setItem("token", res.data.token); // ← add this
+        }
         await login(password);
         Toast.show({
           type: "success",
@@ -193,9 +196,7 @@ export default function Login() {
 
         {/* Remember me + Forgot password */}
         <View className="flex-row items-center justify-between -mt-1 mb-1">
-          <View className="flex-row items-center gap-1.5">
-
-          </View>
+          <View className="flex-row items-center gap-1.5"></View>
           <TouchableOpacity
             onPress={() => router.push("/forgotPassword")}
             disabled={isDisabled}

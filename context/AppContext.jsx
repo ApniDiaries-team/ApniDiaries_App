@@ -26,7 +26,7 @@ const cachePassword = async (userId, pwd) => {
       SESSION_PWD_KEY,
       JSON.stringify({ userId: String(userId), pwd }),
     );
-  } catch { }
+  } catch {}
 };
 
 const getCachedPassword = async (userId) => {
@@ -43,7 +43,7 @@ const getCachedPassword = async (userId) => {
 const clearCachedPassword = async () => {
   try {
     await AsyncStorage.removeItem(SESSION_PWD_KEY);
-  } catch { }
+  } catch {}
 };
 
 const AppContextProvider = ({ children }) => {
@@ -76,7 +76,9 @@ const AppContextProvider = ({ children }) => {
   useEffect(() => {
     const handleAppStateChange = (nextAppState) => {
       if (nextAppState === "active" && user?.id) {
-        console.log("[AppContext] App came to foreground, reconnecting socket...");
+        console.log(
+          "[AppContext] App came to foreground, reconnecting socket...",
+        );
         if (!socket.connected) {
           socket.connect();
         } else {
@@ -85,7 +87,10 @@ const AppContextProvider = ({ children }) => {
         }
       }
     };
-    const subscription = AppState.addEventListener("change", handleAppStateChange);
+    const subscription = AppState.addEventListener(
+      "change",
+      handleAppStateChange,
+    );
     return () => subscription.remove();
   }, [user?.id]);
 
@@ -97,7 +102,10 @@ const AppContextProvider = ({ children }) => {
     if (!user?.id) return;
 
     const handleConnect = () => {
-      console.log("[Socket] Sending setup/heartbeat after connect, userId:", user.id);
+      console.log(
+        "[Socket] Sending setup/heartbeat after connect, userId:",
+        user.id,
+      );
       // Try both — some servers use 'setup', some rely only on heartbeat
       socket.emit("setup", { userId: user.id });
       socket.emit("heartbeat");
@@ -129,13 +137,17 @@ const AppContextProvider = ({ children }) => {
       if (existing?.publicKey && existing?.privateKey) {
         if (pwd) {
           try {
-            console.log(`[E2EE_TRACE] Encrypting existing local private key to sync with server...`);
+            console.log(
+              `[E2EE_TRACE] Encrypting existing local private key to sync with server...`,
+            );
             const {
               encryptedPrivateKey,
               nonce: privateKeyNonce,
               salt: privateKeySalt,
             } = await encryptPrivateKey(existing.privateKey, pwd);
-            console.log(`[E2EE_TRACE] Uploading encrypted private key to server...`);
+            console.log(
+              `[E2EE_TRACE] Uploading encrypted private key to server...`,
+            );
             await api.post("/api/keys/me", {
               publicKey: existing.publicKey,
               encryptedPrivateKey,
@@ -180,14 +192,18 @@ const AppContextProvider = ({ children }) => {
         serverRow?.privateKeySalt
       ) {
         try {
-          console.log(`[E2EE_TRACE] Found encrypted keys on server. Attempting to decrypt with local password...`);
+          console.log(
+            `[E2EE_TRACE] Found encrypted keys on server. Attempting to decrypt with local password...`,
+          );
           const privateKey = await decryptPrivateKey(
             serverRow.encryptedPrivateKey,
             serverRow.privateKeyNonce,
             serverRow.privateKeySalt,
             pwd,
           );
-          console.log(`[E2EE_TRACE] Decryption successful. Saving to local storage...`);
+          console.log(
+            `[E2EE_TRACE] Decryption successful. Saving to local storage...`,
+          );
           await saveUserKeysLocally(userId, serverRow.publicKey, privateKey);
           await cachePassword(userId, pwd);
           setE2eeReady(true);
@@ -206,7 +222,9 @@ const AppContextProvider = ({ children }) => {
         nonce: privateKeyNonce,
         salt: privateKeySalt,
       } = await encryptPrivateKey(privateKey, pwd);
-      console.log(`[E2EE_TRACE] Saving new keypair locally and uploading to server...`);
+      console.log(
+        `[E2EE_TRACE] Saving new keypair locally and uploading to server...`,
+      );
       await saveUserKeysLocally(userId, publicKey, privateKey);
       await api.post("/api/keys/me", {
         publicKey,
@@ -240,11 +258,15 @@ const AppContextProvider = ({ children }) => {
       !serverRow?.privateKeyNonce ||
       !serverRow?.privateKeySalt
     ) {
-      console.log(`[E2EE_TRACE] unlockKeysWithPassword failed: No encrypted key found on server.`);
+      console.log(
+        `[E2EE_TRACE] unlockKeysWithPassword failed: No encrypted key found on server.`,
+      );
       throw new Error("No encrypted key found on server.");
     }
 
-    console.log(`[E2EE_TRACE] Attempting to unlock server keys with provided password...`);
+    console.log(
+      `[E2EE_TRACE] Attempting to unlock server keys with provided password...`,
+    );
     const privateKey = await decryptPrivateKey(
       serverRow.encryptedPrivateKey,
       serverRow.privateKeyNonce,
@@ -252,12 +274,16 @@ const AppContextProvider = ({ children }) => {
       password,
     );
 
-    console.log(`[E2EE_TRACE] Keys unlocked successfully! Saving to local storage...`);
+    console.log(
+      `[E2EE_TRACE] Keys unlocked successfully! Saving to local storage...`,
+    );
     await saveUserKeysLocally(user.id, serverRow.publicKey, privateKey);
     await cachePassword(user.id, password);
     setKeysNeedPassword(false);
     setE2eeReady(true);
-    console.info("[E2EE] Keys unlocked via password and saved to local storage.");
+    console.info(
+      "[E2EE] Keys unlocked via password and saved to local storage.",
+    );
   };
 
   // ── Auth check ────────────────────────────────────────────────────────────
@@ -284,7 +310,7 @@ const AppContextProvider = ({ children }) => {
           }),
         );
         await restoreE2EEKeys(u.id, password);
-        initPushNotifications().catch(() => { });
+        initPushNotifications().catch(() => {});
       } else {
         setUser(null);
         setE2eeReady(false);
@@ -292,12 +318,19 @@ const AppContextProvider = ({ children }) => {
         await AsyncStorage.removeItem("apniDiariesUser");
         await clearCachedPassword();
       }
-    } catch {
-      if (!silent) {
+    } catch (err) {
+      // Logout only on real auth failure
+      if (err.response?.status === 401) {
         setUser(null);
         setE2eeReady(false);
         setKeysNeedPassword(false);
+
         await AsyncStorage.removeItem("apniDiariesUser");
+        await AsyncStorage.removeItem("token");
+        await clearCachedPassword();
+      } else {
+        console.warn("[Auth] checkAuth failed:", err.message);
+        // preserve current session
       }
     } finally {
       if (!silent) {
@@ -310,7 +343,7 @@ const AppContextProvider = ({ children }) => {
   const login = async (password = null) => {
     await clearCachedPassword();
     if (user?.id) {
-      await clearUserKeysLocally(user.id).catch(() => { });
+      await clearUserKeysLocally(user.id).catch(() => {});
     }
     await checkAuth(password);
   };
@@ -322,14 +355,14 @@ const AppContextProvider = ({ children }) => {
       await api.post("/api/user/logout", {}, { withCredentials: true });
     } catch {
     } finally {
-      if (userId) await clearUserKeysLocally(userId).catch(() => { });
+      if (userId) await clearUserKeysLocally(userId).catch(() => {});
       setUser(null);
       setE2eeReady(false);
       setKeysNeedPassword(false);
       await AsyncStorage.removeItem("apniDiariesUser");
       await AsyncStorage.removeItem("token");
       await clearCachedPassword();
-      removePushSubscription().catch(() => { });
+      removePushSubscription().catch(() => {});
     }
   };
 

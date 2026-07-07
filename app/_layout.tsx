@@ -15,7 +15,14 @@ export default function RootLayout() {
   const pathname = usePathname();
 
   // Exact match for public or specific routes
-  const hideNavRoutesExact = ["/", "/home", "/login", "/signup", "/forgot-password"];
+  const hideNavRoutesExact = [
+    "/",
+    "/home",
+    "/login",
+    "/signup",
+    "/forgot-password",
+    "/terms-and-conditions",
+  ];
   // Substring match for feature routes
   const hideNavRoutesIncludes = ["/chat-interface", "/calls"];
 

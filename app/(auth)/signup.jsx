@@ -3,7 +3,6 @@ import { useRouter } from "expo-router";
 import { useContext, useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Linking,
   Pressable,
   ScrollView,
   Text,
@@ -106,15 +105,16 @@ const NativeSelect = ({
   <View className="relative">
     <Pressable
       onPress={onToggle}
-      className={`flex-row items-center justify-between border-[1.5px] rounded-xl px-[14px] bg-white/60 ${hasError ? "border-red-500" : "border-[#E9DED3]"
-        }`}
+      className={`flex-row items-center justify-between border-[1.5px] rounded-xl px-[14px] bg-white/60 ${
+        hasError ? "border-red-500" : "border-[#E9DED3]"
+      }`}
     >
       <Text
         className={`flex-1 text-[14px] py-[11px] ${value ? "text-[#1F2937]" : "text-[#9CA3AF]"}`}
       >
         {value
           ? options.find((o) => String(o.value) === String(value))?.label ||
-          value
+            value
           : placeholder}
       </Text>
       <Text className="text-[11px] text-[#9CA3AF]">▼</Text>
@@ -122,8 +122,9 @@ const NativeSelect = ({
 
     {isOpen && (
       <View
-        className={`absolute left-0 right-0 z-30 bg-white border-[1.5px] border-[#E9DED3] rounded-xl overflow-hidden ${openUp ? "bottom-[110%]" : "top-[110%]"
-          }`}
+        className={`absolute left-0 right-0 z-30 bg-white border-[1.5px] border-[#E9DED3] rounded-xl overflow-hidden ${
+          openUp ? "bottom-[110%]" : "top-[110%]"
+        }`}
         style={{
           shadowColor: "#000",
           shadowOffset: { width: 0, height: 4 },
@@ -147,10 +148,11 @@ const NativeSelect = ({
               }}
             >
               <Text
-                className={`text-[14px] ${String(value) === String(opt.value)
-                  ? "text-[#E87722] font-semibold"
-                  : "text-[#374151]"
-                  }`}
+                className={`text-[14px] ${
+                  String(value) === String(opt.value)
+                    ? "text-[#E87722] font-semibold"
+                    : "text-[#374151]"
+                }`}
               >
                 {opt.label}
               </Text>
@@ -168,14 +170,16 @@ const NativeSelect = ({
 const CheckboxItem = ({ label, checked, onPress }) => (
   <Pressable
     onPress={onPress}
-    className={`flex-row items-center py-2 px-3 rounded-[10px] border-[1.5px] gap-[6px] ${checked
-      ? "border-[#E87722] bg-[#E87722]/[0.08]"
-      : "border-[#E9DED3] bg-white/60"
-      }`}
+    className={`flex-row items-center py-2 px-3 rounded-[10px] border-[1.5px] gap-[6px] ${
+      checked
+        ? "border-[#E87722] bg-[#E87722]/[0.08]"
+        : "border-[#E9DED3] bg-white/60"
+    }`}
   >
     <View
-      className={`w-4 h-4 rounded border-[1.5px] items-center justify-center ${checked ? "bg-[#E87722] border-[#E87722]" : "border-[#9CA3AF] bg-white"
-        }`}
+      className={`w-4 h-4 rounded border-[1.5px] items-center justify-center ${
+        checked ? "bg-[#E87722] border-[#E87722]" : "border-[#9CA3AF] bg-white"
+      }`}
     >
       {checked && (
         <Text className="text-white text-[9px] font-extrabold">✓</Text>
@@ -445,7 +449,7 @@ export default function Signup() {
 
   // ── Open terms URL (mirrors web openTermsModal) ───────────────────────────
   const openTermsUrl = () => {
-    Linking.openURL(`${backendUrl}/terms/v1`);
+    router.push("/(public)/terms-and-conditions");
   };
 
   // ── E2EE setup (mirrors web setupE2EE exactly) ────────────────────────────
@@ -460,17 +464,19 @@ export default function Signup() {
         salt: privateKeySalt,
       } = await encryptPrivateKey(privateKey, password);
 
-      await api.post("/api/keys/me", {
-        publicKey,
-        encryptedPrivateKey,
-        privateKeyNonce,
-        privateKeySalt,
-      },
+      await api.post(
+        "/api/keys/me",
+        {
+          publicKey,
+          encryptedPrivateKey,
+          privateKeyNonce,
+          privateKeySalt,
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`, // ← explicit auth header
           },
-        }
+        },
       );
       console.info("[E2EE] Keypair generated and saved during signup.");
     } catch (err) {
@@ -655,10 +661,11 @@ export default function Signup() {
         {/* Full name */}
         <View className="gap-1">
           <View
-            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.name && touched.name
-              ? "border-red-500"
-              : "border-[#E9DED3]"
-              }`}
+            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${
+              errors.name && touched.name
+                ? "border-red-500"
+                : "border-[#E9DED3]"
+            }`}
           >
             <Text className="text-[15px] mr-[10px] opacity-50">👤</Text>
             <TextInput
@@ -678,10 +685,11 @@ export default function Signup() {
         {/* Username */}
         <View className="gap-1">
           <View
-            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.username && touched.username
-              ? "border-red-500"
-              : "border-[#E9DED3]"
-              }`}
+            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${
+              errors.username && touched.username
+                ? "border-red-500"
+                : "border-[#E9DED3]"
+            }`}
           >
             <Text className="text-[15px] mr-[10px] opacity-50">🪪</Text>
             <TextInput
@@ -702,10 +710,11 @@ export default function Signup() {
         {/* Email */}
         <View className="gap-1">
           <View
-            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.email && touched.email
-              ? "border-red-500"
-              : "border-[#E9DED3]"
-              }`}
+            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${
+              errors.email && touched.email
+                ? "border-red-500"
+                : "border-[#E9DED3]"
+            }`}
           >
             <Text className="text-[15px] mr-[10px] opacity-50">✉️</Text>
             <TextInput
@@ -727,10 +736,11 @@ export default function Signup() {
         {/* Password */}
         <View className="gap-1">
           <View
-            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.password && touched.password
-              ? "border-red-500"
-              : "border-[#E9DED3]"
-              }`}
+            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${
+              errors.password && touched.password
+                ? "border-red-500"
+                : "border-[#E9DED3]"
+            }`}
           >
             <Text className="text-[15px] mr-[10px] opacity-50">🔒</Text>
             <TextInput
@@ -793,10 +803,11 @@ export default function Signup() {
               onBlur={() => handleBlur("dob")}
               keyboardType="numeric"
               placeholderTextColor="#9CA3AF"
-              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${errors.dob && touched.dob
-                ? "border-red-500"
-                : "border-[#E9DED3]"
-                }`}
+              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${
+                errors.dob && touched.dob
+                  ? "border-red-500"
+                  : "border-[#E9DED3]"
+              }`}
             />
             <View className="flex-[2]">
               <NativeSelect
@@ -823,10 +834,11 @@ export default function Signup() {
               onBlur={() => handleBlur("dob")}
               keyboardType="numeric"
               placeholderTextColor="#9CA3AF"
-              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${errors.dob && touched.dob
-                ? "border-red-500"
-                : "border-[#E9DED3]"
-                }`}
+              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${
+                errors.dob && touched.dob
+                  ? "border-red-500"
+                  : "border-[#E9DED3]"
+              }`}
             />
           </View>
           {errors.dob && touched.dob && (
@@ -862,10 +874,11 @@ export default function Signup() {
                 setTermsAccepted((v) => !v);
                 setTermsError("");
               }}
-              className={`w-5 h-5 mt-[2px] rounded border-[1.5px] items-center justify-center ${termsAccepted
-                ? "bg-[#E87722] border-[#E87722]"
-                : "border-[#9CA3AF] bg-white"
-                }`}
+              className={`w-5 h-5 mt-[2px] rounded border-[1.5px] items-center justify-center ${
+                termsAccepted
+                  ? "bg-[#E87722] border-[#E87722]"
+                  : "border-[#9CA3AF] bg-white"
+              }`}
             >
               {termsAccepted && (
                 <Text className="text-white text-[10px] font-extrabold">✓</Text>
@@ -906,8 +919,9 @@ export default function Signup() {
         <Pressable
           onPress={handleSubmit}
           disabled={!termsAccepted || isSendingOtp}
-          className={`flex-row items-center justify-center gap-2 rounded-xl py-[15px] bg-[#E87722] mt-1 ${!termsAccepted || isSendingOtp ? "opacity-50" : ""
-            }`}
+          className={`flex-row items-center justify-center gap-2 rounded-xl py-[15px] bg-[#E87722] mt-1 ${
+            !termsAccepted || isSendingOtp ? "opacity-50" : ""
+          }`}
           style={{
             shadowColor: "#E87722",
             shadowOffset: { width: 0, height: 4 },
@@ -957,8 +971,8 @@ export default function Signup() {
             setUserId(null);
             AsyncStorage.removeItem(STORAGE_KEYS.USER_ID);
             Toast.show({
-              type: 'error',
-              text1: 'OTP expired. Please sign up again.',
+              type: "error",
+              text1: "OTP expired. Please sign up again.",
             });
           }}
         />

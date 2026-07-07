@@ -16,7 +16,14 @@ import {
   UserPlus,
   X,
 } from "lucide-react-native";
-import { memo, useCallback, useContext, useEffect, useRef, useState } from "react";
+import {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   Animated,
@@ -92,11 +99,13 @@ export const AudioManager = (() => {
 
   const register = (postId, sound, setMuted, setPlaying) => {
     // ── FIX: Clean up any existing sound for this postId before overwriting ──
-    // This prevents "zombie sounds" if the same post is registered multiple times 
+    // This prevents "zombie sounds" if the same post is registered multiple times
     // (e.g. going from feed to profile and back).
     const existing = registry.get(postId);
     if (existing?.sound) {
-      try { existing.sound.pause(); } catch { }
+      try {
+        existing.sound.pause();
+      } catch {}
     }
     registry.set(postId, { sound, setMuted, setPlaying, muted: true });
   };
@@ -106,7 +115,9 @@ export const AudioManager = (() => {
     if (entry) {
       // Definitive stop and unload
       if (entry.sound) {
-        try { entry.sound.pause(); } catch { }
+        try {
+          entry.sound.pause();
+        } catch {}
       }
       registry.delete(postId);
       if (_currentActiveId === postId) _currentActiveId = null;
@@ -128,7 +139,7 @@ export const AudioManager = (() => {
           prev.muted = true;
           prev.setMuted(true);
           prev.setPlaying(false);
-        } catch { }
+        } catch {}
       }
     }
 
@@ -142,7 +153,7 @@ export const AudioManager = (() => {
       entry.setMuted(shouldMute);
       entry.sound.play();
       entry.setPlaying(true);
-    } catch { }
+    } catch {}
   };
 
   // Called when a card's Intersection Observer fires (card out of view)
@@ -153,7 +164,7 @@ export const AudioManager = (() => {
       entry.sound.pause();
       entry.setPlaying(false);
       // Keep muted state as-is so it restores correctly
-    } catch { }
+    } catch {}
     if (_currentActiveId === postId) _currentActiveId = null;
   };
 
@@ -177,7 +188,7 @@ export const AudioManager = (() => {
             e.muted = true;
             e.setMuted(true);
             e.setPlaying(false);
-          } catch { }
+          } catch {}
         }
       }
 
@@ -189,7 +200,7 @@ export const AudioManager = (() => {
         entry.sound.play();
         entry.setPlaying(true);
         _currentActiveId = postId;
-      } catch { }
+      } catch {}
 
       return false; // now un-muted
     } else {
@@ -203,7 +214,7 @@ export const AudioManager = (() => {
         entry.muted = true;
         entry.setMuted(true);
         // Keep playing but muted (like web el.muted = true)
-      } catch { }
+      } catch {}
 
       return true; // now muted
     }
@@ -221,7 +232,7 @@ export const AudioManager = (() => {
           entry.muted = true;
           entry.setMuted(true);
           entry.setPlaying(false);
-        } catch { }
+        } catch {}
       }
     }
   };
@@ -315,7 +326,7 @@ const MusicPill = ({ name, playing, muted, onToggle }) => {
               duration: 300,
               useNativeDriver: true,
             }),
-          ])
+          ]),
         );
       const a1 = bar(anim1, 0);
       const a2 = bar(anim2, 150);
@@ -331,7 +342,7 @@ const MusicPill = ({ name, playing, muted, onToggle }) => {
           toValue: 0.3,
           duration: 200,
           useNativeDriver: true,
-        }).start()
+        }).start(),
       );
     }
 
@@ -397,7 +408,13 @@ const MusicPill = ({ name, playing, muted, onToggle }) => {
 };
 
 // ─── Media Carousel ───────────────────────────────────────────────────────────
-const MediaCarousel = ({ urls = [], onTap, musicMuted, hasMusicName }) => {
+const MediaCarousel = ({
+  urls = [],
+  onTap,
+  onDoubleTap,
+  musicMuted,
+  hasMusicName,
+}) => {
   const [index, setIndex] = useState(0);
   const [showMuteFlash, setShowMuteFlash] = useState(false);
   const flashAnim = useRef(new Animated.Value(0)).current;
@@ -407,24 +424,36 @@ const MediaCarousel = ({ urls = [], onTap, musicMuted, hasMusicName }) => {
 
   const height = width / (n === 1 ? 4 / 5 : 1);
 
+  const lastTapRef = useRef(null);
+  const DOUBLE_TAP_DELAY = 300;
+
   const handleTap = () => {
-    if (!hasMusicName) return;
-    onTap?.();
-    setShowMuteFlash(true);
-    flashAnim.setValue(0);
-    Animated.sequence([
-      Animated.timing(flashAnim, {
-        toValue: 1,
-        duration: 150,
-        useNativeDriver: true,
-      }),
-      Animated.timing(flashAnim, {
-        toValue: 0,
-        duration: 600,
-        delay: 200,
-        useNativeDriver: true,
-      }),
-    ]).start(() => setShowMuteFlash(false));
+    const now = Date.now();
+    if (lastTapRef.current && now - lastTapRef.current < DOUBLE_TAP_DELAY) {
+      // Double tap
+      lastTapRef.current = null;
+      onDoubleTap?.(); // ← fires like
+    } else {
+      // Single tap (music toggle)
+      lastTapRef.current = now;
+      if (!hasMusicName) return;
+      onTap?.();
+      setShowMuteFlash(true);
+      flashAnim.setValue(0);
+      Animated.sequence([
+        Animated.timing(flashAnim, {
+          toValue: 1,
+          duration: 150,
+          useNativeDriver: true,
+        }),
+        Animated.timing(flashAnim, {
+          toValue: 0,
+          duration: 600,
+          delay: 200,
+          useNativeDriver: true,
+        }),
+      ]).start(() => setShowMuteFlash(false));
+    }
   };
 
   const cur = urls[index];
@@ -531,8 +560,7 @@ const MediaCarousel = ({ urls = [], onTap, musicMuted, hasMusicName }) => {
                 width: j === index ? 16 : 4,
                 height: 4,
                 borderRadius: 2,
-                backgroundColor:
-                  j === index ? ORANGE : "rgba(255,255,255,0.5)",
+                backgroundColor: j === index ? ORANGE : "rgba(255,255,255,0.5)",
               }}
             />
           ))}
@@ -1015,15 +1043,13 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
 
   const [liked, setLiked] = useState(post?.isLiked || false);
   const [likeCount, setLikeCount] = useState(
-    post?.likeCount ?? post?.likes?.length ?? 0
+    post?.likeCount ?? post?.likes?.length ?? 0,
   );
   const [likeLoading, setLikeLoading] = useState(false);
   const [likeAnim] = useState(new Animated.Value(1));
 
   const [comments, setComments] = useState([]);
-  const [commentCount, setCommentCount] = useState(
-    post?.comments?.length ?? 0
-  );
+  const [commentCount, setCommentCount] = useState(post?.comments?.length ?? 0);
   const [commentText, setCommentText] = useState("");
   const [showComments, setShowComments] = useState(false);
   const [commentLoading, setCommentLoading] = useState(false);
@@ -1044,6 +1070,28 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
   // ── Reveal animation ─────────────────────────────────────────────────────────
   const revealAnim = useRef(new Animated.Value(0)).current;
   const translateAnim = useRef(new Animated.Value(18)).current;
+
+  const [heartBurst, setHeartBurst] = useState(false);
+  const burstAnim = useRef(new Animated.Value(0)).current;
+
+  const triggerHeartBurst = () => {
+    setHeartBurst(true);
+    burstAnim.setValue(0);
+    Animated.sequence([
+      Animated.spring(burstAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+        speed: 20,
+        bounciness: 12,
+      }),
+      Animated.timing(burstAnim, {
+        toValue: 0,
+        duration: 400,
+        delay: 300,
+        useNativeDriver: true,
+      }),
+    ]).start(() => setHeartBurst(false));
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -1080,13 +1128,13 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
     post?.musicName ||
     (musicUrl
       ? decodeURIComponent(
-        musicUrl
-          .split("/")
-          .pop()
-          .replace(/\.[^.]+$/, "")
-          .replace(/%20/g, " ")
-          .replace(/\+/g, " ")
-      )
+          musicUrl
+            .split("/")
+            .pop()
+            .replace(/\.[^.]+$/, "")
+            .replace(/%20/g, " ")
+            .replace(/\+/g, " "),
+        )
       : null);
 
   const accentColor =
@@ -1211,7 +1259,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
       setLiked(res?.data?.liked);
       setLikeCount(
         res?.data?.likeCount ??
-        (prev.liked ? prev.likeCount - 1 : prev.likeCount + 1)
+          (prev.liked ? prev.likeCount - 1 : prev.likeCount + 1),
       );
     } catch {
       setLiked(prev.liked);
@@ -1219,6 +1267,10 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
     } finally {
       setLikeLoading(false);
     }
+  };
+  const handleDoubleTap = () => {
+    if (!liked) handleLike();
+    triggerHeartBurst();
   };
 
   // ── Comments ────────────────────────────────────────────────────────────────
@@ -1228,7 +1280,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
       const list = res?.data?.data ?? [];
       setComments(list);
       setCommentCount(list.length);
-    } catch { }
+    } catch {}
   };
   const toggleComments = async () => {
     const next = !showComments;
@@ -1267,7 +1319,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
         title: `${post?.user?.name}'s travel post`,
         message: post?.content,
       });
-    } catch { }
+    } catch {}
   };
 
   const onTextLayout = useCallback(
@@ -1275,7 +1327,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
       if (!expanded)
         setOverflow(e.nativeEvent.lines.length > (hasMedia ? 3 : 5));
     },
-    [expanded, hasMedia]
+    [expanded, hasMedia],
   );
 
   // ── Menu ─────────────────────────────────────────────────────────────────────
@@ -1504,119 +1556,6 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
   );
 
   // ── Comments Drawer ──────────────────────────────────────────────────────────
-  const CommentsDrawer = () =>
-    showComments ? (
-      <View style={{ paddingHorizontal: 14, paddingBottom: 16 }}>
-        <View
-          style={{ height: 1, backgroundColor: borderCol, marginBottom: 12 }}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 10,
-            marginBottom: 16,
-          }}
-        >
-          <View
-            style={{
-              width: 30,
-              height: 30,
-              borderRadius: 15,
-              overflow: "hidden",
-              backgroundColor: "#FF6B35",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            {user?.avatar ? (
-              <Image
-                source={{ uri: getProfilePhotoUrl(user.avatar) }}
-                style={{ width: 30, height: 30 }}
-              />
-            ) : (
-              <Text
-                style={{
-                  color: "#fff",
-                  fontFamily: Fonts.inter.extrabold,
-                  fontSize: 10,
-                }}
-              >
-                {myInitials}
-              </Text>
-            )}
-          </View>
-          <View
-            style={{
-              flex: 1,
-              flexDirection: "row",
-              alignItems: "center",
-              paddingHorizontal: 14,
-              paddingVertical: 8,
-              borderRadius: 20,
-              backgroundColor: dk
-                ? "rgba(255,255,255,0.06)"
-                : "rgba(0,0,0,0.05)",
-              borderWidth: 1,
-              borderColor: borderCol,
-              gap: 8,
-            }}
-          >
-            <TextInput
-              value={commentText}
-              onChangeText={setCommentText}
-              placeholder="Add a comment…"
-              placeholderTextColor={subColor}
-              style={{
-                flex: 1,
-                fontSize: 14,
-                fontFamily: Fonts.inter.regular,
-                color: textPrimary,
-                paddingVertical: 0,
-              }}
-              onSubmitEditing={submitComment}
-              returnKeyType="send"
-            />
-            <Pressable
-              onPress={submitComment}
-              disabled={!commentText.trim() || commentLoading}
-              hitSlop={8}
-              style={{
-                opacity: !commentText.trim() || commentLoading ? 0.2 : 1,
-              }}
-            >
-              {commentLoading ? (
-                <ActivityIndicator size="small" color={ORANGE} />
-              ) : (
-                <Send size={15} color={ORANGE} />
-              )}
-            </Pressable>
-          </View>
-        </View>
-        {comments.length > 0 ? (
-          comments.map((c) => (
-            <CommentRow
-              key={c.id}
-              comment={c}
-              onPressUser={goUserProfile}
-              isDarkMode={dk}
-            />
-          ))
-        ) : (
-          <View style={{ alignItems: "center", paddingVertical: 16 }}>
-            <Text
-              style={{
-                fontSize: 12,
-                fontFamily: Fonts.inter.bold,
-                color: subColor,
-              }}
-            >
-              No comments yet
-            </Text>
-          </View>
-        )}
-      </View>
-    ) : null;
 
   // ════════════════════════════════════════════════════════════════════════════
   return (
@@ -1656,9 +1595,9 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                     ...(fresh
                       ? { borderWidth: 2, borderColor: ORANGE }
                       : {
-                        borderWidth: 1.5,
-                        borderColor: "rgba(255,153,51,0.3)",
-                      }),
+                          borderWidth: 1.5,
+                          borderColor: "rgba(255,153,51,0.3)",
+                        }),
                   }}
                 >
                   {post?.user?.avatar ? (
@@ -1779,12 +1718,42 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
               </View>
             </View>
 
-            <MediaCarousel
-              urls={media}
-              musicMuted={musicMuted}
-              hasMusicName={!!musicName}
-              onTap={handleMusicMuteToggle}
-            />
+            <Pressable onPress={handleDoubleTap} activeOpacity={1}>
+              <View>
+                <MediaCarousel
+                  urls={media}
+                  musicMuted={musicMuted}
+                  hasMusicName={!!musicName}
+                  onTap={handleMusicMuteToggle}
+                  onDoubleTap={handleDoubleTap}
+                />
+                {heartBurst && (
+                  <Animated.View
+                    pointerEvents="none"
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      opacity: burstAnim,
+                      transform: [
+                        {
+                          scale: burstAnim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [0.4, 1.2],
+                          }),
+                        },
+                      ],
+                    }}
+                  >
+                    <Heart size={90} color="#ef4444" fill="#ef4444" />
+                  </Animated.View>
+                )}
+              </View>
+            </Pressable>
 
             <View
               style={{ paddingHorizontal: 10, paddingTop: 6, paddingBottom: 2 }}
@@ -1813,6 +1782,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
 
             <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
               <TripPills trips={trips} />
+
               <Text
                 onTextLayout={onTextLayout}
                 numberOfLines={expanded ? undefined : 3}
@@ -1907,9 +1877,9 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                     ...(fresh
                       ? { borderWidth: 2, borderColor: ORANGE }
                       : {
-                        borderWidth: 1.5,
-                        borderColor: "rgba(255,153,51,0.3)",
-                      }),
+                          borderWidth: 1.5,
+                          borderColor: "rgba(255,153,51,0.3)",
+                        }),
                   }}
                 >
                   {post?.user?.avatar ? (
@@ -2056,7 +2026,122 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
           </View>
         )}
 
-        <CommentsDrawer />
+        {showComments && (
+          <View style={{ paddingHorizontal: 14, paddingBottom: 16 }}>
+            <View
+              style={{
+                height: 1,
+                backgroundColor: borderCol,
+                marginBottom: 12,
+              }}
+            />
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: 10,
+                marginBottom: 16,
+              }}
+            >
+              <View
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: 15,
+                  overflow: "hidden",
+                  backgroundColor: "#FF6B35",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {user?.avatar ? (
+                  <Image
+                    source={{ uri: getProfilePhotoUrl(user.avatar) }}
+                    style={{ width: 30, height: 30 }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      color: "#fff",
+                      fontFamily: Fonts.inter.extrabold,
+                      fontSize: 10,
+                    }}
+                  >
+                    {myInitials}
+                  </Text>
+                )}
+              </View>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  alignItems: "center",
+                  paddingHorizontal: 14,
+                  paddingVertical: 8,
+                  borderRadius: 20,
+                  backgroundColor: dk
+                    ? "rgba(255,255,255,0.06)"
+                    : "rgba(0,0,0,0.05)",
+                  borderWidth: 1,
+                  borderColor: borderCol,
+                  gap: 8,
+                }}
+              >
+                <TextInput
+                  value={commentText}
+                  onChangeText={setCommentText}
+                  placeholder="Add a comment…"
+                  placeholderTextColor={subColor}
+                  style={{
+                    flex: 1,
+                    fontSize: 14,
+                    fontFamily: Fonts.inter.regular,
+                    color: textPrimary,
+                    paddingVertical: 0,
+                  }}
+                  onSubmitEditing={submitComment}
+                  returnKeyType="send"
+                />
+                <Pressable
+                  onPress={submitComment}
+                  disabled={!commentText.trim() || commentLoading}
+                  hitSlop={8}
+                  style={{
+                    opacity: !commentText.trim() || commentLoading ? 0.2 : 1,
+                  }}
+                >
+                  {commentLoading ? (
+                    <ActivityIndicator size="small" color={ORANGE} />
+                  ) : (
+                    <Send size={15} color={ORANGE} />
+                  )}
+                </Pressable>
+              </View>
+            </View>
+            {comments.length > 0 ? (
+              comments.map((c) => (
+                <CommentRow
+                  key={c.id}
+                  comment={c}
+                  onPressUser={goUserProfile}
+                  isDarkMode={dk}
+                />
+              ))
+            ) : (
+              <View style={{ alignItems: "center", paddingVertical: 16 }}>
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontFamily: Fonts.inter.bold,
+                    color: subColor,
+                  }}
+                >
+                  No comments yet
+                </Text>
+              </View>
+            )}
+          </View>
+        )}
       </Animated.View>
 
       <LikesModal
@@ -2072,5 +2157,3 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
 };
 
 export default memo(PostCard);
-
-

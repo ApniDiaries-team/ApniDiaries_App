@@ -1877,7 +1877,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                 >
                   <MoreHorizontal size={17} color={subColor} />
                 </Pressable>
-                <MenuSheet />
+                {MenuSheet()}
               </View>
             </View>
 
@@ -1891,7 +1891,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
             <View
               style={{ paddingHorizontal: 10, paddingTop: 6, paddingBottom: 2 }}
             >
-              <ActionBar compact={false} />
+              {ActionBar({ compact: false })}
             </View>
 
             {likeCount > 0 && (
@@ -2109,7 +2109,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                 >
                   <MoreHorizontal size={16} color={subColor} />
                 </Pressable>
-                <MenuSheet />
+                {MenuSheet()}
               </View>
             </View>
 
@@ -2154,11 +2154,11 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                 marginTop: 2,
               }}
             />
-            <ActionBar compact />
+            {ActionBar({ compact: true })}
           </View>
         )}
 
-        <CommentsDrawer />
+        {CommentsDrawer()}
       </Animated.View>
 
       <LikesModal

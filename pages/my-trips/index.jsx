@@ -215,7 +215,7 @@ const MyTrips = () => {
               </Text>
             </View>
 
-            <Pressable
+            {/* <Pressable
               onPress={openCreate}
               style={{
                 flexDirection: "row",
@@ -231,7 +231,7 @@ const MyTrips = () => {
               <Text style={{ color: "#fff", fontWeight: "600", fontSize: 14 }}>
                 New Trip
               </Text>
-            </Pressable>
+            </Pressable> */}
           </View>
 
           <View style={{ gap: 20 }}>

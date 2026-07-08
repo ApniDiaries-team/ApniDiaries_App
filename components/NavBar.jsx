@@ -87,6 +87,7 @@ const NavBar = () => {
       <View
         style={{
           paddingTop: insets.top,
+          paddingBottom: insets.bottom,
           height: 45 + insets.top,
           paddingHorizontal: 16,
           flexDirection: "row",
@@ -170,6 +171,13 @@ const NavBar = () => {
                 color={iconColor(isDarkMode, isUserLoggedIn)}
               />
             ) : (
+              // Fixed-size, overflow-visible wrapper: on iOS a bare <View> that
+              // sizes itself purely from the icon glyph's own font metrics can
+              // end up with a tighter bounding box than on Android, clipping
+              // the badge (or part of the icon itself) that is positioned
+              // absolutely relative to it. Giving it an explicit box matching
+              // the icon size, with overflow left visible, guarantees both the
+              // icon and the badge always have room to render fully.
               <View
                 style={{
                   width: 26,

@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import Toast from "react-native-toast-message";
 import api from "../../api/axios";
+import { getCachedPasswordForEmail } from "../../context/AppContext";
 import { decryptPrivateKey, encryptPrivateKey } from "../../utils/encryption";
 import AuthLayout from "./AuthLayout";
 
@@ -164,16 +165,12 @@ export default function ForgotPassword() {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const [showOldPwd, setShowOldPwd] = useState(false);
-  const [oldPwdError, setOldPwdError] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showNewPwd, setShowNewPwd] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
-  const [keyFetchStatus, setKeyFetchStatus] = useState("idle");
 
   const serverKeyRef = useRef(null);
   const decryptedPrivKeyRef = useRef(null);
@@ -217,7 +214,7 @@ export default function ForgotPassword() {
       Toast.show({ type: "error", text1: "Enter the 6-digit OTP" });
       return;
     }
-    setKeyFetchStatus("loading");
+    setLoading(true);
     try {
       const res = await api.post("/api/keys/fetch-for-reset", {
         email,
@@ -230,51 +227,40 @@ export default function ForgotPassword() {
         res.data?.privateKeySalt
       ) {
         serverKeyRef.current = res.data;
-        setKeyFetchStatus("ok");
+        // Silent, best-effort E2EE key migration: no password field is shown
+        // to the user. If this exact device still has a cached password for
+        // this email from a previous logged-in session, we use it to decrypt
+        // the existing key so old chat history keeps working after reset. If
+        // nothing is cached (new device, or never logged in here), this just
+        // stays null — old encrypted messages won't be recoverable, same as
+        // choosing "skip" used to do, just without asking the user first.
+        try {
+          const cachedPwd = await getCachedPasswordForEmail(email);
+          if (cachedPwd) {
+            const privKey = await decryptPrivateKey(
+              res.data.encryptedPrivateKey,
+              res.data.privateKeyNonce,
+              res.data.privateKeySalt,
+              cachedPwd,
+            );
+            decryptedPrivKeyRef.current = privKey;
+          } else {
+            decryptedPrivKeyRef.current = null;
+          }
+        } catch {
+          decryptedPrivKeyRef.current = null;
+        }
       } else {
         serverKeyRef.current = null;
-        setKeyFetchStatus("nokey");
+        decryptedPrivKeyRef.current = null;
       }
     } catch {
       serverKeyRef.current = null;
-      setKeyFetchStatus("nokey");
-    }
-    setStep(3);
-  };
-
-  const handleVerifyOldPassword = async () => {
-    setOldPwdError("");
-    if (!serverKeyRef.current) {
       decryptedPrivKeyRef.current = null;
-      setStep(4);
-      return;
-    }
-    if (!oldPassword) {
-      setOldPwdError("Please enter your current password");
-      return;
-    }
-    setLoading(true);
-    try {
-      const { encryptedPrivateKey, privateKeyNonce, privateKeySalt } =
-        serverKeyRef.current;
-      const privKey = await decryptPrivateKey(
-        encryptedPrivateKey,
-        privateKeyNonce,
-        privateKeySalt,
-        oldPassword,
-      );
-      decryptedPrivKeyRef.current = privKey;
-      setStep(4);
-    } catch {
-      setOldPwdError("Incorrect password. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleSkipOldPassword = () => {
-    decryptedPrivKeyRef.current = null;
-    setStep(4);
+    setStep(3);
   };
 
   const handleResetPassword = async () => {
@@ -335,12 +321,11 @@ export default function ForgotPassword() {
     }
   };
 
-  const stepLabels = ["Email", "OTP", "Verify", "Password"];
+  const stepLabels = ["Email", "OTP", "Password"];
   const stepSubtitles = {
     1: "We'll send a 6-digit OTP to your email",
     2: `OTP sent to ${email}`,
-    3: "Verify your identity to keep your chat history",
-    4: "Choose a strong new password",
+    3: "Choose a strong new password",
   };
 
   // Shared class helpers
@@ -465,115 +450,8 @@ export default function ForgotPassword() {
           </View>
         )}
 
-        {/* ── STEP 3: Verify old password ── */}
+        {/* ── STEP 3: New password ── */}
         {step === 3 && (
-          <View className="gap-4">
-            {keyFetchStatus === "loading" && (
-              <View className="items-center gap-3 py-6">
-                <ActivityIndicator color="#6B5A4A" />
-                <Text className="text-[13px] text-[#6B5A4A]">
-                  Fetching your encryption keys…
-                </Text>
-              </View>
-            )}
-
-            {keyFetchStatus === "ok" && (
-              <>
-                <Banner type="green">
-                  Enter your <Text className="font-bold">current password</Text>{" "}
-                  so we can securely transfer your encryption keys. Your full
-                  chat history will be preserved on all devices.
-                </Banner>
-                <View className="gap-1.5">
-                  <Text className="text-[11px] font-bold text-[#6B5A4A] tracking-widest">
-                    CURRENT PASSWORD
-                  </Text>
-                  <View>
-                    <TextInput
-                      placeholder="Your current password"
-                      placeholderTextColor="#9ca3af"
-                      value={oldPassword}
-                      onChangeText={(t) => {
-                        setOldPassword(t);
-                        setOldPwdError("");
-                      }}
-                      secureTextEntry={!showOldPwd}
-                      autoFocus
-                      className={`${inputBase} pr-12 ${oldPwdError ? "border-red-400" : "border-[#E9DED3]"}`}
-                    />
-                    <Pressable
-                      onPress={() => setShowOldPwd((v) => !v)}
-                      className="absolute right-3 top-3.5"
-                    >
-                      <Text className="text-[#9E8E80] text-[13px]">
-                        {showOldPwd ? "Hide" : "Show"}
-                      </Text>
-                    </Pressable>
-                  </View>
-                  {oldPwdError ? (
-                    <Text className="text-xs text-red-500">{oldPwdError}</Text>
-                  ) : null}
-                </View>
-                <View className="flex-row gap-3">
-                  <Pressable
-                    onPress={() => setStep(2)}
-                    className={`${btnOutlineClass} flex-1`}
-                  >
-                    <Text className="text-[#6B5A4A] font-semibold">← Back</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={handleVerifyOldPassword}
-                    disabled={loading || !oldPassword}
-                    className={`${btnPrimaryClass(loading || !oldPassword)} flex-1`}
-                  >
-                    {loading ? <ActivityIndicator color="#fff" /> : null}
-                    <Text className="text-white font-semibold">
-                      {loading ? "Verifying…" : "Continue →"}
-                    </Text>
-                  </Pressable>
-                </View>
-                <Pressable
-                  onPress={handleSkipOldPassword}
-                  className="items-center"
-                >
-                  <Text className="text-xs text-[#9E8E80] underline">
-                    I don't remember my current password — skip this step
-                  </Text>
-                </Pressable>
-              </>
-            )}
-
-            {keyFetchStatus === "nokey" && (
-              <>
-                <Banner type="amber">
-                  We couldn't find an encryption key backup for your account.
-                  Previous messages may not be visible on new devices, but{" "}
-                  <Text className="font-bold">
-                    new messages will work perfectly
-                  </Text>
-                  .
-                </Banner>
-                <View className="flex-row gap-3">
-                  <Pressable
-                    onPress={() => setStep(2)}
-                    className={`${btnOutlineClass} flex-1`}
-                  >
-                    <Text className="text-[#6B5A4A] font-semibold">← Back</Text>
-                  </Pressable>
-                  <Pressable
-                    onPress={handleSkipOldPassword}
-                    className={`${btnPrimaryClass(false)} flex-1`}
-                  >
-                    <Text className="text-white font-semibold">Continue →</Text>
-                  </Pressable>
-                </View>
-              </>
-            )}
-          </View>
-        )}
-
-        {/* ── STEP 4: New password ── */}
-        {step === 4 && (
           <View className="gap-4">
             {decryptedPrivKeyRef.current ? (
               <Banner type="green">
@@ -660,7 +538,7 @@ export default function ForgotPassword() {
 
             <View className="flex-row gap-3">
               <Pressable
-                onPress={() => setStep(3)}
+                onPress={() => setStep(2)}
                 className={`${btnOutlineClass} flex-1`}
               >
                 <Text className="text-[#6B5A4A] font-semibold">← Back</Text>

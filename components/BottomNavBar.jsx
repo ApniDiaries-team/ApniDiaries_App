@@ -73,8 +73,8 @@ const BottomNavBar = () => {
             const tabColor = isActive
               ? "#f97316"
               : isDarkMode
-                ? "#9ca3af"
-                : "#6b7280";
+                ? "#A9917F"
+                : "#8D7165";
             return (
               <Pressable
                 key={tab.id}

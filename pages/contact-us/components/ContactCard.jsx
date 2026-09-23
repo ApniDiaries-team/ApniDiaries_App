@@ -4,10 +4,10 @@ import { Fonts } from '../../../constants/theme';
 
 const ContactCard = ({ icon, title, details, link, linkText, isDarkMode }) => {
   const bg = isDarkMode ? '#131c2b' : '#fff';
-  const border = isDarkMode ? '#1e2d42' : '#e5e7eb';
-  const textPrimary = isDarkMode ? '#f1f5f9' : '#111827';
-  const textSecondary = isDarkMode ? '#64748b' : '#6b7280';
-  const borderBottom = isDarkMode ? '#1e2d42' : '#f3f4f6';
+  const border = isDarkMode ? '#1e2d42' : '#EDD6CD';
+  const textPrimary = isDarkMode ? '#FFF1EC' : '#261913';
+  const textSecondary = isDarkMode ? '#8D7165' : '#8D7165';
+  const borderBottom = isDarkMode ? '#1e2d42' : '#FFE9E1';
 
   return (
     <View

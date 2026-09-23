@@ -15,7 +15,7 @@ const FilterDropdown = ({ label, options, value, onChange, isDarkMode }) => {
         style={{
           fontSize: 14,
           fontWeight: "500",
-          color: isDarkMode ? "#f9fafb" : "#111827",
+          color: isDarkMode ? "#FFF1EC" : "#261913",
         }}
       >
         {label}
@@ -32,7 +32,7 @@ const FilterDropdown = ({ label, options, value, onChange, isDarkMode }) => {
           paddingVertical: 10,
           borderRadius: 8,
           borderWidth: 1,
-          borderColor: open ? "#3b82f6" : isDarkMode ? "#374151" : "#e5e7eb",
+          borderColor: open ? "#3b82f6" : isDarkMode ? "#594137" : "#EDD6CD",
           // matches web: bg-[var(--color-bg-card)] — white in light, dark card in dark
           backgroundColor: "#ffffff",
         }}
@@ -42,11 +42,11 @@ const FilterDropdown = ({ label, options, value, onChange, isDarkMode }) => {
             fontSize: 14,
             color: selected
               ? isDarkMode
-                ? "#f9fafb"
-                : "#111827"
+                ? "#FFF1EC"
+                : "#261913"
               : isDarkMode
-                ? "#6b7280"
-                : "#9ca3af",
+                ? "#8D7165"
+                : "#A9917F",
             flex: 1,
           }}
         >
@@ -55,7 +55,7 @@ const FilterDropdown = ({ label, options, value, onChange, isDarkMode }) => {
         <Icon
           name={open ? "ChevronUp" : "ChevronDown"}
           size={16}
-          color={isDarkMode ? "#9ca3af" : "#6b7280"}
+          color={isDarkMode ? "#A9917F" : "#8D7165"}
         />
       </Pressable>
 
@@ -65,8 +65,8 @@ const FilterDropdown = ({ label, options, value, onChange, isDarkMode }) => {
           style={{
             borderRadius: 8,
             borderWidth: 1,
-            borderColor: isDarkMode ? "#374151" : "#e5e7eb",
-            backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+            borderColor: isDarkMode ? "#594137" : "#EDD6CD",
+            backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
             elevation: 8,
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 4 },
@@ -98,8 +98,8 @@ const FilterDropdown = ({ label, options, value, onChange, isDarkMode }) => {
                       value === opt.value
                         ? "#fff"
                         : isDarkMode
-                          ? "#f9fafb"
-                          : "#111827",
+                          ? "#FFF1EC"
+                          : "#261913",
                   }}
                 >
                   {opt.label}
@@ -186,7 +186,7 @@ const FilterPanel = ({
             paddingHorizontal: 16,
             borderRadius: 8,
             borderWidth: 1,
-            borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+            borderColor: isDarkMode ? "#594137" : "#EDD6CD",
             // matches web: hover:bg-[var(--color-bg-secondary)]
             backgroundColor: "transparent",
             width: "100%",
@@ -195,13 +195,13 @@ const FilterPanel = ({
           <Icon
             name={isOpen ? "X" : "SlidersHorizontal"}
             size={16}
-            color={isDarkMode ? "#f9fafb" : "#374151"}
+            color={isDarkMode ? "#FFF1EC" : "#594137"}
           />
           <Text
             style={{
               fontSize: 14,
               fontWeight: "500",
-              color: isDarkMode ? "#f9fafb" : "#374151",
+              color: isDarkMode ? "#FFF1EC" : "#594137",
             }}
           >
             {isOpen ? "Close Filters" : "Show Filters"}
@@ -229,11 +229,11 @@ const FilterPanel = ({
       {isOpen && (
         <View
           style={{
-            backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+            backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
             borderRadius: 12,
             padding: 20,
             borderWidth: 1,
-            borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+            borderColor: isDarkMode ? "#594137" : "#EDD6CD",
             shadowColor: "#000",
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.08,
@@ -259,7 +259,7 @@ const FilterPanel = ({
                 style={{
                   fontSize: 18,
                   fontWeight: "600",
-                  color: isDarkMode ? "#f9fafb" : "#111827",
+                  color: isDarkMode ? "#FFF1EC" : "#261913",
                 }}
               >
                 Filters
@@ -281,7 +281,7 @@ const FilterPanel = ({
                 <Text
                   style={{
                     fontSize: 14,
-                    color: isDarkMode ? "#9ca3af" : "#6b7280",
+                    color: isDarkMode ? "#A9917F" : "#8D7165",
                   }}
                 >
                   Clear All
@@ -328,14 +328,14 @@ const FilterPanel = ({
               style={{
                 paddingTop: 20,
                 borderTopWidth: 1,
-                borderTopColor: isDarkMode ? "#374151" : "#e5e7eb",
+                borderTopColor: isDarkMode ? "#594137" : "#EDD6CD",
                 gap: 12,
               }}
             >
               <Text
                 style={{
                   fontSize: 14,
-                  color: isDarkMode ? "#9ca3af" : "#6b7280",
+                  color: isDarkMode ? "#A9917F" : "#8D7165",
                 }}
               >
                 Active Filters:

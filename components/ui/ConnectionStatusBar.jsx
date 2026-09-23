@@ -17,8 +17,8 @@ const ConnectionStatusBar = ({ visible = true }) => {
   const colors = {
     bgSecondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
     border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
+    textPrimary: isDarkMode ? "#FFFFFF" : "#261913",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#8D7165",
   };
 
   // ── Network status — mirrors web online/offline listeners ────────────────

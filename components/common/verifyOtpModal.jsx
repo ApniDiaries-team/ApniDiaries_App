@@ -118,18 +118,18 @@ const VerifyOtpModal = ({ isOpen, onClose, userId, onVerified, onExpired }) => {
           {/* Close button — hidden when expired, same as web */}
           {!expired && (
             <Pressable onPress={onClose} style={{ position: 'absolute', top: 16, right: 16, padding: 4 }}>
-              <Text style={{ fontSize: 18, color: '#9ca3af' }}>✕</Text>
+              <Text style={{ fontSize: 18, color: '#A9917F' }}>✕</Text>
             </Pressable>
           )}
 
           <View style={{ alignItems: 'center', gap: 16 }}>
-            <Text style={{ fontSize: 22, fontWeight: '600', color: '#111827' }}>
+            <Text style={{ fontSize: 22, fontWeight: '600', color: '#261913' }}>
               {expired ? 'OTP Expired' : 'Verify OTP'}
             </Text>
 
             {!expired ? (
               <>
-                <Text style={{ fontSize: 14, color: '#6b7280', textAlign: 'center', lineHeight: 20 }}>
+                <Text style={{ fontSize: 14, color: '#8D7165', textAlign: 'center', lineHeight: 20 }}>
                   Enter the 6-digit OTP sent to your email.
                 </Text>
 
@@ -146,7 +146,7 @@ const VerifyOtpModal = ({ isOpen, onClose, userId, onVerified, onExpired }) => {
                   <Text style={{ fontSize: 13, fontWeight: '700', color: urgency ? '#dc2626' : '#f97316' }}>
                     ⏱ {mins}:{secs}
                   </Text>
-                  <Text style={{ fontSize: 12, color: urgency ? '#dc2626' : '#9ca3af' }}>
+                  <Text style={{ fontSize: 12, color: urgency ? '#dc2626' : '#A9917F' }}>
                     {urgency ? 'Hurry up!' : 'to verify'}
                   </Text>
                 </View>
@@ -167,13 +167,13 @@ const VerifyOtpModal = ({ isOpen, onClose, userId, onVerified, onExpired }) => {
                         width: 44,
                         height: 52,
                         borderWidth: 1.5,
-                        borderColor: digit ? '#E87722' : '#e5e7eb',
+                        borderColor: digit ? '#E87722' : '#EDD6CD',
                         borderRadius: 12,
                         textAlign: 'center',
                         fontSize: 20,
                         fontWeight: '600',
-                        color: '#111827',
-                        backgroundColor: '#f9fafb',
+                        color: '#261913',
+                        backgroundColor: '#FFF1EC',
                       }}
                     />
                   ))}
@@ -205,7 +205,7 @@ const VerifyOtpModal = ({ isOpen, onClose, userId, onVerified, onExpired }) => {
               /* Expired state — matches web exactly */
               <>
                 <Text style={{ fontSize: 48 }}>⏰</Text>
-                <Text style={{ fontSize: 14, color: '#6b7280', textAlign: 'center', lineHeight: 20 }}>
+                <Text style={{ fontSize: 14, color: '#8D7165', textAlign: 'center', lineHeight: 20 }}>
                   Your OTP has expired and your account has been removed. Please sign up again.
                 </Text>
                 <Pressable

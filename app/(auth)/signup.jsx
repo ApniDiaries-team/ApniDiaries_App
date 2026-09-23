@@ -110,14 +110,14 @@ const NativeSelect = ({
       }`}
     >
       <Text
-        className={`flex-1 text-[14px] py-[11px] ${value ? "text-[#1F2937]" : "text-[#9CA3AF]"}`}
+        className={`flex-1 text-[14px] py-[11px] ${value ? "text-[#3C2D27]" : "text-[#A9917F]"}`}
       >
         {value
           ? options.find((o) => String(o.value) === String(value))?.label ||
             value
           : placeholder}
       </Text>
-      <Text className="text-[11px] text-[#9CA3AF]">▼</Text>
+      <Text className="text-[11px] text-[#A9917F]">▼</Text>
     </Pressable>
 
     {isOpen && (
@@ -151,7 +151,7 @@ const NativeSelect = ({
                 className={`text-[14px] ${
                   String(value) === String(opt.value)
                     ? "text-[#E87722] font-semibold"
-                    : "text-[#374151]"
+                    : "text-[#594137]"
                 }`}
               >
                 {opt.label}
@@ -178,7 +178,7 @@ const CheckboxItem = ({ label, checked, onPress }) => (
   >
     <View
       className={`w-4 h-4 rounded border-[1.5px] items-center justify-center ${
-        checked ? "bg-[#E87722] border-[#E87722]" : "border-[#9CA3AF] bg-white"
+        checked ? "bg-[#E87722] border-[#E87722]" : "border-[#A9917F] bg-white"
       }`}
     >
       {checked && (
@@ -673,8 +673,8 @@ export default function Signup() {
               value={form.name}
               onChangeText={(v) => setForm({ ...form, name: v })}
               onBlur={() => handleBlur("name")}
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 text-[14px] text-[#1F2937] py-[13px]"
+              placeholderTextColor="#A9917F"
+              className="flex-1 text-[14px] text-[#3C2D27] py-[13px]"
             />
           </View>
           {errors.name && touched.name && (
@@ -698,8 +698,8 @@ export default function Signup() {
               onChangeText={(v) => setForm({ ...form, username: v })}
               onBlur={() => handleBlur("username")}
               autoCapitalize="none"
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 text-[14px] text-[#1F2937] py-[13px]"
+              placeholderTextColor="#A9917F"
+              className="flex-1 text-[14px] text-[#3C2D27] py-[13px]"
             />
           </View>
           {errors.username && touched.username && (
@@ -724,8 +724,8 @@ export default function Signup() {
               onBlur={() => handleBlur("email")}
               keyboardType="email-address"
               autoCapitalize="none"
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 text-[14px] text-[#1F2937] py-[13px]"
+              placeholderTextColor="#A9917F"
+              className="flex-1 text-[14px] text-[#3C2D27] py-[13px]"
             />
           </View>
           {errors.email && touched.email && (
@@ -749,15 +749,15 @@ export default function Signup() {
               onChangeText={(v) => setForm({ ...form, password: v })}
               onBlur={() => handleBlur("password")}
               secureTextEntry={!showPassword}
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor="#A9917F"
               editable={!isSendingOtp}
-              className="flex-1 text-[14px] text-[#1F2937] py-[13px]"
+              className="flex-1 text-[14px] text-[#3C2D27] py-[13px]"
             />
             <Pressable
               onPress={() => setShowPassword((v) => !v)}
               disabled={isSendingOtp}
             >
-              <Text className="text-[#9CA3AF] text-[13px]">
+              <Text className="text-[#A9917F] text-[13px]">
                 {showPassword ? "Hide" : "Show"}
               </Text>
             </Pressable>
@@ -802,8 +802,8 @@ export default function Signup() {
               onChangeText={handleDayChange}
               onBlur={() => handleBlur("dob")}
               keyboardType="numeric"
-              placeholderTextColor="#9CA3AF"
-              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${
+              placeholderTextColor="#A9917F"
+              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#3C2D27] text-center ${
                 errors.dob && touched.dob
                   ? "border-red-500"
                   : "border-[#E9DED3]"
@@ -833,8 +833,8 @@ export default function Signup() {
               onChangeText={handleYearChange}
               onBlur={() => handleBlur("dob")}
               keyboardType="numeric"
-              placeholderTextColor="#9CA3AF"
-              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${
+              placeholderTextColor="#A9917F"
+              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#3C2D27] text-center ${
                 errors.dob && touched.dob
                   ? "border-red-500"
                   : "border-[#E9DED3]"
@@ -877,7 +877,7 @@ export default function Signup() {
               className={`w-5 h-5 mt-[2px] rounded border-[1.5px] items-center justify-center ${
                 termsAccepted
                   ? "bg-[#E87722] border-[#E87722]"
-                  : "border-[#9CA3AF] bg-white"
+                  : "border-[#A9917F] bg-white"
               }`}
             >
               {termsAccepted && (

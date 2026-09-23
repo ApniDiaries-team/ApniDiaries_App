@@ -59,7 +59,7 @@ const ChatOptionsModal = ({ isOpen, onClose, contactName, onAction }) => {
             className={`w-full rounded-t-[32px] px-6 pt-8 border-t ${
               isDarkMode
                 ? "bg-[#1A1F29] border-white/5"
-                : "bg-[#F8FAFC] border-black/5"
+                : "bg-[#FFF8F6] border-black/5"
             }`}
             style={{ paddingBottom: Platform.OS === "ios" ? 40 : 24 }}
             onPress={(e) => e.stopPropagation()}
@@ -85,7 +85,7 @@ const ChatOptionsModal = ({ isOpen, onClose, contactName, onAction }) => {
                 <Icon
                   name="X"
                   size={22}
-                  color={isDarkMode ? "#FFFFFF" : "#111827"}
+                  color={isDarkMode ? "#FFFFFF" : "#261913"}
                 />
               </Pressable>
             </View>
@@ -121,7 +121,7 @@ const ChatOptionsModal = ({ isOpen, onClose, contactName, onAction }) => {
                             ? "#ef4444"
                             : isDarkMode
                               ? "#FFFFFF"
-                              : "#111827"
+                              : "#261913"
                         }
                         strokeWidth={1.5}
                       />
@@ -135,7 +135,7 @@ const ChatOptionsModal = ({ isOpen, onClose, contactName, onAction }) => {
                             ? "text-[#ef4444]"
                             : isDarkMode
                               ? "text-white"
-                              : "text-[#111827]"
+                              : "text-[#261913]"
                         }`}
                       >
                         {option.label}

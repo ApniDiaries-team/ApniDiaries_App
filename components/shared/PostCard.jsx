@@ -66,7 +66,7 @@ const TRIP_COLORS = {
   food: "#fb923c",
   photography: "#38bdf8",
   leisure: "#84cc16",
-  business: "#94a3b8",
+  business: "#A9917F",
 };
 
 const isFresh = (d) => d && Date.now() - new Date(d).getTime() < ONE_HOUR;
@@ -715,7 +715,7 @@ const LikesModal = ({
                 style={{
                   fontSize: 16,
                   fontFamily: Fonts.inter.extrabold,
-                  color: dk ? "#fff" : "#0f172a",
+                  color: dk ? "#fff" : "#261913",
                 }}
               >
                 {likeCount?.toLocaleString("en-IN")}{" "}
@@ -733,7 +733,7 @@ const LikesModal = ({
                   justifyContent: "center",
                 }}
               >
-                <X size={15} color={dk ? "#94a3b8" : "#64748b"} />
+                <X size={15} color={dk ? "#A9917F" : "#8D7165"} />
               </Pressable>
             </View>
             {loading ? (
@@ -755,10 +755,10 @@ const LikesModal = ({
                   gap: 12,
                 }}
               >
-                <Heart size={36} color={dk ? "#475569" : "#94a3b8"} />
+                <Heart size={36} color={dk ? "#6B5546" : "#A9917F"} />
                 <Text
                   style={{
-                    color: dk ? "#475569" : "#94a3b8",
+                    color: dk ? "#6B5546" : "#A9917F",
                     fontSize: 13,
                     fontFamily: Fonts.inter.regular,
                   }}
@@ -845,7 +845,7 @@ const LikesModal = ({
                           style={{
                             fontSize: 14,
                             fontFamily: Fonts.inter.extrabold,
-                            color: dk ? "#fff" : "#0f172a",
+                            color: dk ? "#fff" : "#261913",
                           }}
                         >
                           {u.name}
@@ -856,7 +856,7 @@ const LikesModal = ({
                             style={{
                               fontSize: 11,
                               fontFamily: Fonts.inter.regular,
-                              color: dk ? "#64748b" : "#94a3b8",
+                              color: dk ? "#8D7165" : "#A9917F",
                             }}
                           >
                             @{u.username}
@@ -890,8 +890,8 @@ const LikesModal = ({
                               color={
                                 isFollowing
                                   ? dk
-                                    ? "#64748b"
-                                    : "#94a3b8"
+                                    ? "#8D7165"
+                                    : "#A9917F"
                                   : "#fff"
                               }
                             />
@@ -899,13 +899,13 @@ const LikesModal = ({
                             <>
                               <Check
                                 size={11}
-                                color={dk ? "#64748b" : "#94a3b8"}
+                                color={dk ? "#8D7165" : "#A9917F"}
                               />
                               <Text
                                 style={{
                                   fontSize: 11,
                                   fontFamily: Fonts.inter.extrabold,
-                                  color: dk ? "#64748b" : "#94a3b8",
+                                  color: dk ? "#8D7165" : "#A9917F",
                                 }}
                               >
                                 {btnLabel}
@@ -1004,7 +1004,7 @@ const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) =
           style={{
             fontSize: 13,
             lineHeight: 19,
-            color: dk ? "#f1f5f9" : "#0f172a",
+            color: dk ? "#FFF1EC" : "#261913",
             fontFamily: Fonts.inter.regular,
           }}
         >
@@ -1017,7 +1017,7 @@ const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) =
           style={{
             fontSize: 10,
             fontFamily: Fonts.inter.regular,
-            color: dk ? "#475569" : "#94a3b8",
+            color: dk ? "#6B5546" : "#A9917F",
             marginTop: 2,
           }}
         >
@@ -1031,7 +1031,7 @@ const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) =
             hitSlop={10}
             style={{ padding: 4 }}
           >
-            <MoreHorizontal size={16} color={dk ? "#64748b" : "#94a3b8"} />
+            <MoreHorizontal size={16} color={dk ? "#8D7165" : "#A9917F"} />
           </Pressable>
           {menuOpen && (
             <>
@@ -1051,7 +1051,7 @@ const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) =
                   position: "absolute",
                   top: 22,
                   right: 0,
-                  backgroundColor: dk ? "#1e293b" : "#ffffff",
+                  backgroundColor: dk ? "#3C2D27" : "#ffffff",
                   borderRadius: 10,
                   paddingVertical: 4,
                   minWidth: 110,
@@ -1181,7 +1181,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
 
   const cardBg = dk ? "#161616" : "#ffffff";
   const subColor = dk ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)";
-  const textPrimary = dk ? "#f1f5f9" : "#0f172a";
+  const textPrimary = dk ? "#FFF1EC" : "#261913";
   const borderCol = dk ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
   const initials =
     post?.user?.name

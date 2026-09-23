@@ -140,10 +140,10 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
             )}
           </View>
           <View>
-            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#0f172a" }}>
+            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#261913" }}>
               {user?.name}
             </Text>
-            <Text style={{ fontSize: 12, color: "#94a3b8" }}>Sharing a travel story…</Text>
+            <Text style={{ fontSize: 12, color: "#A9917F" }}>Sharing a travel story…</Text>
           </View>
         </View>
 
@@ -155,7 +155,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
             value={content}
             onChangeText={(v) => setContent(v.slice(0, 5000))}
             placeholder={"What happened? What did you feel?\nShare the moment that made this trip unforgettable…"}
-            placeholderTextColor="#94a3b8"
+            placeholderTextColor="#A9917F"
             style={{
               width: "100%",
               minHeight: 180,
@@ -163,7 +163,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
               lineHeight: 26,
               textAlignVertical: "top",
               fontFamily: Fonts.inter.regular,
-              color: dk ? "#fff" : "#0f172a",
+              color: dk ? "#fff" : "#261913",
               letterSpacing: -0.16,
             }}
           />
@@ -195,7 +195,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
                   style={{
                     fontSize: 10,
                     fontFamily: Fonts.inter.bold,
-                    color: charsLeft < 50 ? "#ef4444" : "#94a3b8",
+                    color: charsLeft < 50 ? "#ef4444" : "#A9917F",
                   }}
                 >
                   {charsLeft}
@@ -228,12 +228,12 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
                 onFocus={() => { if (suggestions.length > 0) setShowSug(true); }}
                 onBlur={() => setTimeout(() => setShowSug(false), 150)}
                 placeholder="Where did you go?  (required)"
-                placeholderTextColor="#94a3b8"
+                placeholderTextColor="#A9917F"
                 style={{
                   flex: 1,
                   fontSize: 14,
                   fontFamily: Fonts.inter.semibold,
-                  color: dk ? "#fff" : "#0f172a",
+                  color: dk ? "#fff" : "#261913",
                 }}
               />
               {city ? <Icon name="Check" size={14} color={S} /> : null}
@@ -276,7 +276,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
                     }}
                   >
                     <Icon name="MapPin" size={12} color={S} />
-                    <Text style={{ fontSize: 14, color: dk ? "#fff" : "#0f172a" }}>{c}</Text>
+                    <Text style={{ fontSize: 14, color: dk ? "#fff" : "#261913" }}>{c}</Text>
                   </Pressable>
                 ))}
               </View>
@@ -304,7 +304,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
                     borderColor: "rgba(0,0,0,0.08)",
                   }}
                 >
-                  <Text style={{ fontSize: 11, fontFamily: Fonts.inter.bold, color: "#94a3b8" }}>
+                  <Text style={{ fontSize: 11, fontFamily: Fonts.inter.bold, color: "#A9917F" }}>
                     {c}
                   </Text>
                 </Pressable>
@@ -622,7 +622,7 @@ const WaveformTrimmer = ({ duration, trimStart, trimEnd, currentTime, onChange, 
         <Text style={{ fontSize: 11, fontFamily: Fonts.inter.bold, color: S }}>
           {fmtTime(trimStart)}
         </Text>
-        <Text style={{ fontSize: 10, color: "#94a3b8" }}>drag handles or slide window</Text>
+        <Text style={{ fontSize: 10, color: "#A9917F" }}>drag handles or slide window</Text>
         <Text style={{ fontSize: 11, fontFamily: Fonts.inter.bold, color: S }}>
           {fmtTime(trimEnd)}
         </Text>
@@ -862,10 +862,10 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
             <Icon name="Image" size={26} color={S} strokeWidth={2.5} />
           </View>
           <View style={{ alignItems: "center" }}>
-            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#0f172a" }}>
+            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#261913" }}>
               Add photos & videos
             </Text>
-            <Text style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>
+            <Text style={{ fontSize: 12, color: "#A9917F", marginTop: 2 }}>
               Tap · up to {MAX_FILES} files
             </Text>
           </View>
@@ -973,7 +973,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
               fontSize: 11,
               textAlign: "center",
               marginTop: 8,
-              color: "#94a3b8",
+              color: "#A9917F",
               fontFamily: Fonts.inter.semibold,
             }}
           >
@@ -989,7 +989,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
         <View style={{ marginTop: 20 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 }}>
             <Icon name="Music" size={15} color={S} />
-            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#0f172a" }}>
+            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#261913" }}>
               Background music
             </Text>
             <View
@@ -1041,12 +1041,12 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
                   style={{
                     fontSize: 14,
                     fontFamily: Fonts.inter.bold,
-                    color: dk ? "#fff" : "#0f172a",
+                    color: dk ? "#fff" : "#261913",
                   }}
                 >
                   Add a song
                 </Text>
-                <Text style={{ fontSize: 11, color: "#94a3b8", marginTop: 1 }}>
+                <Text style={{ fontSize: 11, color: "#A9917F", marginTop: 1 }}>
                   MP3, AAC, M4A · any length · max 50MB
                 </Text>
               </View>
@@ -1095,7 +1095,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
                     style={{
                       fontSize: 14,
                       fontFamily: Fonts.inter.bold,
-                      color: dk ? "#fff" : "#0f172a",
+                      color: dk ? "#fff" : "#261913",
                     }}
                   >
                     {music.name}
@@ -1121,7 +1121,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
                       ))}
                     </View>
                   ) : (
-                    <Text style={{ fontSize: 11, color: "#94a3b8" }}>Tap ▶ to preview</Text>
+                    <Text style={{ fontSize: 11, color: "#A9917F" }}>Tap ▶ to preview</Text>
                   )}
                 </View>
 
@@ -1161,7 +1161,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
                     flexShrink: 0,
                   }}
                 >
-                  <Icon name="X" size={13} color="#94a3b8" />
+                  <Icon name="X" size={13} color="#A9917F" />
                 </Pressable>
               </View>
 
@@ -1189,7 +1189,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
                       style={{
                         fontSize: 12,
                         fontFamily: Fonts.inter.bold,
-                        color: dk ? "#fff" : "#0f172a",
+                        color: dk ? "#fff" : "#261913",
                       }}
                     >
                       Select clip · max 30 sec
@@ -1294,7 +1294,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
               fontSize: 10,
               textAlign: "center",
               marginTop: 8,
-              color: "#94a3b8",
+              color: "#A9917F",
               opacity: 0.7,
             }}
           >
@@ -1331,12 +1331,12 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
           style={{
             fontSize: 14,
             fontFamily: Fonts.inter.bold,
-            color: dk ? "#fff" : "#0f172a",
+            color: dk ? "#fff" : "#261913",
             marginBottom: 12,
           }}
         >
           What kind of trip?{" "}
-          <Text style={{ color: "#94a3b8", fontFamily: Fonts.inter.regular }}>(optional)</Text>
+          <Text style={{ color: "#A9917F", fontFamily: Fonts.inter.regular }}>(optional)</Text>
         </Text>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
           {TRIP_TYPES.map((t) => {
@@ -1363,7 +1363,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
                   style={{
                     fontSize: 12,
                     fontFamily: Fonts.inter.bold,
-                    color: active ? "#fff" : "#94a3b8",
+                    color: active ? "#fff" : "#A9917F",
                   }}
                 >
                   {t.label}
@@ -1380,12 +1380,12 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
           style={{
             fontSize: 14,
             fontFamily: Fonts.inter.bold,
-            color: dk ? "#fff" : "#0f172a",
+            color: dk ? "#fff" : "#261913",
             marginBottom: 10,
           }}
         >
           When did you travel?{" "}
-          <Text style={{ color: "#94a3b8", fontFamily: Fonts.inter.regular }}>(optional)</Text>
+          <Text style={{ color: "#A9917F", fontFamily: Fonts.inter.regular }}>(optional)</Text>
         </Text>
         <Pressable
           onPress={() => setShowDatePicker(true)}
@@ -1405,7 +1405,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
           <Text
             style={{
               fontSize: 14,
-              color: metadata.travelDate ? (dk ? "#fff" : "#0f172a") : "#94a3b8",
+              color: metadata.travelDate ? (dk ? "#fff" : "#261913") : "#A9917F",
             }}
           >
             {metadata.travelDate
@@ -1432,7 +1432,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
           style={{
             fontSize: 14,
             fontFamily: Fonts.inter.bold,
-            color: dk ? "#fff" : "#0f172a",
+            color: dk ? "#fff" : "#261913",
             marginBottom: 10,
           }}
         >
@@ -1472,19 +1472,19 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
                     flexShrink: 0,
                   }}
                 >
-                  <Icon name={opt.icon} size={15} color={active ? S : "#94a3b8"} />
+                  <Icon name={opt.icon} size={15} color={active ? S : "#A9917F"} />
                 </View>
                 <View style={{ flex: 1 }}>
                   <Text
                     style={{
                       fontSize: 14,
                       fontFamily: Fonts.inter.bold,
-                      color: active ? S : dk ? "#fff" : "#0f172a",
+                      color: active ? S : dk ? "#fff" : "#261913",
                     }}
                   >
                     {opt.label}
                   </Text>
-                  <Text style={{ fontSize: 11, color: "#94a3b8" }}>{opt.desc}</Text>
+                  <Text style={{ fontSize: 11, color: "#A9917F" }}>{opt.desc}</Text>
                 </View>
                 {active && <Icon name="Check" size={16} color={S} strokeWidth={3} />}
               </Pressable>
@@ -1576,7 +1576,7 @@ const StepReview = ({ content, city, mediaItems, music, metadata, user, dk }) =>
                 flexShrink: 0,
               }}
             >
-              <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: "#94a3b8" }}>
+              <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: "#A9917F" }}>
                 +{mediaItems.length - 4}
               </Text>
             </View>
@@ -1614,7 +1614,7 @@ const StepReview = ({ content, city, mediaItems, music, metadata, user, dk }) =>
                 width: 80,
                 flexShrink: 0,
                 paddingTop: 1,
-                color: "#94a3b8",
+                color: "#A9917F",
               }}
             >
               {row.label}
@@ -1624,7 +1624,7 @@ const StepReview = ({ content, city, mediaItems, music, metadata, user, dk }) =>
                 fontSize: 12,
                 flex: 1,
                 lineHeight: 18,
-                color: dk ? "#fff" : "#0f172a",
+                color: dk ? "#fff" : "#261913",
               }}
             >
               {row.value}
@@ -1817,7 +1817,7 @@ const CreatePost = () => {
             <Icon
               name={step > 0 ? "ChevronLeft" : "X"}
               size={18}
-              color={dk ? "#fff" : "#0f172a"}
+              color={dk ? "#fff" : "#261913"}
             />
           </Pressable>
 
@@ -1850,7 +1850,7 @@ const CreatePost = () => {
           </View>
 
           <View style={{ width: 36, alignItems: "flex-end" }}>
-            <Text style={{ fontSize: 12, fontFamily: Fonts.inter.bold, color: "#94a3b8" }}>
+            <Text style={{ fontSize: 12, fontFamily: Fonts.inter.bold, color: "#A9917F" }}>
               {step + 1}/{STEPS.length}
             </Text>
           </View>
@@ -1874,7 +1874,7 @@ const CreatePost = () => {
               fontSize: 20,
               fontFamily: Fonts.playfair?.black || Fonts.inter.bold,
               letterSpacing: -0.4,
-              color: dk ? "#fff" : "#0f172a",
+              color: dk ? "#fff" : "#261913",
             }}
           >
             {STEPS[step].hint}
@@ -1974,7 +1974,7 @@ const CreatePost = () => {
                   style={{
                     fontSize: 14,
                     fontFamily: Fonts.inter.bold,
-                    color: canNext ? "#fff" : "#94a3b8",
+                    color: canNext ? "#fff" : "#A9917F",
                   }}
                 >
                   {step === 0 && !canNext
@@ -2061,7 +2061,7 @@ const CreatePost = () => {
                 style={{
                   fontSize: 12,
                   fontFamily: Fonts.inter.semibold,
-                  color: "#94a3b8",
+                  color: "#A9917F",
                 }}
               >
                 Skip for now →

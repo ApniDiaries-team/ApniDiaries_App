@@ -26,16 +26,26 @@ const ProfileTabs = ({ activeTab, onTabChange, postCount }) => {
               >
                 <Text
                   className={`text-sm font-medium ${isActive
-                      ? "text-profile-text-primary dark:text-profile-text-primary-dark"
+                      ? "text-primary dark:text-primary-dark"
                       : "text-profile-text-secondary dark:text-profile-text-secondary-dark"
                     }`}
                 >
                   {tab.label}
                 </Text>
 
-                {tab.count !== null && (
-                  <View className="px-2 py-0.5 rounded-full bg-profile-secondary dark:bg-profile-secondary-dark">
-                    <Text className="text-xs text-profile-text-secondary dark:text-profile-text-secondary-dark">
+                {tab.count !== null && !!tab.count && (
+                  <View
+                    className={`px-2 py-0.5 rounded-full ${isActive
+                        ? "bg-primary/15"
+                        : "bg-profile-secondary dark:bg-profile-secondary-dark"
+                      }`}
+                  >
+                    <Text
+                      className={`text-xs font-medium ${isActive
+                          ? "text-primary dark:text-primary-dark"
+                          : "text-profile-text-secondary dark:text-profile-text-secondary-dark"
+                        }`}
+                    >
                       {tab.count}
                     </Text>
                   </View>

@@ -92,8 +92,8 @@ const CallRow = memo(({
     : isIncoming
       ? "#22c55e"
       : isDarkMode
-        ? "#9ca3af"
-        : "#6b7280";
+        ? "#A9917F"
+        : "#8D7165";
 
   const statusLabel = isMissed
     ? "Missed"
@@ -133,7 +133,7 @@ const CallRow = memo(({
         styles.rowCard,
         {
           backgroundColor: isDarkMode ? "#1e2433" : "#ffffff",
-          borderColor: isDarkMode ? "#2d3748" : "#e5e7eb",
+          borderColor: isDarkMode ? "#2d3748" : "#EDD6CD",
           opacity,
           transform: [{ translateY }],
         },
@@ -154,7 +154,7 @@ const CallRow = memo(({
         <View
           style={[
             styles.typeBadge,
-            { backgroundColor: isDarkMode ? "#111827" : "#fff" },
+            { backgroundColor: isDarkMode ? "#261913" : "#fff" },
           ]}
         >
           {isVideo ? (
@@ -171,7 +171,7 @@ const CallRow = memo(({
           style={[
             styles.contactName,
             {
-              color: isMissed ? "#ef4444" : isDarkMode ? "#f9fafb" : "#111827",
+              color: isMissed ? "#ef4444" : isDarkMode ? "#FFF1EC" : "#261913",
             },
           ]}
           numberOfLines={1}
@@ -183,7 +183,7 @@ const CallRow = memo(({
           <Text
             style={[
               styles.metaText,
-              { color: isDarkMode ? "#9ca3af" : "#6b7280" },
+              { color: isDarkMode ? "#A9917F" : "#8D7165" },
             ]}
           >
             {statusLabel}
@@ -193,20 +193,20 @@ const CallRow = memo(({
               <Text
                 style={[
                   styles.metaDot,
-                  { color: isDarkMode ? "#9ca3af" : "#6b7280" },
+                  { color: isDarkMode ? "#A9917F" : "#8D7165" },
                 ]}
               >
                 ·
               </Text>
               <Clock
                 size={10}
-                color={isDarkMode ? "#9ca3af" : "#6b7280"}
+                color={isDarkMode ? "#A9917F" : "#8D7165"}
                 strokeWidth={2}
               />
               <Text
                 style={[
                   styles.metaText,
-                  { color: isDarkMode ? "#9ca3af" : "#6b7280" },
+                  { color: isDarkMode ? "#A9917F" : "#8D7165" },
                 ]}
               >
                 {durationLabel}
@@ -220,7 +220,7 @@ const CallRow = memo(({
       <Text
         style={[
           styles.timestamp,
-          { color: isDarkMode ? "#9ca3af" : "#6b7280" },
+          { color: isDarkMode ? "#A9917F" : "#8D7165" },
         ]}
       >
         {formatTimestamp(call.timestamp)}
@@ -251,7 +251,7 @@ const CallRow = memo(({
 
 const SectionLabel = ({ label, isDarkMode }) => (
   <Text
-    style={[styles.sectionLabel, { color: isDarkMode ? "#9ca3af" : "#6b7280" }]}
+    style={[styles.sectionLabel, { color: isDarkMode ? "#A9917F" : "#8D7165" }]}
   >
     {label.toUpperCase()}
   </Text>
@@ -338,10 +338,10 @@ const CallList = ({ callHistory = [], onAudioCall, onVideoCall, onBack }) => {
     [isDarkMode, onAudioCall, onVideoCall],
   );
 
-  const bgColor = isDarkMode ? "#111827" : "#f9fafb";
-  const borderColor = isDarkMode ? "#2d3748" : "#e5e7eb";
-  const textPrimary = isDarkMode ? "#f9fafb" : "#111827";
-  const textSecondary = isDarkMode ? "#9ca3af" : "#6b7280";
+  const bgColor = isDarkMode ? "#261913" : "#FFF1EC";
+  const borderColor = isDarkMode ? "#2d3748" : "#EDD6CD";
+  const textPrimary = isDarkMode ? "#FFF1EC" : "#261913";
+  const textSecondary = isDarkMode ? "#A9917F" : "#8D7165";
   const cardBg = isDarkMode ? "#1a2236" : "#ffffff";
 
   return (
@@ -532,7 +532,7 @@ const styles = StyleSheet.create({
     height: 20,
     borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: "#e5e7eb",
+    borderColor: "#EDD6CD",
     alignItems: "center",
     justifyContent: "center",
   },

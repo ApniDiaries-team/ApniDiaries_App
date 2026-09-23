@@ -31,11 +31,11 @@ const CityDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const bgPrimary = isDarkMode ? "#111827" : "#f9fafb";
-  const bgCard = isDarkMode ? "#1f2937" : "#fff";
-  const border = isDarkMode ? "#374151" : "#e5e7eb";
-  const textPrimary = isDarkMode ? "#f9fafb" : "#111827";
-  const textSecondary = isDarkMode ? "#9ca3af" : "#6b7280";
+  const bgPrimary = isDarkMode ? "#261913" : "#FFF1EC";
+  const bgCard = isDarkMode ? "#3C2D27" : "#fff";
+  const border = isDarkMode ? "#594137" : "#EDD6CD";
+  const textPrimary = isDarkMode ? "#FFF1EC" : "#261913";
+  const textSecondary = isDarkMode ? "#A9917F" : "#8D7165";
 
   useEffect(() => {
     const fetchCity = async () => {
@@ -150,7 +150,7 @@ const CityDetails = () => {
             width: 36,
             height: 36,
             borderRadius: 18,
-            backgroundColor: isDarkMode ? "#374151" : "#f3f4f6",
+            backgroundColor: isDarkMode ? "#594137" : "#FFE9E1",
             alignItems: "center",
             justifyContent: "center",
             marginRight: 8,

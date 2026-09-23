@@ -246,7 +246,7 @@ const ShareProfileModal = ({ isOpen, onClose, userData }) => {
                 paddingHorizontal: 12,
                 paddingVertical: 6,
                 borderRadius: 6,
-                backgroundColor: copied ? "#10B981" : "#374151",
+                backgroundColor: copied ? "#10B981" : "#594137",
               }}
             >
               <Text style={{ color: "#fff", fontSize: 12 }}>

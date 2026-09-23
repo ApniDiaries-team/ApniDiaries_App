@@ -4,9 +4,9 @@ import { Fonts } from '../../../constants/theme';
 
 const SocialMediaCard = ({ platform, handle, followers, icon, link, color, isDarkMode }) => {
   const bg = isDarkMode ? '#131c2b' : '#fff';
-  const border = isDarkMode ? '#1e2d42' : '#e5e7eb';
-  const textPrimary = isDarkMode ? '#f1f5f9' : '#111827';
-  const textSecondary = isDarkMode ? '#64748b' : '#6b7280';
+  const border = isDarkMode ? '#1e2d42' : '#EDD6CD';
+  const textPrimary = isDarkMode ? '#FFF1EC' : '#261913';
+  const textSecondary = isDarkMode ? '#8D7165' : '#8D7165';
 
   return (
     <Pressable

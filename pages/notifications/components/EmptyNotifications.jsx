@@ -1,93 +1,65 @@
-import React from 'react'
-import { Text, View } from 'react-native'
-import Icon from '../../../components/AppIcon'
-import { useDarkMode } from '../../../context/DarkModeContext'
-import { Fonts } from '../../../constants/theme'
+import { Text, View } from "react-native";
+import Icon from "../../../components/AppIcon";
+import { Fonts } from "../../../constants/theme";
+import { useDarkMode } from "../../../context/DarkModeContext";
+
+// Mirrors web pages/notifications/components/EmptyNotifications.jsx.
+const MESSAGES = {
+  all: {
+    icon: "Bell",
+    title: "No notifications yet",
+    description: "When someone follows you, sends a friend request, or interacts with your posts, you'll see it here.",
+  },
+  invites: {
+    icon: "UserPlus2",
+    title: "No invites",
+    description: "You don't have any pending friend or trip invites at the moment.",
+  },
+  message: {
+    icon: "MessageCircle",
+    title: "No message notifications",
+    description: "Message notifications will appear here when you receive new messages.",
+  },
+  alerts: {
+    icon: "BellRing",
+    title: "No alerts yet",
+    description: "Follows, likes, comments, and other activity will show up here.",
+  },
+};
 
 const EmptyNotifications = ({ filterType }) => {
-  const { isDarkMode } = useDarkMode()
-
-  const colors = {
-    secondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-  }
-
-  const getEmptyMessage = () => {
-    const messages = {
-      all: {
-        icon: 'Bell',
-        title: 'No notifications yet',
-        description: "When someone follows you, sends a friend request, or interacts with your posts, you'll see it here.",
-      },
-      friend_request: {
-        icon: 'UserPlus',
-        title: 'No friend requests',
-        description: "You don't have any pending friend requests at the moment.",
-      },
-      follow: {
-        icon: 'UserCheck',
-        title: 'No new followers',
-        description: "When someone follows you, you'll be notified here.",
-      },
-      message: {
-        icon: 'MessageCircle',
-        title: 'No message notifications',
-        description: 'Message notifications will appear here when you receive new messages.',
-      },
-      engagement: {
-        icon: 'Heart',
-        title: 'No activity yet',
-        description: 'Likes, comments, and other interactions with your posts will show up here.',
-      },
-    }
-
-    return messages[filterType] || messages.all
-  }
-
-  const message = getEmptyMessage()
+  const { theme } = useDarkMode();
+  const { icon, title, description } = MESSAGES[filterType] || MESSAGES.all;
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 64, px: 16 }}>
+    <View style={{ alignItems: "center", justifyContent: "center", paddingVertical: 64, paddingHorizontal: 16 }}>
       <View
         style={{
           width: 80,
           height: 80,
-          borderRadius: 40,
-          backgroundColor: colors.secondary,
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginBottom: 24,
+          borderRadius: 999,
+          alignItems: "center",
+          justifyContent: "center",
+          marginBottom: 20,
+          backgroundColor: theme.surfaceContainerLow,
         }}
       >
-        <Icon name={message.icon} size={40} color={colors.textSecondary} />
+        <Icon name={icon} size={34} color={theme.onSurfaceVariant} />
       </View>
-
       <Text
         style={{
-          fontSize: 18,
-          fontFamily: Fonts.playfair.bold,
-          color: colors.textPrimary,
-          textAlign: 'center',
-          marginBottom: 8
+          fontFamily: Fonts.display.semibold,
+          fontSize: 19,
+          color: theme.onSurface,
+          marginBottom: 8,
+          textAlign: "center",
         }}
       >
-        {message.title}
+        {title}
       </Text>
-
-      <Text
-        style={{
-          fontSize: 14,
-          color: colors.textSecondary,
-          textAlign: 'center',
-          maxWidth: 280,
-          fontFamily: "Poppins_400Regular"
-        }}
-      >
-        {message.description}
-      </Text>
+      <Text style={{ fontSize: 14, color: theme.onSurfaceVariant, textAlign: "center" }}>{description}</Text>
     </View>
-  )
-}
+  );
+};
 
-export default EmptyNotifications
+export default EmptyNotifications;

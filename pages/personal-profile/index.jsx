@@ -21,6 +21,7 @@ import AboutSection from "./components/AboutSection";
 import CoverPhotoSection from "./components/CoverPhotoSection";
 import PostsSection from "./components/PostsSection";
 import ProfileHeader from "./components/ProfileHeader";
+import ProfileStats from "./components/ProfileStats";
 import ProfileTabs from "./components/ProfileTabs";
 import ShareProfileModal from "./components/ShareProfileModal";
 import TravelStatsSection from "./components/TravelStatsSection";
@@ -48,8 +49,8 @@ const PersonalProfile = () => {
 
   const colors = {
     background: isDarkMode ? "#0B0E14" : "#ffff", // Matched Premium branding from SearchUser
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
+    textPrimary: isDarkMode ? "#FFFFFF" : "#261913",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#8D7165",
     border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
   };
 
@@ -137,11 +138,11 @@ const PersonalProfile = () => {
   };
 
   const handleFollowersClick = () => {
-    console.log("Navigate to followers list");
+    router.push({ pathname: "/followers", params: { userId: user?.id, tab: "followers" } });
   };
 
   const handleFollowingClick = () => {
-    console.log("Navigate to following list");
+    router.push({ pathname: "/followers", params: { userId: user?.id, tab: "following" } });
   };
 
   const handleBackClick = () => {
@@ -195,7 +196,7 @@ const PersonalProfile = () => {
             backgroundColor: pressed
               ? isDarkMode
                 ? "#2D3748"
-                : "#F1F5F9"
+                : "#FFF1EC"
               : "transparent",
           })}
         >
@@ -244,6 +245,12 @@ const PersonalProfile = () => {
               profileData={profileData}
               onEditProfile={handleEditProfile}
               onShareProfile={handleShareProfile}
+            />
+
+            <ProfileStats
+              expeditions={profileData?.stats?.totalPosts}
+              followers={profileData?.stats?.followers}
+              following={profileData?.stats?.following}
               onFollowersClick={handleFollowersClick}
               onFollowingClick={handleFollowingClick}
             />

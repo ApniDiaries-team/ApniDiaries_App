@@ -66,9 +66,9 @@ const TravelPreferencesSection = ({ formData, errors, onChange }) => {
       style={{
         borderRadius: 12,
         padding: 16,
-        backgroundColor: isDarkMode ? '#1f2937' : '#fff',
+        backgroundColor: isDarkMode ? '#3C2D27' : '#fff',
         borderWidth: 1,
-        borderColor: isDarkMode ? '#374151' : '#f3f4f6',
+        borderColor: isDarkMode ? '#594137' : '#FFE9E1',
         top: 40
       }}
     >
@@ -97,7 +97,7 @@ const TravelPreferencesSection = ({ formData, errors, onChange }) => {
           style={{
             fontSize: 18,
             fontWeight: '600',
-            color: isDarkMode ? '#f9fafb' : '#111827',
+            color: isDarkMode ? '#FFF1EC' : '#261913',
           }}
         >
           Travel Preferences
@@ -165,7 +165,7 @@ const TravelPreferencesSection = ({ formData, errors, onChange }) => {
             style={{
               fontSize: 14,
               fontWeight: '500',
-              color: isDarkMode ? '#ffff' : '#111827',
+              color: isDarkMode ? '#ffff' : '#261913',
             }}
           >
             Travel Availability
@@ -220,14 +220,14 @@ const SingleDropdown = ({
   return (
     <View style={{ gap: 6 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-        <Text style={{ fontSize: 14, fontWeight: '600', color: isDarkMode ? '#f9fafb' : '#111827' }}>
+        <Text style={{ fontSize: 14, fontWeight: '600', color: isDarkMode ? '#FFF1EC' : '#261913' }}>
           {label}
         </Text>
         {required && <Text style={{ color: '#ef4444', fontSize: 14 }}>*</Text>}
       </View>
 
       {description && (
-        <Text style={{ fontSize: 12, color: isDarkMode ? '#9ca3af' : '#6b7280' }}>
+        <Text style={{ fontSize: 12, color: isDarkMode ? '#A9917F' : '#8D7165' }}>
           {description}
         </Text>
       )}
@@ -245,8 +245,8 @@ const SingleDropdown = ({
           borderColor: error
             ? '#ef4444'
             : open
-              ? '#9ca3af'
-              : isDarkMode ? '#374151' : '#e5e7eb',
+              ? '#A9917F'
+              : isDarkMode ? '#594137' : '#EDD6CD',
           backgroundColor: isDarkMode ? '#0b0e14' : '#fff',
         }}
       >
@@ -255,8 +255,8 @@ const SingleDropdown = ({
             fontSize: 14,
             fontWeight: '500',
             color: selected
-              ? isDarkMode ? '#f9fafb' : '#111827'
-              : isDarkMode ? '#6b7280' : '#9ca3af',
+              ? isDarkMode ? '#FFF1EC' : '#261913'
+              : isDarkMode ? '#8D7165' : '#A9917F',
           }}
         >
           {selected ? selected.label : placeholder}
@@ -264,7 +264,7 @@ const SingleDropdown = ({
         <Icon
           name={open ? 'ChevronUp' : 'ChevronDown'}
           size={18}
-          color={isDarkMode ? '#9ca3af' : '#6b7280'}
+          color={isDarkMode ? '#A9917F' : '#8D7165'}
         />
       </Pressable>
 
@@ -273,14 +273,14 @@ const SingleDropdown = ({
           style={{
             borderRadius: 12,
             overflow: 'hidden',
-            backgroundColor: isDarkMode ? '#1f2937' : '#fff',
+            backgroundColor: isDarkMode ? '#3C2D27' : '#fff',
             elevation: 5,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 8,
             borderWidth: 1,
-            borderColor: isDarkMode ? '#374151' : '#e5e7eb',
+            borderColor: isDarkMode ? '#594137' : '#EDD6CD',
           }}
         >
           <View
@@ -290,20 +290,20 @@ const SingleDropdown = ({
               paddingHorizontal: 12,
               paddingVertical: 8,
               borderBottomWidth: 1,
-              borderBottomColor: isDarkMode ? '#374151' : '#f3f4f6',
+              borderBottomColor: isDarkMode ? '#594137' : '#FFE9E1',
               gap: 8,
             }}
           >
-            <Icon name="Search" size={15} color={isDarkMode ? '#9ca3af' : '#6b7280'} />
+            <Icon name="Search" size={15} color={isDarkMode ? '#A9917F' : '#8D7165'} />
             <TextInput
               value={search}
               onChangeText={setSearch}
               placeholder="Search..."
-              placeholderTextColor={isDarkMode ? '#6b7280' : '#9ca3af'}
+              placeholderTextColor={isDarkMode ? '#8D7165' : '#A9917F'}
               style={{
                 flex: 1,
                 fontSize: 13,
-                color: isDarkMode ? '#f9fafb' : '#111827',
+                color: isDarkMode ? '#FFF1EC' : '#261913',
                 paddingVertical: 2,
               }}
             />
@@ -311,7 +311,7 @@ const SingleDropdown = ({
 
           <ScrollView style={{ maxHeight: 220 }} nestedScrollEnabled>
             {filtered.length === 0 ? (
-              <Text style={{ padding: 14, fontSize: 13, color: isDarkMode ? '#6b7280' : '#9ca3af', textAlign: 'center' }}>
+              <Text style={{ padding: 14, fontSize: 13, color: isDarkMode ? '#8D7165' : '#A9917F', textAlign: 'center' }}>
                 No results found
               </Text>
             ) : (
@@ -332,7 +332,7 @@ const SingleDropdown = ({
                     style={{
                       fontSize: 14,
                       fontWeight: value === opt.value ? '600' : '400',
-                      color: value === opt.value ? '#fff' : isDarkMode ? '#f9fafb' : '#111827',
+                      color: value === opt.value ? '#fff' : isDarkMode ? '#FFF1EC' : '#261913',
                     }}
                   >
                     {opt.label}
@@ -384,14 +384,14 @@ const MultiDropdown = ({
   return (
     <View style={{ gap: 6 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-        <Text style={{ fontSize: 14, fontWeight: '600', color: isDarkMode ? '#f9fafb' : '#111827' }}>
+        <Text style={{ fontSize: 14, fontWeight: '600', color: isDarkMode ? '#FFF1EC' : '#261913' }}>
           {label}
         </Text>
         {required && <Text style={{ color: '#ef4444', fontSize: 14 }}>*</Text>}
       </View>
 
       {description && (
-        <Text style={{ fontSize: 12, color: isDarkMode ? '#9ca3af' : '#6b7280' }}>
+        <Text style={{ fontSize: 12, color: isDarkMode ? '#A9917F' : '#8D7165' }}>
           {description}
         </Text>
       )}
@@ -409,15 +409,15 @@ const MultiDropdown = ({
           borderColor: error
             ? '#ef4444'
             : open
-              ? '#9ca3af'
-              : isDarkMode ? '#374151' : '#e5e7eb',
+              ? '#A9917F'
+              : isDarkMode ? '#594137' : '#EDD6CD',
           backgroundColor: isDarkMode ? '#0b0e14' : '#fff',
           minHeight: 48,
         }}
       >
         <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
           {selected.length === 0 ? (
-            <Text style={{ fontSize: 14, fontWeight: '500', color: isDarkMode ? '#6b7280' : '#9ca3af' }}>
+            <Text style={{ fontSize: 14, fontWeight: '500', color: isDarkMode ? '#8D7165' : '#A9917F' }}>
               {placeholder}
             </Text>
           ) : (
@@ -447,7 +447,7 @@ const MultiDropdown = ({
         <Icon
           name={open ? 'ChevronUp' : 'ChevronDown'}
           size={18}
-          color={isDarkMode ? '#9ca3af' : '#6b7280'}
+          color={isDarkMode ? '#A9917F' : '#8D7165'}
           style={{ marginLeft: 8 }}
         />
       </Pressable>
@@ -457,14 +457,14 @@ const MultiDropdown = ({
           style={{
             borderRadius: 12,
             overflow: 'hidden',
-            backgroundColor: isDarkMode ? '#1f2937' : '#fff',
+            backgroundColor: isDarkMode ? '#3C2D27' : '#fff',
             elevation: 5,
             shadowColor: '#000',
             shadowOffset: { width: 0, height: 2 },
             shadowOpacity: 0.1,
             shadowRadius: 8,
             borderWidth: 1,
-            borderColor: isDarkMode ? '#374151' : '#e5e7eb',
+            borderColor: isDarkMode ? '#594137' : '#EDD6CD',
           }}
         >
           <View
@@ -474,20 +474,20 @@ const MultiDropdown = ({
               paddingHorizontal: 12,
               paddingVertical: 8,
               borderBottomWidth: 1,
-              borderBottomColor: isDarkMode ? '#374151' : '#f3f4f6',
+              borderBottomColor: isDarkMode ? '#594137' : '#FFE9E1',
               gap: 8,
             }}
           >
-            <Icon name="Search" size={15} color={isDarkMode ? '#9ca3af' : '#6b7280'} />
+            <Icon name="Search" size={15} color={isDarkMode ? '#A9917F' : '#8D7165'} />
             <TextInput
               value={search}
               onChangeText={setSearch}
               placeholder="Search..."
-              placeholderTextColor={isDarkMode ? '#6b7280' : '#9ca3af'}
+              placeholderTextColor={isDarkMode ? '#8D7165' : '#A9917F'}
               style={{
                 flex: 1,
                 fontSize: 13,
-                color: isDarkMode ? '#f9fafb' : '#111827',
+                color: isDarkMode ? '#FFF1EC' : '#261913',
                 paddingVertical: 2,
               }}
             />
@@ -502,7 +502,7 @@ const MultiDropdown = ({
 
           <ScrollView style={{ maxHeight: 220 }} nestedScrollEnabled>
             {filtered.length === 0 ? (
-              <Text style={{ padding: 14, fontSize: 13, color: isDarkMode ? '#6b7280' : '#9ca3af', textAlign: 'center' }}>
+              <Text style={{ padding: 14, fontSize: 13, color: isDarkMode ? '#8D7165' : '#A9917F', textAlign: 'center' }}>
                 No results found
               </Text>
             ) : (
@@ -525,7 +525,7 @@ const MultiDropdown = ({
                       style={{
                         fontSize: 14,
                         fontWeight: isSelected ? '600' : '400',
-                        color: isSelected ? '#fff' : isDarkMode ? '#f9fafb' : '#111827',
+                        color: isSelected ? '#fff' : isDarkMode ? '#FFF1EC' : '#261913',
                       }}
                     >
                       {opt.label}
@@ -544,8 +544,8 @@ const MultiDropdown = ({
                 paddingVertical: 12,
                 alignItems: 'center',
                 borderTopWidth: 1,
-                borderTopColor: isDarkMode ? '#374151' : '#f3f4f6',
-                backgroundColor: isDarkMode ? '#111827' : '#f9fafb',
+                borderTopColor: isDarkMode ? '#594137' : '#FFE9E1',
+                backgroundColor: isDarkMode ? '#261913' : '#FFF1EC',
               }}
             >
               <Text style={{ fontSize: 14, fontWeight: '700', color: '#FF9933' }}>

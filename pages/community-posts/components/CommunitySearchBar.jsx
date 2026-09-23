@@ -29,17 +29,17 @@ const CommunitySearchBar = ({ onSearch }) => {
       <View
         className="flex-row items-center gap-3 px-4 py-3.5 md:py-4 rounded-3xl border-[1.5px] bg-white dark:bg-slate-900 shadow-sm border-slate-900 dark:border-slate-100"
       >
-        <Icon name="Search" size={20} color="#64748b" />
+        <Icon name="Search" size={20} color="#8D7165" />
         <TextInput
           value={searchQuery}
           onChangeText={handleSearchChange}
           placeholder="Search posts, travelers, destinations..."
-          placeholderTextColor="#64748b"
+          placeholderTextColor="#8D7165"
           className="flex-1 text-sm md:text-base text-slate-900 dark:text-slate-100"
         />
         {searchQuery !== '' && (
           <Pressable onPress={handleClear}>
-            <Icon name="X" size={18} color="#64748b" />
+            <Icon name="X" size={18} color="#8D7165" />
           </Pressable>
         )}
       </View>

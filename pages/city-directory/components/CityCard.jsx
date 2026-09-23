@@ -45,11 +45,11 @@ const CityCard = ({ city }) => {
       onPressIn={() => setShowHoverDetails(true)}
       onPressOut={() => setShowHoverDetails(false)}
       style={{
-        backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+        backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
         borderRadius: 12,
         overflow: "hidden",
         borderWidth: 1,
-        borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+        borderColor: isDarkMode ? "#594137" : "#EDD6CD",
         marginBottom: 16,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
@@ -161,7 +161,7 @@ const CityCard = ({ city }) => {
         <Text
           style={{
             fontSize: 14,
-            color: isDarkMode ? "#9ca3af" : "#6b7280",
+            color: isDarkMode ? "#A9917F" : "#8D7165",
             marginBottom: 16,
             lineHeight: 20,
           }}
@@ -177,7 +177,7 @@ const CityCard = ({ city }) => {
             marginBottom: 16,
             paddingBottom: 16,
             borderBottomWidth: 1,
-            borderBottomColor: isDarkMode ? "#374151" : "#f3f4f6",
+            borderBottomColor: isDarkMode ? "#594137" : "#FFE9E1",
           }}
         >
           {/* Active Travelers — matches web: text-blue-500 for icon AND number */}
@@ -205,7 +205,7 @@ const CityCard = ({ city }) => {
             <Text
               style={{
                 fontSize: 12,
-                color: isDarkMode ? "#9ca3af" : "#6b7280",
+                color: isDarkMode ? "#A9917F" : "#8D7165",
               }}
             >
               Active Travelers
@@ -236,7 +236,7 @@ const CityCard = ({ city }) => {
             <Text
               style={{
                 fontSize: 12,
-                color: isDarkMode ? "#9ca3af" : "#6b7280",
+                color: isDarkMode ? "#A9917F" : "#8D7165",
               }}
             >
               Recent Posts
@@ -267,7 +267,7 @@ const CityCard = ({ city }) => {
             <Text
               style={{
                 fontSize: 12,
-                color: isDarkMode ? "#9ca3af" : "#6b7280",
+                color: isDarkMode ? "#A9917F" : "#8D7165",
               }}
             >
               Packages
@@ -288,7 +288,7 @@ const CityCard = ({ city }) => {
                 style={{
                   fontSize: 13,
                   fontWeight: "500",
-                  color: isDarkMode ? "#f9fafb" : "#111827",
+                  color: isDarkMode ? "#FFF1EC" : "#261913",
                 }}
               >
                 Weather:
@@ -296,7 +296,7 @@ const CityCard = ({ city }) => {
               <Text
                 style={{
                   fontSize: 13,
-                  color: isDarkMode ? "#9ca3af" : "#6b7280",
+                  color: isDarkMode ? "#A9917F" : "#8D7165",
                 }}
               >
                 {city?.weather}
@@ -312,7 +312,7 @@ const CityCard = ({ city }) => {
                 style={{
                   fontSize: 13,
                   fontWeight: "500",
-                  color: isDarkMode ? "#f9fafb" : "#111827",
+                  color: isDarkMode ? "#FFF1EC" : "#261913",
                 }}
               >
                 Rating:
@@ -320,7 +320,7 @@ const CityCard = ({ city }) => {
               <Text
                 style={{
                   fontSize: 13,
-                  color: isDarkMode ? "#9ca3af" : "#6b7280",
+                  color: isDarkMode ? "#A9917F" : "#8D7165",
                 }}
               >
                 {city?.rating}/5.0
@@ -344,13 +344,13 @@ const CityCard = ({ city }) => {
                     paddingVertical: 4,
                     borderRadius: 999,
                     // matches web: bg-[var(--color-bg-secondary)]
-                    backgroundColor: isDarkMode ? "#374151" : "#f3f4f6",
+                    backgroundColor: isDarkMode ? "#594137" : "#FFE9E1",
                   }}
                 >
                   <Text
                     style={{
                       fontSize: 12,
-                      color: isDarkMode ? "#9ca3af" : "#6b7280",
+                      color: isDarkMode ? "#A9917F" : "#8D7165",
                     }}
                   >
                     {activity}
@@ -380,8 +380,8 @@ const CityCard = ({ city }) => {
               borderColor: viewPostsPressed
                 ? "#FF9933"
                 : isDarkMode
-                  ? "#374151"
-                  : "#e5e7eb",
+                  ? "#594137"
+                  : "#EDD6CD",
               backgroundColor: viewPostsPressed ? "#FF9933" : "transparent",
             }}
           >
@@ -389,7 +389,7 @@ const CityCard = ({ city }) => {
               name="MessageCircle"
               size={14}
               color={
-                viewPostsPressed ? "#fff" : isDarkMode ? "#f9fafb" : "#374151"
+                viewPostsPressed ? "#fff" : isDarkMode ? "#FFF1EC" : "#594137"
               }
             />
             <Text
@@ -399,8 +399,8 @@ const CityCard = ({ city }) => {
                 color: viewPostsPressed
                   ? "#fff"
                   : isDarkMode
-                    ? "#f9fafb"
-                    : "#374151",
+                    ? "#FFF1EC"
+                    : "#594137",
               }}
             >
               View Posts
@@ -424,8 +424,8 @@ const CityCard = ({ city }) => {
               borderColor: packagesPressed
                 ? "#FF9933"
                 : isDarkMode
-                  ? "#374151"
-                  : "#e5e7eb",
+                  ? "#594137"
+                  : "#EDD6CD",
               backgroundColor: packagesPressed ? "#FF9933" : "transparent",
             }}
           >
@@ -433,7 +433,7 @@ const CityCard = ({ city }) => {
               name="Package"
               size={14}
               color={
-                packagesPressed ? "#fff" : isDarkMode ? "#f9fafb" : "#374151"
+                packagesPressed ? "#fff" : isDarkMode ? "#FFF1EC" : "#594137"
               }
             />
             <Text
@@ -443,8 +443,8 @@ const CityCard = ({ city }) => {
                 color: packagesPressed
                   ? "#fff"
                   : isDarkMode
-                    ? "#f9fafb"
-                    : "#374151",
+                    ? "#FFF1EC"
+                    : "#594137",
               }}
             >
               Packages

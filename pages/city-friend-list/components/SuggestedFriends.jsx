@@ -15,8 +15,8 @@ const SuggestedFriends = ({ suggestions, onAddFriend }) => {
     bgCard: isDarkMode ? "#1E242F" : "#FFFFFF",
     bgSecondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
     accent: "#FF9933",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
+    textPrimary: isDarkMode ? "#FFFFFF" : "#261913",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#8D7165",
     border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
   };
 

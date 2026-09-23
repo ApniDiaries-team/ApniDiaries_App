@@ -35,12 +35,12 @@ const PostMetadataForm = ({ metadata, onChange }) => {
   const [showPrivacyDropdown, setShowPrivacyDropdown] = useState(false);
   const [showTripTypeDropdown, setShowTripTypeDropdown] = useState(false);
   const colors = {
-    bg: isDarkMode ? "#1f2937" : "#FFFFFF",
-    bgSecondary: isDarkMode ? "#111827" : "#f9fafb",
+    bg: isDarkMode ? "#3C2D27" : "#FFFFFF",
+    bgSecondary: isDarkMode ? "#261913" : "#FFF1EC",
     bgSoft: isDarkMode ? "#1a2233" : "#faf7f2",
-    textPrimary: isDarkMode ? "#f3f4f6" : "#1a1a1a",
-    textSecondary: isDarkMode ? "#9ca3af" : "#6b7280",
-    border: isDarkMode ? "#374151" : "#e5e7eb",
+    textPrimary: isDarkMode ? "#FFE9E1" : "#1a1a1a",
+    textSecondary: isDarkMode ? "#A9917F" : "#8D7165",
+    border: isDarkMode ? "#594137" : "#EDD6CD",
     borderSoft: isDarkMode ? "#2d3748" : "#e9ded3",
     saffron: "#FF9933",
     orange: "#EA580C",
@@ -98,7 +98,7 @@ const PostMetadataForm = ({ metadata, onChange }) => {
         backgroundColor: selected
           ? colors.saffron
           : isDarkMode
-            ? "#374151"
+            ? "#594137"
             : colors.white,
         borderWidth: 0.5,
         borderColor: selected ? colors.saffron : "",
@@ -358,7 +358,7 @@ const PostMetadataForm = ({ metadata, onChange }) => {
               // borderWidth: 1.5,
               // borderColor: "rgba(255,153,51,0.3)",
               overflow: "hidden",
-              backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+              backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
               maxHeight: 280,
               elevation: 5,
             }}
@@ -473,7 +473,7 @@ const PostMetadataForm = ({ metadata, onChange }) => {
               // borderWidth: 1.5,
               // borderColor: "rgba(255,153,51,0.3)",
               overflow: "hidden",
-              backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+              backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
               elevation: 5,
             }}
           >
@@ -579,7 +579,7 @@ const PostMetadataForm = ({ metadata, onChange }) => {
           borderRadius: 12,
           borderWidth: 0.5,
           // borderColor: colors.borderSoft,
-          backgroundColor: isDarkMode ? "#111827" : colors.white,
+          backgroundColor: isDarkMode ? "#261913" : colors.white,
           // opacity: pressed ? 0.9 : 1,
         }}
       >

@@ -14,7 +14,7 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
         borderRadius: 12,
         overflow: "hidden",
         borderWidth: 1,
-        borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+        borderColor: isDarkMode ? "#594137" : "#EDD6CD",
         marginBottom: 16,
       }}
     >

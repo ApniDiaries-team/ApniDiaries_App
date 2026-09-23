@@ -11,7 +11,7 @@ const SearchBar = ({ onSearch }) => {
     bgInput: isDarkMode ? '#1E242F' : '#FFFFFF',
     border: isDarkMode ? '#2D3748' : '#E2E8F0',
     text: isDarkMode ? '#FFFFFF' : '#1A202C',
-    placeholder: isDarkMode ? '#A0AEC0' : '#64748B',
+    placeholder: isDarkMode ? '#A0AEC0' : '#8D7165',
     accent: '#FF9933', // Brand orange
   };
 

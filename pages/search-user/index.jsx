@@ -14,7 +14,7 @@ const SearchUser = () => {
   const colors = {
     background: isDarkMode ? '#0B0E14' : '#ffff', // Matched bg-bg-cream (light cream/gray)
     textPrimary: isDarkMode ? '#FFFFFF' : '#1A202C',
-    textSecondary: isDarkMode ? '#A0AEC0' : '#6B7280',
+    textSecondary: isDarkMode ? '#A0AEC0' : '#8D7165',
     accent: '#FF9933',
   };
 

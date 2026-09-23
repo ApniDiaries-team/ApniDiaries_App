@@ -22,7 +22,7 @@ const EmptyState = ({ onClearFilters }) => {
           width: 96,
           height: 96,
           borderRadius: 999,
-          backgroundColor: isDarkMode ? "#374151" : "#f3f4f6",
+          backgroundColor: isDarkMode ? "#594137" : "#FFE9E1",
           alignItems: "center",
           justifyContent: "center",
           marginBottom: 24,
@@ -32,7 +32,7 @@ const EmptyState = ({ onClearFilters }) => {
         <Icon
           name="MapOff"
           size={48}
-          color={isDarkMode ? "#9ca3af" : "#6b7280"}
+          color={isDarkMode ? "#A9917F" : "#8D7165"}
         />
       </View>
 
@@ -41,7 +41,7 @@ const EmptyState = ({ onClearFilters }) => {
         style={{
           fontSize: 22,
           fontFamily: Fonts.playfair.bold,
-          color: isDarkMode ? "#f9fafb" : "#111827",
+          color: isDarkMode ? "#FFF1EC" : "#261913",
           marginBottom: 12,
           textAlign: "center",
         }}
@@ -53,7 +53,7 @@ const EmptyState = ({ onClearFilters }) => {
       <Text
         style={{
           fontSize: 14,
-          color: isDarkMode ? "#9ca3af" : "#6b7280",
+          color: isDarkMode ? "#A9917F" : "#8D7165",
           marginBottom: 24,
           textAlign: "center",
           maxWidth: 448,

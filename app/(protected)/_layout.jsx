@@ -8,10 +8,10 @@ export default function ProtectedLayout() {
 
   if (isLoading || isAuthenticating) {
     return (
-      <View className="flex-1 justify-center items-center bg-orange-50">
+      <View className="flex-1 justify-center items-center bg-surface">
         <View className="items-center">
-          <ActivityIndicator size="large" color="#EAB308" />
-          <Text className="mt-4 text-gray-500 font-medium">
+          <ActivityIndicator size="large" color="#F97316" />
+          <Text className="mt-4 text-on-surface-variant font-body-medium">
             Checking authentication...
           </Text>
         </View>

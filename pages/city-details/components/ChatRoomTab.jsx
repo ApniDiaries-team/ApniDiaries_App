@@ -144,13 +144,13 @@ const ChatRoomTab = ({ cityName }) => {
     return `${days}d ago`;
   };
 
-  const bg = isDarkMode ? "#1f2937" : "#fff";
-  const border = isDarkMode ? "#374151" : "#e5e7eb";
-  const textPrimary = isDarkMode ? "#f9fafb" : "#111827";
-  const textSecondary = isDarkMode ? "#9ca3af" : "#6b7280";
-  const inputBg = isDarkMode ? "#111827" : "#f9fafb";
-  const bgPrimary = isDarkMode ? "#111827" : "#f9fafb";
-  const bgSecondary = isDarkMode ? "#374151" : "#f3f4f6";
+  const bg = isDarkMode ? "#3C2D27" : "#fff";
+  const border = isDarkMode ? "#594137" : "#EDD6CD";
+  const textPrimary = isDarkMode ? "#FFF1EC" : "#261913";
+  const textSecondary = isDarkMode ? "#A9917F" : "#8D7165";
+  const inputBg = isDarkMode ? "#261913" : "#FFF1EC";
+  const bgPrimary = isDarkMode ? "#261913" : "#FFF1EC";
+  const bgSecondary = isDarkMode ? "#594137" : "#FFE9E1";
 
   return (
     <KeyboardAvoidingView
@@ -332,8 +332,8 @@ const ChatRoomTab = ({ cityName }) => {
               borderRadius: 8,
               backgroundColor: !message?.trim()
                 ? isDarkMode
-                  ? "#374151"
-                  : "#e5e7eb"
+                  ? "#594137"
+                  : "#EDD6CD"
                 : "#FF9933",
               alignItems: "center",
               justifyContent: "center",

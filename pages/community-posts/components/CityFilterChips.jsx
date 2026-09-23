@@ -105,18 +105,18 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
         <View className="mb-4">
           <View className="relative">
             <View className="absolute left-3 top-3.5 z-10" >
-              <Icon name="Search" size={16} color="#64748b" />
+              <Icon name="Search" size={16} color="#8D7165" />
             </View>
             <TextInput
               placeholder="Search destinations..."
               value={searchQuery}
               onChangeText={handleSearchChange}
-              placeholderTextColor="#64748b"
+              placeholderTextColor="#8D7165"
               className="w-full pl-10 pr-4 py-3 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100"
             />
             {searchQuery !== '' && (
               <Pressable onPress={() => { setSearchQuery(''); setCitySuggestions([]) }} className="absolute right-3 top-3.5">
-                <Icon name="X" size={14} color="#64748b" />
+                <Icon name="X" size={14} color="#8D7165" />
               </Pressable>
             )}
           </View>
@@ -154,7 +154,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
             >
               <View className="flex-row items-center gap-2">
                 <View className={`p-1.5 rounded ${selectedCity === 'all' ? 'bg-[#FF9933]' : 'bg-slate-50 dark:bg-slate-800'}`}>
-                  <Icon name="Globe" size={14} color={selectedCity === 'all' ? '#fff' : '#64748b'} />
+                  <Icon name="Globe" size={14} color={selectedCity === 'all' ? '#fff' : '#8D7165'} />
                 </View>
                 <Text className={`text-sm font-medium ${selectedCity === 'all' ? 'text-[#FF9933]' : 'text-slate-600 dark:text-slate-300'}`}>All Destinations</Text>
               </View>
@@ -175,7 +175,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
                 >
                   <View className="flex-row items-center gap-2">
                     <View className={`p-1.5 rounded ${isActive ? 'bg-[#FF9933]' : 'bg-slate-50 dark:bg-slate-800'}`}>
-                      <Icon name="MapPin" size={14} color={isActive ? '#fff' : '#64748b'} />
+                      <Icon name="MapPin" size={14} color={isActive ? '#fff' : '#8D7165'} />
                     </View>
                     <View>
                       <Text className={`text-sm font-medium ${isActive ? 'text-[#FF9933]' : 'text-slate-600 dark:text-slate-300'}`}>{cityName}</Text>
@@ -241,7 +241,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
             </Pressable>
           )}
           <Pressable onPress={() => setShowSearch(!showSearch)} className="p-1.5 rounded-lg bg-white dark:bg-slate-950 shadow-sm">
-            <Icon name="Search" size={18} color="#64748b" />
+            <Icon name="Search" size={18} color="#8D7165" />
           </Pressable>
         </View>
       </View>
@@ -249,18 +249,18 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
       {showSearch && (
         <View className="relative mb-4">
           <View className="absolute left-3 top-3.5 z-10">
-            <Icon name="Search" size={16} color="#64748b" />
+            <Icon name="Search" size={16} color="#8D7165" />
           </View>
           <TextInput
             placeholder="Search destinations..."
             value={searchQuery}
             onChangeText={handleSearchChange}
-            placeholderTextColor="#64748b"
+            placeholderTextColor="#8D7165"
             className="w-full pl-10 pr-4 py-3.5 text-sm rounded-2xl border border-slate-200 dark:border-slate-100 bg-white dark:bg-slate-800 shadow-sm text-slate-900 dark:text-slate-100"
           />
           {searchQuery !== '' && (
             <Pressable onPress={() => { setSearchQuery(''); setCitySuggestions([]) }} className="absolute right-3 top-3.5">
-              <Icon name="X" size={16} color="#64748b" />
+              <Icon name="X" size={16} color="#8D7165" />
             </Pressable>
           )}
         </View>

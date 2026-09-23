@@ -12,11 +12,11 @@ const ProfileQuickActionsModal = ({ isOpen, onClose, userData, onAction }) => {
   // ── Colors — mirrors web CSS variables ───────────────────────────────────
   const colors = {
     bgCard: isDarkMode ? "#1E242F" : "#ffffff",
-    bgSecondary: isDarkMode ? "#1A1F29" : "#f9fafb",
-    bgPrimary: isDarkMode ? "#0B0E14" : "#f3f4f6",
-    textPrimary: isDarkMode ? "#ffffff" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-    border: isDarkMode ? "#2D3748" : "#e5e7eb",
+    bgSecondary: isDarkMode ? "#1A1F29" : "#FFF1EC",
+    bgPrimary: isDarkMode ? "#0B0E14" : "#FFE9E1",
+    textPrimary: isDarkMode ? "#ffffff" : "#261913",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#8D7165",
+    border: isDarkMode ? "#2D3748" : "#EDD6CD",
   };
 
   useEffect(() => {

@@ -1,7 +1,9 @@
 import { Text, View } from "react-native";
+import { useDarkMode } from "../../../context/DarkModeContext";
 import Icon from "../../../components/AppIcon";
 
 const TravelStatsSection = ({ stats }) => {
+  const { theme } = useDarkMode();
   const statCards = [
     {
       icon: "MapPin",
@@ -33,8 +35,8 @@ const TravelStatsSection = ({ stats }) => {
     },
   ];
 
-  const cardClasses =
-    "bg-profile-card dark:bg-profile-card-dark rounded-xl p-4 border border-profile-border dark:border-profile-border-dark mb-4";
+  const cardClasses = "rounded-2xl p-4 mb-4";
+  const cardBg = { backgroundColor: theme.surfaceContainerLow };
 
   return (
     <View>
@@ -44,9 +46,10 @@ const TravelStatsSection = ({ stats }) => {
           <View
             key={index}
             className={`${cardClasses} flex-1 min-w-[45%] mb-0`}
+            style={cardBg}
           >
             <View
-              className={`w-12 h-12 rounded-xl ${stat.bgClass} items-center justify-center mb-3 border border-profile-border dark:border-profile-border-dark`}
+              className={`w-12 h-12 rounded-xl ${stat.bgClass} items-center justify-center mb-3`}
             >
               <Icon name={stat.icon} size={24} color={stat.iconColor} />
             </View>
@@ -61,7 +64,7 @@ const TravelStatsSection = ({ stats }) => {
       </View>
 
       {/* Recent Destinations */}
-      <View className={cardClasses}>
+      <View className={cardClasses} style={cardBg}>
         <Text className="text-lg font-playfair-bold text-profile-text-primary dark:text-profile-text-primary-dark mb-4">
           Recent Destinations
         </Text>
@@ -72,11 +75,12 @@ const TravelStatsSection = ({ stats }) => {
               className="flex-row items-center justify-between p-3"
             >
               <View className="flex-row items-center gap-3">
-                <View className="w-10 h-10 rounded-lg bg-profile-secondary dark:bg-profile-secondary-dark items-center justify-center border border-profile-border dark:border-profile-border-dark">
+                <View className="w-10 h-10 rounded-lg items-center justify-center"
+                  style={{ backgroundColor: theme.surfaceVariant }}>
                   <Icon
                     name="MapPin"
                     size={20}
-                    className="text-profile-indicator dark:text-profile-indicator-dark"
+                    color={theme.primary}
                   />
                 </View>
                 <View>
@@ -100,7 +104,7 @@ const TravelStatsSection = ({ stats }) => {
       </View>
 
       {/* Travel Achievements */}
-      <View className={cardClasses}>
+      <View className={cardClasses} style={cardBg}>
         <Text className="text-lg font-playfair-bold text-profile-text-primary dark:text-profile-text-primary-dark mb-4">
           Travel Achievements
         </Text>
@@ -108,9 +112,11 @@ const TravelStatsSection = ({ stats }) => {
           {stats?.achievements?.map((achievement, index) => (
             <View
               key={index}
-              className="flex-row items-center gap-3 p-3 rounded-xl bg-profile-secondary dark:bg-profile-secondary-dark border border-profile-border dark:border-profile-border-dark"
+              className="flex-row items-center gap-3 p-3 rounded-xl"
+              style={{ backgroundColor: theme.surfaceVariant }}
             >
-              <View className="w-10 h-10 rounded-full bg-profile-card dark:bg-profile-card-dark items-center justify-center border border-profile-border dark:border-profile-border-dark">
+              <View className="w-10 h-10 rounded-full items-center justify-center"
+                style={{ backgroundColor: theme.surfaceContainerLow }}>
                 <Icon
                   name="Award"
                   size={20}

@@ -9,12 +9,12 @@ const SearchBar = ({ searchQuery, onSearchChange, resultCount }) => {
     // matches web: bg-[var(--color-bg-card)] rounded-xl p-4 md:p-6 shadow-md mb-6 border border-[var(--color-border)]
     <View
       style={{
-        backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+        backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
         borderRadius: 12,
         padding: 20,
         marginBottom: 24,
         borderWidth: 1,
-        borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+        borderColor: isDarkMode ? "#594137" : "#EDD6CD",
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.08,
@@ -32,25 +32,25 @@ const SearchBar = ({ searchQuery, onSearchChange, resultCount }) => {
           paddingVertical: 12,
           borderRadius: 8,
           borderWidth: 1,
-          borderColor: isDarkMode ? "#374151" : "#e5e7eb",
-          backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+          borderColor: isDarkMode ? "#594137" : "#EDD6CD",
+          backgroundColor: isDarkMode ? "#261913" : "#FFF1EC",
         }}
       >
         {/* matches web: <Icon name='Search' size={20} className='text-[var(--color-text-secondary)]' /> */}
         <Icon
           name="Search"
           size={20}
-          color={isDarkMode ? "#9ca3af" : "#6b7280"}
+          color={isDarkMode ? "#A9917F" : "#8D7165"}
         />
         <TextInput
           value={searchQuery}
           onChangeText={onSearchChange}
           placeholder="Search cities by name, country, or activities..."
-          placeholderTextColor={isDarkMode ? "#6b7280" : "#9ca3af"}
+          placeholderTextColor={isDarkMode ? "#8D7165" : "#A9917F"}
           style={{
             flex: 1,
             fontSize: 14,
-            color: isDarkMode ? "#f9fafb" : "#111827",
+            color: isDarkMode ? "#FFF1EC" : "#261913",
             paddingVertical: 0,
           }}
         />
@@ -71,13 +71,13 @@ const SearchBar = ({ searchQuery, onSearchChange, resultCount }) => {
               font-semibold text-[var(--color-text-primary)] span for the number
               — web uses system font-semibold, NOT playfair */}
           <Text
-            style={{ fontSize: 14, color: isDarkMode ? "#9ca3af" : "#6b7280" }}
+            style={{ fontSize: 14, color: isDarkMode ? "#A9917F" : "#8D7165" }}
           >
             Found{" "}
             <Text
               style={{
                 fontWeight: "600",
-                color: isDarkMode ? "#f9fafb" : "#111827",
+                color: isDarkMode ? "#FFF1EC" : "#261913",
               }}
             >
               {resultCount}

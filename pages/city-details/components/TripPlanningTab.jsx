@@ -109,12 +109,12 @@ const TripPlanningTab = ({ cityName, onCreateTrip }) => {
   const { isDarkMode } = useDarkMode();
 
   const colors = {
-    bg: isDarkMode ? "#1f2937" : "#fff",
-    bgSecondary: isDarkMode ? "#374151" : "#f3f4f6",
-    bgInput: isDarkMode ? "#111827" : "#f9fafb",
-    border: isDarkMode ? "#374151" : "#e5e7eb",
-    textPrimary: isDarkMode ? "#f9fafb" : "#111827",
-    textSecondary: isDarkMode ? "#9ca3af" : "#6b7280",
+    bg: isDarkMode ? "#3C2D27" : "#fff",
+    bgSecondary: isDarkMode ? "#594137" : "#FFE9E1",
+    bgInput: isDarkMode ? "#261913" : "#FFF1EC",
+    border: isDarkMode ? "#594137" : "#EDD6CD",
+    textPrimary: isDarkMode ? "#FFF1EC" : "#261913",
+    textSecondary: isDarkMode ? "#A9917F" : "#8D7165",
   };
 
   const [tripData, setTripData] = useState({
@@ -518,7 +518,7 @@ const TripPlanningTab = ({ cityName, onCreateTrip }) => {
                     style={{
                       paddingHorizontal: 8,
                       paddingVertical: 4,
-                      backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+                      backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
                       borderRadius: 4,
                       borderWidth: 1,
                       borderColor: colors.border,

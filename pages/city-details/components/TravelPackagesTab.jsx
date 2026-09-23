@@ -14,11 +14,11 @@ const TravelPackagesTab = ({ cityName }) => {
   const { isDarkMode } = useDarkMode();
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  const bg = isDarkMode ? "#1f2937" : "#fff";
-  const border = isDarkMode ? "#374151" : "#e5e7eb";
-  const textPrimary = isDarkMode ? "#f9fafb" : "#111827";
-  const textSecondary = isDarkMode ? "#9ca3af" : "#6b7280";
-  const bgSecondary = isDarkMode ? "#374151" : "#f3f4f6";
+  const bg = isDarkMode ? "#3C2D27" : "#fff";
+  const border = isDarkMode ? "#594137" : "#EDD6CD";
+  const textPrimary = isDarkMode ? "#FFF1EC" : "#261913";
+  const textSecondary = isDarkMode ? "#A9917F" : "#8D7165";
+  const bgSecondary = isDarkMode ? "#594137" : "#FFE9E1";
 
   const packages = [
     {

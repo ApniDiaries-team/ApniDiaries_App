@@ -405,7 +405,7 @@ const CommunityPosts = () => {
             <Text
               style={{
                 fontFamily: Fonts.inter.extrabold,
-                color: dk ? "#fff" : "#0f172a",
+                color: dk ? "#fff" : "#261913",
               }}
             >
               "{searchQuery}"
@@ -454,7 +454,7 @@ const CommunityPosts = () => {
           style={{
             fontSize: 16,
             fontFamily: Fonts.playfair.black,
-            color: dk ? "#fff" : "#0f172a",
+            color: dk ? "#fff" : "#261913",
             marginBottom: 6,
             textAlign: "center",
           }}
@@ -574,7 +574,7 @@ const CommunityPosts = () => {
                     flex: 1,
                     fontSize: 14,
                     fontFamily: Fonts.inter.regular,
-                    color: dk ? "#fff" : "#0f172a",
+                    color: dk ? "#fff" : "#261913",
                     paddingVertical: 0,
                   }}
                 />
@@ -593,7 +593,7 @@ const CommunityPosts = () => {
                   fontSize: 17,
                   fontFamily: Fonts.playfair.black,
                   letterSpacing: -0.4,
-                  color: dk ? "#fff" : "#0f172a",
+                  color: dk ? "#fff" : "#261913",
                 }}
               >
                 Community

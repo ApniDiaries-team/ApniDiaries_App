@@ -146,9 +146,9 @@ const CoverPhotoSection = ({
       style={{
         borderRadius: 12,
         padding: 16,
-        backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+        backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
         borderWidth: 1,
-        borderColor: isDarkMode ? "#374151" : "#f3f4f6",
+        borderColor: isDarkMode ? "#594137" : "#FFE9E1",
         top: 10,
       }}
     >
@@ -165,7 +165,7 @@ const CoverPhotoSection = ({
           style={{
             fontSize: 18,
             fontWeight: "600",
-            color: isDarkMode ? "#f9fafb" : "#111827",
+            color: isDarkMode ? "#FFF1EC" : "#261913",
           }}
         >
           Profile Photos
@@ -192,7 +192,7 @@ const CoverPhotoSection = ({
               style={{
                 fontSize: 15,
                 fontWeight: "500",
-                color: isDarkMode ? "#f9fafb" : "#111827",
+                color: isDarkMode ? "#FFF1EC" : "#261913",
               }}
             >
               Cover Photo
@@ -226,7 +226,7 @@ const CoverPhotoSection = ({
               height: 192,
               borderRadius: 12,
               overflow: "hidden",
-              backgroundColor: isDarkMode ? "#374151" : "#f3f4f6",
+              backgroundColor: isDarkMode ? "#594137" : "#FFE9E1",
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -243,12 +243,12 @@ const CoverPhotoSection = ({
                 <Icon
                   name="ImagePlus"
                   size={48}
-                  color={isDarkMode ? "#6b7280" : "#9ca3af"}
+                  color={isDarkMode ? "#8D7165" : "#A9917F"}
                 />
                 <Text
                   style={{
                     fontSize: 14,
-                    color: isDarkMode ? "#6b7280" : "#9ca3af",
+                    color: isDarkMode ? "#8D7165" : "#A9917F",
                   }}
                 >
                   No cover photo uploaded
@@ -319,13 +319,13 @@ const CoverPhotoSection = ({
                 <Icon
                   name="X"
                   size={16}
-                  color={isDarkMode ? "#9ca3af" : "#6b7280"}
+                  color={isDarkMode ? "#A9917F" : "#8D7165"}
                 />
                 <Text
                   style={{
                     fontSize: 14,
                     fontWeight: "500",
-                    color: isDarkMode ? "#9ca3af" : "#6b7280",
+                    color: isDarkMode ? "#A9917F" : "#8D7165",
                   }}
                 >
                   Remove Cover
@@ -349,7 +349,7 @@ const CoverPhotoSection = ({
               style={{
                 fontSize: 15,
                 fontWeight: "500",
-                color: isDarkMode ? "#f9fafb" : "#111827",
+                color: isDarkMode ? "#FFF1EC" : "#261913",
               }}
             >
               Profile Photo
@@ -387,8 +387,8 @@ const CoverPhotoSection = ({
                   borderRadius: 64,
                   overflow: "hidden",
                   borderWidth: 4,
-                  borderColor: isDarkMode ? "#1f2937" : "#fff",
-                  backgroundColor: isDarkMode ? "#374151" : "#f3f4f6",
+                  borderColor: isDarkMode ? "#3C2D27" : "#fff",
+                  backgroundColor: isDarkMode ? "#594137" : "#FFE9E1",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
@@ -404,7 +404,7 @@ const CoverPhotoSection = ({
                   <Icon
                     name="User"
                     size={64}
-                    color={isDarkMode ? "#6b7280" : "#9ca3af"}
+                    color={isDarkMode ? "#8D7165" : "#A9917F"}
                   />
                 )}
               </View>
@@ -451,20 +451,20 @@ const CoverPhotoSection = ({
                     paddingVertical: 11,
                     borderRadius: 10,
                     borderWidth: 1.5,
-                    borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+                    borderColor: isDarkMode ? "#594137" : "#EDD6CD",
                     backgroundColor: "transparent",
                   }}
                 >
                   <Icon
                     name="Trash2"
                     size={16}
-                    color={isDarkMode ? "#f9fafb" : "#374151"}
+                    color={isDarkMode ? "#FFF1EC" : "#594137"}
                   />
                   <Text
                     style={{
                       fontSize: 14,
                       fontWeight: "500",
-                      color: isDarkMode ? "#f9fafb" : "#374151",
+                      color: isDarkMode ? "#FFF1EC" : "#594137",
                     }}
                   >
                     Remove Photo
@@ -499,7 +499,7 @@ const CoverPhotoSection = ({
           <Text
             style={{
               fontSize: 12,
-              color: isDarkMode ? "#9ca3af" : "#6b7280",
+              color: isDarkMode ? "#A9917F" : "#8D7165",
               lineHeight: 18,
             }}
           >

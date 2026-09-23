@@ -263,7 +263,7 @@ const EditPersonalDetails = () => {
 
   return (
     <View
-      style={{ flex: 1, backgroundColor: isDarkMode ? "#111827" : "#f9fafb" }}
+      style={{ flex: 1, backgroundColor: isDarkMode ? "#261913" : "#FFF1EC" }}
     >
       {/* ── HEADER ── */}
       <View
@@ -274,8 +274,8 @@ const EditPersonalDetails = () => {
           paddingHorizontal: 16,
           paddingVertical: 14,
           borderBottomWidth: 1,
-          backgroundColor: isDarkMode ? "#1f2937" : "#fff",
-          borderBottomColor: isDarkMode ? "#374151" : "#e5e7eb",
+          backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
+          borderBottomColor: isDarkMode ? "#594137" : "#EDD6CD",
         }}
       >
         <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
@@ -295,7 +295,7 @@ const EditPersonalDetails = () => {
             <Icon
               name="ArrowLeft"
               size={24}
-              color={isDarkMode ? "#f9fafb" : "#111827"}
+              color={isDarkMode ? "#FFF1EC" : "#261913"}
             />
           </Pressable>
 
@@ -304,7 +304,7 @@ const EditPersonalDetails = () => {
               style={{
                 fontSize: 20,
                 fontWeight: "600",
-                color: isDarkMode ? "#f9fafb" : "#111827",
+                color: isDarkMode ? "#FFF1EC" : "#261913",
               }}
             >
               Edit Profile
@@ -384,7 +384,7 @@ const EditPersonalDetails = () => {
         style={{
           borderTopWidth: 1,
           padding: 16,
-          backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+          backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
           shadowColor: "#000",
           shadowOffset: { width: 0, height: -2 },
           shadowOpacity: 0.06,
@@ -394,7 +394,7 @@ const EditPersonalDetails = () => {
           width: "92%",
           alignSelf: "center",
           borderWidth: 1,
-          borderColor: isDarkMode ? "#374151" : "#f3f4f6",
+          borderColor: isDarkMode ? "#594137" : "#FFE9E1",
           bottom: 10,
         }}
       >
@@ -451,7 +451,7 @@ const EditPersonalDetails = () => {
               fontSize: 12,
               textAlign: "center",
               marginTop: 12,
-              color: isDarkMode ? "#9ca3af" : "#6b7280",
+              color: isDarkMode ? "#A9917F" : "#8D7165",
             }}
           >
             Don't forget to save your changes before leaving

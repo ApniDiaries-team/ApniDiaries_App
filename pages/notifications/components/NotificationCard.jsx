@@ -14,8 +14,8 @@ const NotificationCard = ({ notification, onAccept, onDecline, onMarkAsRead }) =
   const colors = {
     card: isDarkMode ? "#1E242F" : "#FFFFFF",
     secondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
+    textPrimary: isDarkMode ? "#FFFFFF" : "#261913",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#8D7165",
     border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.05)",
     primary: "#FF9933",
   }
@@ -41,9 +41,9 @@ const NotificationCard = ({ notification, onAccept, onDecline, onMarkAsRead }) =
       like: '#ef4444',
       comment: '#f97316',
       missed_call: '#ef4444',
-      system: '#94a3b8',
+      system: '#A9917F',
     }
-    return colorsMap[type] || '#94a3b8'
+    return colorsMap[type] || '#A9917F'
   }
 
   const handleCardPress = () => {

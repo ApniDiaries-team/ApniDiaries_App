@@ -4,21 +4,15 @@ import { Image, Pressable, Text, View } from 'react-native'
 import Icon from '../../../components/AppIcon'
 import Button from '../../../components/ui/Button'
 import { useDarkMode } from '../../../context/DarkModeContext'
-import { Fonts } from '../../../constants/theme'
+import { Fonts, Palette } from '../../../constants/theme'
 import { getProfilePhotoUrl } from '../../../helper/DefaultImageUrl'
 
 const NotificationCard = ({ notification, onAccept, onDecline, onMarkAsRead }) => {
   const router = useRouter()
   const { isDarkMode } = useDarkMode()
 
-  const colors = {
-    card: isDarkMode ? "#1E242F" : "#FFFFFF",
-    secondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-    border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.05)",
-    primary: "#FF9933",
-  }
+  const palette = isDarkMode ? Palette.dark : Palette.light
+  const colors = { card:palette.surfaceLowest, secondary:palette.surfaceLow, textPrimary:palette.text, textSecondary:palette.textVariant, border:palette.outlineVariant, primary:palette.primary }
 
   const getNotificationIcon = (type) => {
     const icons = {
@@ -87,7 +81,7 @@ const NotificationCard = ({ notification, onAccept, onDecline, onMarkAsRead }) =
         borderColor: colors.border
       })}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'start', gap: 12 }}>
+      <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 12 }}>
         <View style={{ position: 'relative', flexShrink: 0 }}>
           <Image
             source={{ uri: getProfilePhotoUrl(notification.avatar) }}
@@ -113,7 +107,7 @@ const NotificationCard = ({ notification, onAccept, onDecline, onMarkAsRead }) =
         </View>
 
         <View style={{ flex: 1 }}>
-          <View style={{ flexDirection: 'row', alignItems: 'start', justifyContent: 'between', gap: 8, marginBottom: 4 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 4 }}>
             <Text style={{ fontSize: 14, color: colors.textPrimary, flex: 1 }}>
               <Text style={{ fontFamily: Fonts.playfair.bold }}>{notification.userName}</Text>
               {' '}{notification.message}

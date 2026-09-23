@@ -12,6 +12,13 @@ import {
   PlayfairDisplay_700Bold,
   PlayfairDisplay_800ExtraBold,
 } from "@expo-google-fonts/playfair-display";
+import {
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+  PlusJakartaSans_800ExtraBold,
+} from "@expo-google-fonts/plus-jakarta-sans";
 import { useFonts } from "expo-font";
 import { Redirect } from "expo-router";
 import { useContext } from "react";
@@ -36,6 +43,11 @@ export default function Index() {
     PlayfairDisplay_600SemiBold,
     PlayfairDisplay_700Bold,
     PlayfairDisplay_800ExtraBold,
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+    PlusJakartaSans_800ExtraBold,
   });
 
   const context = useContext(AppContext);

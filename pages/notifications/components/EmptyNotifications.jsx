@@ -2,16 +2,13 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import Icon from '../../../components/AppIcon'
 import { useDarkMode } from '../../../context/DarkModeContext'
-import { Fonts } from '../../../constants/theme'
+import { Fonts, Palette } from '../../../constants/theme'
 
 const EmptyNotifications = ({ filterType }) => {
   const { isDarkMode } = useDarkMode()
 
-  const colors = {
-    secondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-  }
+  const palette = isDarkMode ? Palette.dark : Palette.light
+  const colors = { secondary:palette.surfaceLow, textPrimary:palette.text, textSecondary:palette.textVariant }
 
   const getEmptyMessage = () => {
     const messages = {
@@ -20,6 +17,8 @@ const EmptyNotifications = ({ filterType }) => {
         title: 'No notifications yet',
         description: "When someone follows you, sends a friend request, or interacts with your posts, you'll see it here.",
       },
+      invites: { icon:'UserPlus', title:'No invitations yet', description:'Friend requests and invitations will appear here.' },
+      alerts: { icon:'Bell', title:'No alerts yet', description:'Likes, follows, and other updates will appear here.' },
       friend_request: {
         icon: 'UserPlus',
         title: 'No friend requests',
@@ -48,7 +47,7 @@ const EmptyNotifications = ({ filterType }) => {
   const message = getEmptyMessage()
 
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 64, px: 16 }}>
+    <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 44, paddingHorizontal: 16 }}>
       <View
         style={{
           width: 80,
@@ -81,7 +80,7 @@ const EmptyNotifications = ({ filterType }) => {
           color: colors.textSecondary,
           textAlign: 'center',
           maxWidth: 280,
-          fontFamily: "Poppins_400Regular"
+          fontFamily: Fonts.inter.regular
         }}
       >
         {message.description}

@@ -1,10 +1,11 @@
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Fonts, Palette } from '../../constants/theme';
+import ComingSoonModal from '../../components/common/ComingSoonModal';
 import { AppContext } from '../../context/AppContext';
 import { useDarkMode } from '../../context/DarkModeContext';
 
@@ -22,6 +23,7 @@ const journeys = [
     subtitle: 'Find your stay',
     action: 'Book Now',
     path: '/hostels',
+    comingSoon: true,
     colors: ['#148A5B', '#087348'],
     icon: 'home-city-outline',
   },
@@ -30,6 +32,7 @@ const journeys = [
     subtitle: 'Ride your adventure',
     action: 'Rent Now',
     path: '/bike-rentals',
+    comingSoon: true,
     colors: ['#D95C18', '#B6400D'],
     icon: 'motorbike',
   },
@@ -60,6 +63,7 @@ export default function LandingPage() {
   const router = useRouter();
   const { isDarkMode } = useDarkMode();
   const { user } = useContext(AppContext) || {};
+  const [showComingSoon, setShowComingSoon] = useState(false);
   const palette = isDarkMode ? Palette.dark : Palette.light;
   const name = user?.name?.trim()?.split(/\s+/)[0] || 'Explorer';
 
@@ -71,8 +75,9 @@ export default function LandingPage() {
           <Text style={{ fontFamily: Fonts.playfair.bold, fontSize: 30, lineHeight: 38, color: palette.text, marginTop: 8 }}>Hi, {name} <Text>👋</Text></Text>
           <Text style={{ fontFamily: Fonts.inter.regular, fontSize: 16, color: palette.textVariant, marginTop: 5 }}>Where will you go today?</Text>
         </View>
-        {journeys.map((item) => <JourneyCard key={item.title} item={item} onPress={() => router.push(item.path)} />)}
+        {journeys.map((item) => <JourneyCard key={item.title} item={item} onPress={() => item.comingSoon ? setShowComingSoon(true) : router.push(item.path)} />)}
       </ScrollView>
+      <ComingSoonModal isOpen={showComingSoon} onClose={() => setShowComingSoon(false)} />
     </SafeAreaView>
   );
 }

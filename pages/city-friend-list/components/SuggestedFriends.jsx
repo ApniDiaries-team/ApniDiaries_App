@@ -13,11 +13,11 @@ const SuggestedFriends = ({ suggestions, onAddFriend }) => {
 
   const colors = {
     bgCard: isDarkMode ? "#1E242F" : "#FFFFFF",
-    bgSecondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
-    accent: "#FF9933",
+    bgSecondary: isDarkMode ? "#1A1F29" : "#FFF1EC",
+    accent: "#A23F00",
     textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
     textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-    border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
+    border: isDarkMode ? "#2D3748" : "#E1BFB2",
   };
 
   if (!suggestions || suggestions?.length === 0) return null;

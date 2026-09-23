@@ -47,10 +47,10 @@ const PersonalProfile = () => {
   const { handleScroll } = useScroll();
 
   const colors = {
-    background: isDarkMode ? "#0B0E14" : "#ffff", // Matched Premium branding from SearchUser
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-    border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
+    background: isDarkMode ? "#0B0E14" : "#FFF8F6",
+    textPrimary: isDarkMode ? "#FFFFFF" : "#261913",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#594137",
+    border: isDarkMode ? "#2D3748" : "#E1BFB2",
   };
 
   const [travelStats] = useState({
@@ -137,11 +137,11 @@ const PersonalProfile = () => {
   };
 
   const handleFollowersClick = () => {
-    console.log("Navigate to followers list");
+    router.push({ pathname: "/followers", params: { userId: profileData?.user?.id, tab: "followers" } });
   };
 
   const handleFollowingClick = () => {
-    console.log("Navigate to following list");
+    router.push({ pathname: "/following", params: { userId: profileData?.user?.id, tab: "following" } });
   };
 
   const handleBackClick = () => {
@@ -217,7 +217,7 @@ const PersonalProfile = () => {
 
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ pb: 20 }}
+        contentContainerStyle={{ paddingBottom: 20 }}
         showsVerticalScrollIndicator={false}
         onScroll={handleScroll}
         scrollEventThrottle={16}
@@ -236,7 +236,7 @@ const PersonalProfile = () => {
               paddingVertical: 64,
             }}
           >
-            <ActivityIndicator size="large" color="#FF9933" />
+            <ActivityIndicator size="large" color="#A23F00" />
           </View>
         ) : (
           <>

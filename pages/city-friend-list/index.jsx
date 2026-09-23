@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import PrivateAccountModal from "../../components/common/PrivateAccountModal";
 import ProfileQuickActionsModal from "../../components/ui/ProfileQuickActionsModal";
-import { Fonts } from "../../constants/theme";
+import { Fonts, Palette } from "../../constants/theme";
 import { AppContext } from "../../context/AppContext";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { socket } from "../../lib/sockets";
@@ -35,7 +35,7 @@ import StatsBar from "./components/StatsBar";
 import SuggestedFriends from "./components/SuggestedFriends";
 import TripCalendarModal from "./components/TripCalendarModal";
 
-const ORANGE = "#FF9933";
+const ORANGE = "#A23F00";
 
 const CityFriendList = () => {
   const params = useLocalSearchParams();
@@ -47,12 +47,12 @@ const CityFriendList = () => {
   const isDesktop = width >= 1024;
 
   const colors = {
-    bgPrimary: isDarkMode ? "#0B0E14" : "#FFFFFF",
-    bgCard: isDarkMode ? "#1E242F" : "#EDF2F7",
-    bgSecondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-    border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
+    bgPrimary: isDarkMode ? Palette.dark.surface : Palette.light.surface,
+    bgCard: isDarkMode ? Palette.dark.surfaceLowest : Palette.light.surfaceLowest,
+    bgSecondary: isDarkMode ? Palette.dark.surfaceLow : Palette.light.surfaceLow,
+    textPrimary: isDarkMode ? Palette.dark.text : Palette.light.text,
+    textSecondary: isDarkMode ? Palette.dark.textVariant : Palette.light.textVariant,
+    border: isDarkMode ? Palette.dark.outlineVariant : Palette.light.outlineVariant,
   };
 
   const [activeFilter, setActiveFilter] = useState("all");

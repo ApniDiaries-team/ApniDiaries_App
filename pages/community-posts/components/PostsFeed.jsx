@@ -133,7 +133,7 @@ const PostsFeed = ({ selectedCity, searchQuery }) => {
         className="items-center justify-center py-16 rounded-[32px] border-[1.2px] bg-white dark:bg-slate-900 border-slate-400 dark:border-slate-100 shadow-sm"
       >
         <View className="mb-6 opacity-80">
-          <Icon name="Compass" size={56} color="#FF9933" />
+          <Icon name="Compass" size={56} color="#A23F00" />
         </View>
 
         <Text className="text-2xl font-playfair-bold text-slate-900 dark:text-slate-100 mb-3 text-center">
@@ -153,10 +153,10 @@ const PostsFeed = ({ selectedCity, searchQuery }) => {
     <View>
       {searchQuery !== '' && (
         <View className="flex-row items-center gap-3 p-4 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 mb-4 shadow-sm">
-          <Icon name="Search" size={18} color="#FF9933" />
+          <Icon name="Search" size={18} color="#A23F00" />
           <Text className="text-sm text-slate-700 dark:text-slate-300">
             Results for{' '}
-            <Text className="font-semibold" style={{ color: '#FF9933' }}>
+            <Text className="font-semibold" style={{ color: '#A23F00' }}>
               "{searchQuery}"
             </Text>
             {selectedCity !== 'all' ? ` in ${selectedCity}` : ''}
@@ -174,12 +174,12 @@ const PostsFeed = ({ selectedCity, searchQuery }) => {
         ListFooterComponent={
           loading ? (
             <View className="py-6 flex-row items-center justify-center gap-3 bg-slate-50/50 dark:bg-slate-800/50 rounded-xl mb-4">
-              <View className="w-2 h-2 rounded-full bg-[#FF9933] animate-pulse" />
+              <View className="w-2 h-2 rounded-full bg-[#A23F00] animate-pulse" />
               <Text className="text-sm font-medium text-slate-500 dark:text-slate-400">Loading more stories...</Text>
             </View>
           ) : !hasMore && filteredPosts.length > 0 ? (
             <View className="py-8 flex-row items-center justify-center gap-2">
-              <Icon name="CheckCircle" size={18} color="#FF9933" />
+              <Icon name="CheckCircle" size={18} color="#A23F00" />
               <Text className="text-sm font-medium text-slate-400 dark:text-slate-500">You've reached the end of the feed</Text>
             </View>
           ) : null

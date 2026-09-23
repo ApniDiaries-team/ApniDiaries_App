@@ -7,8 +7,8 @@ const StatsBar = ({ stats, onStatClick }) => {
   const { isDarkMode } = useDarkMode();
 
   const colors = {
-    bgCard: isDarkMode ? "#1E242F" : "#EDF2F7",
-    bgSecondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
+    bgCard: isDarkMode ? "#1E242F" : "#FFF1EC",
+    bgSecondary: isDarkMode ? "#1A1F29" : "#FFF1EC",
     bgPrimary: isDarkMode ? "#0B0E14" : "#FFFFFF",
     textPrimary: isDarkMode ? "#FFFFFF" : "#1A202C",
     textSecondary: isDarkMode ? "#A0AEC0" : "#4A5568",

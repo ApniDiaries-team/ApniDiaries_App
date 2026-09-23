@@ -1,14 +1,9 @@
 import { useEffect, useState } from "react";
 import { Alert, Image, Pressable, Text, View } from "react-native";
-
 import Icon from "../../../components/AppIcon";
+import { Fonts } from "../../../constants/theme";
 import { useDarkMode } from "../../../context/DarkModeContext";
-
-import {
-  getCoverPhotoUrl,
-  getProfilePhotoUrl,
-} from "../../../helper/DefaultImageUrl";
-
+import { getCoverPhotoUrl, getProfilePhotoUrl } from "../../../helper/DefaultImageUrl";
 import { removeFriend, sendFriendRequest } from "../../../services/user.api";
 
 const ProfileHeader = ({
@@ -22,431 +17,146 @@ const ProfileHeader = ({
   onMoreActions,
   canViewProfile = true,
 }) => {
-  const { theme } = useDarkMode();
-
+  const { isDarkMode } = useDarkMode();
   const [friendRequestStatus, setFriendRequestStatus] = useState("none");
+  const palette = {
+    background: isDarkMode ? "#0B0E14" : "#FFF8F6",
+    card: isDarkMode ? "#1E242F" : "#FFFFFF",
+    surface: isDarkMode ? "#1A1F29" : "#FFF1EC",
+    text: isDarkMode ? "#FFFFFF" : "#261913",
+    muted: isDarkMode ? "#A0AEC0" : "#594137",
+    border: isDarkMode ? "#2D3748" : "#E1BFB2",
+    accent: isDarkMode ? "#ED8936" : "#A23F00",
+  };
+  const profile = userData?.user;
 
   useEffect(() => {
-    if (userData?.friendStatus) {
-      setFriendRequestStatus(userData.friendStatus);
-    }
+    setFriendRequestStatus(userData?.friendStatus || "none");
   }, [userData?.friendStatus]);
 
   const handleFriendToggle = async () => {
     if (friendRequestStatus === "none") {
-      // Optimistic update first (matching web behavior)
       setFriendRequestStatus("pending");
       try {
-        if (!isFriend) {
-          const res = await sendFriendRequest(userData?.user?.id);
-          if (res?.data?.success) {
-            Alert.alert(
-              "Success",
-              `Friend request sent to ${userData?.user?.name}`,
-            );
-          }
-        }
-      } catch (error) {
-        console.log(error);
+        const response = await sendFriendRequest(profile?.id);
+        if (!response?.data?.success) setFriendRequestStatus("none");
+        else Alert.alert("Request sent", `Friend request sent to ${profile?.name}.`);
+      } catch {
+        setFriendRequestStatus("none");
+        Alert.alert("Could not send request", "Please try again.");
       }
-    } else if (friendRequestStatus === "pending") {
-      // Web allows cancelling pending — revert to none
+      return;
+    }
+    if (friendRequestStatus === "pending") {
       setFriendRequestStatus("none");
-    } else if (friendRequestStatus === "accepted") {
+      return;
+    }
+    if (friendRequestStatus === "accepted") {
       try {
-        const res = await removeFriend(userData?.user?.id);
-        if (res?.data?.success) {
-          Alert.alert("Friend removed");
+        const response = await removeFriend(profile?.id);
+        if (response?.data?.success) {
           setFriendRequestStatus("none");
+          onFriendToggle?.();
         }
-      } catch (error) {
-        console.log(error);
+      } catch {
+        Alert.alert("Could not remove friend", "Please try again.");
       }
-      onFriendToggle?.();
     }
   };
 
-  const getFriendButtonText = () => {
-    switch (friendRequestStatus) {
-      case "pending":
-        return "Pending";
-      case "accepted":
-        return "Remove Friend";
-      default:
-        return "Add Friend";
-    }
-  };
+  const friendLabel = friendRequestStatus === "pending"
+    ? "Pending"
+    : friendRequestStatus === "accepted"
+      ? "Remove friend"
+      : "Add friend";
+  const friendIcon = friendRequestStatus === "pending"
+    ? "Clock"
+    : friendRequestStatus === "accepted"
+      ? "UserCheck"
+      : "UserPlus";
 
-  const getFriendIcon = () => {
-    switch (friendRequestStatus) {
-      case "pending":
-        return "Clock";
-      case "accepted":
-        return "UserX";
-      default:
-        return "UserCheck"; // web uses UserCheck not UserPlus
-    }
-  };
+  const outlineAction = (icon, onPress, label) => (
+    <Pressable
+      key={label}
+      onPress={onPress}
+      accessibilityLabel={label}
+      style={{ width: 42, height: 42, borderRadius: 21, borderWidth: 1, borderColor: palette.border, alignItems: "center", justifyContent: "center", backgroundColor: palette.card }}
+    >
+      <Icon name={icon} size={17} color={palette.text} />
+    </Pressable>
+  );
 
   return (
-    <View style={{ backgroundColor: theme.bgPrimary }}>
-      {/* COVER */}
-      <View style={{ height: 190 }}>
-        <Image
-          source={{ uri: getCoverPhotoUrl(userData?.user?.cover_photo) }}
-          style={{
-            width: "100%",
-            height: "100%",
-            borderBottomLeftRadius: 18,
-            borderBottomRightRadius: 18,
-          }}
-          resizeMode="cover"
-        />
+    <View style={{ backgroundColor: palette.background }}>
+      <View style={{ height: 174, backgroundColor: palette.surface, overflow: "hidden", borderBottomLeftRadius: 20, borderBottomRightRadius: 20 }}>
+        <Image source={{ uri: getCoverPhotoUrl(profile?.cover_photo) }} style={{ width: "100%", height: "100%" }} resizeMode="cover" />
       </View>
 
-      {/* PROFILE CONTENT */}
-      <View style={{ paddingHorizontal: 20 }}>
-        {/* AVATAR */}
-        <View
-          style={{
-            marginTop: -45,
-            width: 90,
-            height: 90,
-            borderRadius: 45,
-            overflow: "hidden",
-            borderWidth: 4,
-            borderColor: theme.bgPrimary,
-          }}
-        >
-          <Image
-            source={{
-              uri: getProfilePhotoUrl(userData?.user?.profile_photo),
-            }}
-            style={{ width: "100%", height: "100%" }}
-          />
-
-          {/* Online Indicator */}
-          {userData?.isOnline && (
-            <View
-              style={{
-                position: "absolute",
-                bottom: 4,
-                right: 4,
-                width: 16,
-                height: 16,
-                borderRadius: 8,
-                backgroundColor: "#22c55e",
-                borderWidth: 2,
-                borderColor: theme.bgPrimary,
-              }}
+      <View style={{ paddingHorizontal: 18, marginTop: -42 }}>
+        <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 13 }}>
+          <View style={{ position: "relative" }}>
+            <Image
+              source={{ uri: getProfilePhotoUrl(profile?.profile_photo) }}
+              style={{ width: 84, height: 84, borderRadius: 42, borderWidth: 4, borderColor: palette.background, backgroundColor: palette.surface }}
             />
-          )}
-        </View>
-
-        {/* NAME */}
-        <Text
-          style={{
-            fontSize: 26,
-            fontFamily: "PlayfairDisplay_700Bold",
-            marginTop: 12,
-            color: theme.textPrimary,
-          }}
-        >
-          {userData?.user?.name}
-        </Text>
-
-        {/* USERNAME */}
-        <Text
-          style={{
-            marginTop: 4,
-            color: theme.textSecondary,
-          }}
-        >
-          @{userData?.user?.username}
-        </Text>
-
-        {/* LOCATION */}
-        {userData?.location && (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              marginTop: 6,
-            }}
-          >
-            <Icon name="MapPin" size={14} color={theme.textSecondary} />
-
-            <Text
-              style={{
-                marginLeft: 4,
-                color: theme.textSecondary,
-              }}
-            >
-              {userData.location}
-            </Text>
+            {userData?.isOnline && (
+              <View style={{ position: "absolute", right: 3, bottom: 4, width: 15, height: 15, borderRadius: 8, backgroundColor: "#10B981", borderWidth: 2, borderColor: palette.background }} />
+            )}
           </View>
-        )}
-
-        {/* BIO */}
-        {userData?.user?.bio && (
-          <Text
-            style={{
-              marginTop: 10,
-              fontSize: 14,
-              color: theme.textPrimary,
-            }}
-          >
-            {userData.user.bio}
-          </Text>
-        )}
-
-        {/* STATS */}
-        <View
-          style={{
-            flexDirection: "row",
-            marginTop: 18,
-            justifyContent: "space-between",
-            width: 220,
-          }}
-        >
-          {[
-            { label: "Posts", value: userData?.stats?.totalPosts },
-            { label: "Followers", value: userData?.stats?.followers },
-            { label: "Following", value: userData?.stats?.following },
-          ].map((item, index) => (
-            <View key={index} style={{ alignItems: "center" }}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "600",
-                  color: theme.textPrimary,
-                }}
-              >
-                {item.value || 0}
-              </Text>
-
-              <Text
-                style={{
-                  fontSize: 12,
-                  color: theme.textSecondary,
-                }}
-              >
-                {item.label}
-              </Text>
-            </View>
-          ))}
+          <View style={{ flex: 1, paddingBottom: 3 }}>
+            <Text numberOfLines={1} style={{ color: palette.text, fontFamily: Fonts.playfair.bold, fontSize: 22 }}>{profile?.name || "Traveler"}</Text>
+            {!!profile?.username && <Text numberOfLines={1} style={{ color: palette.accent, fontFamily: Fonts.inter.medium, fontSize: 12, marginTop: 1 }}>@{profile.username}</Text>}
+            {!!userData?.location && (
+              <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 5 }}>
+                <Icon name="MapPin" size={13} color={palette.muted} />
+                <Text numberOfLines={1} style={{ color: palette.muted, fontFamily: Fonts.inter.regular, fontSize: 12, flexShrink: 1 }}>{userData.location}</Text>
+              </View>
+            )}
+          </View>
         </View>
 
-        {/* MUTUAL FRIENDS */}
-        {userData?.mutualFriends?.length > 0 && (
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 8,
-              marginTop: 16,
-              padding: 12,
-              borderRadius: 8,
-              backgroundColor: theme.bgSecondary,
-            }}
-          >
+        {!!profile?.bio && <Text style={{ marginTop: 14, color: palette.text, fontFamily: Fonts.inter.regular, fontSize: 13, lineHeight: 20 }}>{profile.bio}</Text>}
+
+        {canViewProfile && userData?.mutualFriends?.length > 0 && (
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 9, marginTop: 14, padding: 11, borderRadius: 14, backgroundColor: palette.surface }}>
             <View style={{ flexDirection: "row" }}>
               {userData.mutualFriends.slice(0, 3).map((friend, index) => (
-                <Image
-                  key={index}
-                  source={{ uri: friend?.avatar }}
-                  style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 16,
-                    borderWidth: 2,
-                    borderColor: theme.bgCard,
-                    marginLeft: index === 0 ? 0 : -8,
-                  }}
-                  resizeMode="cover"
-                />
+                <Image key={friend.id || index} source={{ uri: getProfilePhotoUrl(friend?.profile_photo || friend?.avatar) }} style={{ width: 28, height: 28, borderRadius: 14, marginLeft: index ? -7 : 0, borderWidth: 2, borderColor: palette.surface }} />
               ))}
             </View>
-            <Text style={{ fontSize: 12, color: theme.textSecondary }}>
-              {userData.mutualFriends.length} mutual{" "}
-              {userData.mutualFriends.length === 1 ? "friend" : "friends"}
-            </Text>
+            <Text style={{ color: palette.muted, fontFamily: Fonts.inter.medium, fontSize: 11 }}>{userData.mutualFriends.length} mutual {userData.mutualFriends.length === 1 ? "friend" : "friends"}</Text>
           </View>
         )}
 
-        {/* COMMON CITIES */}
-        {userData?.commonCities?.length > 0 && (
-          <View
-            style={{
-              flexDirection: "row",
-              flexWrap: "wrap",
-              gap: 8,
-              marginTop: 12,
-            }}
-          >
-            {userData.commonCities.map((city, index) => (
-              <View
-                key={index}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 4,
-                  paddingHorizontal: 12,
-                  paddingVertical: 6,
-                  borderRadius: 999,
-                  backgroundColor: theme.bgSecondary,
-                }}
-              >
-                <Icon name="MapPin" size={14} color={theme.textPrimary} />
-                <Text
-                  style={{
-                    fontSize: 12,
-                    fontWeight: "500",
-                    color: theme.textPrimary,
-                  }}
-                >
-                  {city}
-                </Text>
+        {canViewProfile && userData?.commonCities?.length > 0 && (
+          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 7, marginTop: 12 }}>
+            {userData.commonCities.map((city) => (
+              <View key={city} style={{ flexDirection: "row", alignItems: "center", gap: 5, paddingHorizontal: 10, paddingVertical: 6, borderRadius: 18, backgroundColor: palette.surface }}>
+                <Icon name="MapPin" size={12} color={palette.accent} />
+                <Text style={{ color: palette.text, fontFamily: Fonts.inter.medium, fontSize: 11 }}>{city}</Text>
               </View>
             ))}
           </View>
         )}
 
-        {/* BUTTON ROW 1 */}
-        <View
-          style={{
-            flexDirection: "row",
-            marginTop: 20,
-            gap: 10,
-          }}
-        >
-            {/* FOLLOW */}
-            <Pressable
-              onPress={onFollowToggle}
-              style={{
-                flex: 1,
-                paddingVertical: 12,
-                borderRadius: 12,
-                alignItems: "center",
-                backgroundColor: isFollowing ? theme.bgSecondary : "#FF9933",
-              }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Icon
-                  name={isFollowing ? "UserMinus" : "UserPlus"}
-                  size={16}
-                  color={isFollowing ? theme.textPrimary : "#fff"}
-                />
-
-                <Text
-                  style={{
-                    marginLeft: 6,
-                    color: isFollowing ? theme.textPrimary : "#fff",
-                    fontWeight: "500",
-                  }}
-                >
-                  {isFollowing ? "Following" : "Follow"}
-                </Text>
-              </View>
-            </Pressable>
-
-            {/* FRIEND */}
-            <Pressable
-              disabled={friendRequestStatus === "pending"}
-              onPress={handleFriendToggle}
-              style={{
-                flex: 1,
-                paddingVertical: 12,
-                borderRadius: 12,
-                alignItems: "center",
-                backgroundColor: theme.bgSecondary,
-                opacity: friendRequestStatus === "pending" ? 0.6 : 1,
-              }}
-            >
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <Icon
-                  name={getFriendIcon()}
-                  size={16}
-                  color={theme.textPrimary}
-                />
-
-                <Text
-                  style={{
-                    marginLeft: 6,
-                    color: theme.textPrimary,
-                  }}
-                >
-                  {getFriendButtonText()}
-                </Text>
-              </View>
-            </Pressable>
+        <View style={{ flexDirection: "row", gap: 9, marginTop: 16 }}>
+          <Pressable onPress={onFollowToggle} style={{ flex: 1, minHeight: 42, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 7, borderRadius: 24, backgroundColor: isFollowing ? "transparent" : palette.accent, borderWidth: isFollowing ? 1 : 0, borderColor: palette.border }}>
+            <Icon name={isFollowing ? "UserMinus" : "UserPlus"} size={15} color={isFollowing ? palette.text : "#FFFFFF"} />
+            <Text style={{ color: isFollowing ? palette.text : "#FFFFFF", fontFamily: Fonts.inter.semibold, fontSize: 12 }}>{isFollowing ? "Following" : "Follow"}</Text>
+          </Pressable>
+          <Pressable disabled={friendRequestStatus === "pending"} onPress={handleFriendToggle} style={{ flex: 1, minHeight: 42, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 7, borderRadius: 24, borderWidth: 1, borderColor: palette.border, backgroundColor: palette.card, opacity: friendRequestStatus === "pending" ? 0.65 : 1 }}>
+            <Icon name={friendIcon} size={15} color={palette.text} />
+            <Text style={{ color: palette.text, fontFamily: Fonts.inter.semibold, fontSize: 12 }}>{friendLabel}</Text>
+          </Pressable>
         </View>
-
-        {/* BUTTON ROW 2 */}
         {canViewProfile && (
-          <View
-            style={{
-              flexDirection: "row",
-              marginTop: 10,
-              gap: 10,
-            }}
-          >
-            {/* MESSAGE — icon only, matches web ghost icon button */}
-            <Pressable
-              onPress={onMessageClick}
-              style={{
-                paddingHorizontal: 16,
-                paddingVertical: 12,
-                borderRadius: 12,
-                borderWidth: 1,
-                borderColor: theme.border,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Icon name="MessageCircle" size={18} color={theme.textPrimary} />
-            </Pressable>
-
-            {/* SHARE — conditional on profile_sharing flag */}
-            {userData?.user?.profile_sharing && (
-              <Pressable
-                onPress={onShareProfile}
-                style={{
-                  flex: 1,
-                  paddingVertical: 12,
-                  borderRadius: 12,
-                  borderWidth: 1,
-                  borderColor: "#FF9933",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexDirection: "row",
-                  gap: 6,
-                }}
-              >
-                <Icon name="Share2" size={16} color="#FF9933" />
-                <Text style={{ color: "#FF9933", fontWeight: "500" }}>Share</Text>
-              </Pressable>
-            )}
-
-            <Pressable
-              onPress={onMoreActions}
-              style={{
-                flex: 1,
-                paddingVertical: 12,
-                borderRadius: 12,
-                borderWidth: 1,
-                borderColor: "#FF9933",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "row",
-                gap: 6,
-              }}
-            >
-              <Icon name="MoreVertical" size={16} color="#FF9933" />
-              <Text style={{ color: "#FF9933", fontWeight: "500" }}>More</Text>
-            </Pressable>
+          <View style={{ flexDirection: "row", justifyContent: "flex-end", gap: 8, marginTop: 10 }}>
+            {outlineAction("MessageCircle", onMessageClick, "Message")}
+            {profile?.profile_sharing && outlineAction("Share2", onShareProfile, "Share profile")}
+            {outlineAction("MoreVertical", onMoreActions, "More actions")}
           </View>
         )}
+
       </View>
     </View>
   );

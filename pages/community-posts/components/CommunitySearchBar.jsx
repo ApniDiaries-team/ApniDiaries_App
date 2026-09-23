@@ -47,10 +47,10 @@ const CommunitySearchBar = ({ onSearch }) => {
       {searchQuery !== '' && (
         <View className="flex-row items-center mt-2 ml-1">
           <Text className="text-xs text-slate-500 dark:text-slate-400">
-            Searching for: <Text className="font-medium" style={{ color: '#FF9933' }}>{searchQuery}</Text>
+            Searching for: <Text className="font-medium" style={{ color: '#A23F00' }}>{searchQuery}</Text>
           </Text>
           {loading && (
-            <Text className="text-xs ml-2 font-bold animate-pulse" style={{ color: '#FF9933' }}>
+            <Text className="text-xs ml-2 font-bold animate-pulse" style={{ color: '#A23F00' }}>
               Searching...
             </Text>
           )}

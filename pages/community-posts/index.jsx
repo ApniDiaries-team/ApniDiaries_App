@@ -25,7 +25,7 @@ import { useDarkMode } from "../../context/DarkModeContext";
 import { getCityPostCounts, getFeed } from "../../services/posts.api";
 import PostCard, { AudioManager } from "./components/PostCard"; // ← ADD: import AudioManager
 
-const S = "#FF9933";
+const S = "#A23F00";
 
 const MOODS = [
   { id: "all", label: "For You" },
@@ -188,9 +188,9 @@ const CommunityPosts = () => {
   }, []);
   // ─────────────────────────────────────────────────────────────────────────────
 
-  const bg = dk ? "#0d0d0d" : "#f7f4ef";
-  const bdr = dk ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.07)";
-  const surf = dk ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.04)";
+  const bg = dk ? "#0B0E14" : "#FFF8F6";
+  const bdr = dk ? "#2D3748" : "#E1BFB2";
+  const surf = dk ? "#1A1F29" : "#FFF1EC";
 
   // ── City counts ──────────────────────────────────────────────────────────────
   useEffect(() => {

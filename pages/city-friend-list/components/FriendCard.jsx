@@ -37,11 +37,11 @@ const FriendCard = ({ friend, onMessage, onQuickActions, unreadCount = 0 }) => {
 
   const colors = {
     bgCard: isDarkMode ? "#1E242F" : "#FFFFFF",
-    bgSecondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
+    bgSecondary: isDarkMode ? "#1A1F29" : "#FFF1EC",
     textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
     textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-    border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
-    accent: "#FF9933",
+    border: isDarkMode ? "#2D3748" : "#E1BFB2",
+    accent: "#A23F00",
   };
 
   const getStatusColor = (status) => {

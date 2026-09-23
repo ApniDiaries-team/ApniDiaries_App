@@ -1,5 +1,7 @@
-import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import Icon from "../../../components/AppIcon";
+import { Fonts } from "../../../constants/theme";
+import { useDarkMode } from "../../../context/DarkModeContext";
 import { getProfilePhotoUrl } from "../../../helper/DefaultImageUrl";
 
 const ProfileHeader = ({
@@ -9,102 +11,109 @@ const ProfileHeader = ({
   onFollowersClick,
   onFollowingClick,
 }) => {
+  const { isDarkMode } = useDarkMode();
+  const bg = isDarkMode ? "#0B0E14" : "#FFF8F6";
+  const surface = isDarkMode ? "#1A1F29" : "#FFF1EC";
+  const text = isDarkMode ? "#FFFFFF" : "#261913";
+  const muted = isDarkMode ? "#A0AEC0" : "#594137";
+  const border = isDarkMode ? "#2D3748" : "#E1BFB2";
+  const person = profileData?.user;
+  const stats = [
+    { label: "Posts", value: profileData?.stats?.totalPosts },
+    { label: "Followers", value: profileData?.stats?.followers, onPress: onFollowersClick },
+    { label: "Following", value: profileData?.stats?.following, onPress: onFollowingClick },
+  ];
+
+  const actionButton = (label, icon, onPress) => (
+    <Pressable
+      key={label}
+      onPress={onPress}
+      style={{
+        flex: 1,
+        minHeight: 44,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 7,
+        paddingHorizontal: 10,
+        borderRadius: 24,
+        borderWidth: 1,
+        borderColor: border,
+        backgroundColor: surface,
+      }}
+    >
+      <Icon name={icon} size={15} color={text} />
+      <Text style={{ color: text, fontFamily: Fonts.inter.semibold, fontSize: 12 }}>{label}</Text>
+    </Pressable>
+  );
 
   return (
-    <View className="px-4 pb-4">
-      {/* Avatar — centered, overlapping cover photo */}
-      <View className="items-center -mt-[52px]">
-        <View className="relative">
-          <View className="w-[100px] h-[100px] rounded-full overflow-hidden border-4 border-profile-primary dark:border-profile-primary-dark bg-profile-card dark:bg-profile-card-dark shadow-lg elevation-6">
-            <Image
-              source={{
-                uri: getProfilePhotoUrl(profileData?.user?.profile_photo),
-              }}
-              className="w-full h-full"
-              resizeMode="cover"
-            />
-          </View>
-          {/* Online dot */}
-          <View className="absolute bottom-1.5 right-1.5 w-4 h-4 rounded-full bg-emerald-500 border-2 border-profile-primary dark:border-profile-primary-dark" />
+    <View style={{ paddingHorizontal: 18, marginTop: -42 }}>
+      <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 14 }}>
+        <View style={{ position: "relative" }}>
+          <Image
+            source={{ uri: getProfilePhotoUrl(person?.profile_photo) }}
+            style={{
+              width: 86,
+              height: 86,
+              borderRadius: 43,
+              borderWidth: 4,
+              borderColor: bg,
+              backgroundColor: surface,
+            }}
+          />
+          <View style={{ position: "absolute", right: 4, bottom: 5, width: 14, height: 14, borderRadius: 7, backgroundColor: "#10B981", borderWidth: 2, borderColor: bg }} />
+        </View>
+        <View style={{ flex: 1, paddingBottom: 3 }}>
+          <Text numberOfLines={1} style={{ color: text, fontFamily: Fonts.playfair.bold, fontSize: 22 }}>
+            {person?.name || "Traveler"}
+          </Text>
+          {!!person?.username && (
+            <Text numberOfLines={1} style={{ color: ACCENT, fontFamily: Fonts.inter.medium, fontSize: 12, marginTop: 1 }}>
+              @{person.username}
+            </Text>
+          )}
+          {!!profileData?.city && (
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 5 }}>
+              <Icon name="MapPin" size={13} color={muted} />
+              <Text numberOfLines={1} style={{ color: muted, fontFamily: Fonts.inter.regular, fontSize: 12, flexShrink: 1 }}>
+                {profileData.city}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
 
-      {/* Name, username, location — centered */}
-      <View className="items-center mt-3">
-        <Text className="text-2xl font-playfair-bold text-profile-text-primary dark:text-profile-text-primary-dark">
-          {profileData?.user?.name}
-        </Text>
-        <Text className="text-sm text-profile-text-secondary dark:text-profile-text-secondary-dark mt-0.5">
-          @{profileData?.user?.username}
-        </Text>
-        <View className="flex-row items-center gap-1 mt-1">
-          <Icon name="MapPin" size={16} className="text-profile-text-secondary dark:text-profile-text-secondary-dark" />
-          <Text className="text-sm text-profile-text-secondary dark:text-profile-text-secondary-dark">
-            {profileData?.city}
-          </Text>
-        </View>
-
-        {/* Followers / Following */}
-        <View className="flex-row gap-8 mt-4">
-          <Pressable
-            onPress={onFollowersClick}
-            className="items-center"
-          >
-            <Text className="text-xl font-semibold text-profile-text-primary dark:text-profile-text-primary-dark">
-              {profileData?.stats?.followers?.toLocaleString("en-IN") ?? 0}
-            </Text>
-            <Text className="text-[13px] text-profile-text-secondary dark:text-profile-text-secondary-dark">
-              Followers
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={onFollowingClick}
-            className="items-center"
-          >
-            <Text className="text-xl font-semibold text-profile-text-primary dark:text-profile-text-primary-dark">
-              {profileData?.stats?.following?.toLocaleString("en-IN") ?? 0}
-            </Text>
-            <Text className="text-[13px] text-profile-text-secondary dark:text-profile-text-secondary-dark">
-              Following
-            </Text>
-          </Pressable>
-        </View>
+      <View style={{ flexDirection: "row", marginTop: 20, paddingVertical: 14, borderTopWidth: 1, borderBottomWidth: 1, borderColor: border }}>
+        {stats.map((item, index) => {
+          const Content = (
+            <>
+              <Text style={{ color: text, fontFamily: Fonts.inter.bold, fontSize: 16 }}>
+                {(item.value || 0).toLocaleString("en-IN")}
+              </Text>
+              <Text style={{ color: muted, fontFamily: Fonts.inter.regular, fontSize: 11, marginTop: 2 }}>{item.label}</Text>
+            </>
+          );
+          return item.onPress ? (
+            <Pressable key={item.label} onPress={item.onPress} style={{ flex: 1, alignItems: "center", borderRightWidth: index < 2 ? 1 : 0, borderColor: border }}>
+              {Content}
+            </Pressable>
+          ) : (
+            <View key={item.label} style={{ flex: 1, alignItems: "center", borderRightWidth: index < 2 ? 1 : 0, borderColor: border }}>
+              {Content}
+            </View>
+          );
+        })}
       </View>
 
-      {/* Action buttons — full width, stacked */}
-      <View className="gap-2.5 mt-5">
-        <TouchableOpacity
-          onPress={onEditProfile}
-          activeOpacity={0.7}
-          className="flex-row items-center justify-center gap-2 py-3.5 rounded-[20px] border border-profile-border dark:border-profile-border-dark bg-profile-secondary dark:bg-profile-secondary-dark"
-        >
-          <Icon
-            name="Edit"
-            size={16}
-            className="text-profile-text-primary dark:text-profile-text-primary-dark"
-          />
-          <Text className="text-base font-medium text-profile-text-primary dark:text-profile-text-primary-dark">
-            Edit Profile
-          </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          onPress={onShareProfile}
-          activeOpacity={0.7}
-          className="flex-row items-center justify-center gap-2 py-3.5 rounded-[20px] border border-profile-border dark:border-profile-border-dark bg-profile-secondary dark:bg-profile-secondary-dark"
-        >
-          <Icon
-            name="Share2"
-            size={16}
-            className="text-profile-text-primary dark:text-profile-text-primary-dark"
-          />
-          <Text className="text-base font-medium text-profile-text-primary dark:text-profile-text-primary-dark">
-            Share Profile
-          </Text>
-        </TouchableOpacity>
+      <View style={{ flexDirection: "row", gap: 10, marginTop: 16 }}>
+        {actionButton("Edit profile", "Edit", onEditProfile)}
+        {actionButton("Share profile", "Share2", onShareProfile)}
       </View>
     </View>
   );
 };
+
+const ACCENT = "#A23F00";
 
 export default ProfileHeader;

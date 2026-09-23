@@ -4,3 +4,6 @@ import api from '../api/axios';
 export const getUserSettings = () => api.get('api/settings');
 
 export const updateUserSettings = (data) => api.put('api/settings', data);
+
+export const deleteAccount = (password) =>
+  api.delete('api/auth/delete-account', { data: { password } });

@@ -12,6 +12,7 @@ import ProfileQuickActionsModal from "@/components/ui/ProfileQuickActionsModal";
 import Icon from "../../components/AppIcon";
 import PostCard, { AudioManager } from "./components/PostCard";
 import ProfileHeader from "./components/ProfileHeader";
+import ProfileStats from "./components/ProfileStats";
 import ShareProfileModal from "./components/ShareProfileModal";
 
 import {
@@ -24,7 +25,8 @@ import {
 import { useDarkMode } from "../../context/DarkModeContext";
 
 const OtherUserProfile = () => {
-  const { theme } = useDarkMode();
+  const { theme, isDarkMode } = useDarkMode();
+  const accentColor = isDarkMode ? "#ED8936" : "#A23F00";
   const router = useRouter();
   const params = useLocalSearchParams();
   const userId = params?.userId;
@@ -119,6 +121,13 @@ const OtherUserProfile = () => {
       },
     });
 
+  const openConnections = (tab) => {
+    router.push({
+      pathname: tab === "followers" ? "/followers" : "/following",
+      params: { userId, tab },
+    });
+  };
+
   const handleShareProfile = () => {
     setShowShareModal(true);
   };
@@ -167,7 +176,7 @@ const OtherUserProfile = () => {
           backgroundColor: theme.bgPrimary,
         }}
       >
-        <ActivityIndicator size="large" color="#FF9933" />
+        <ActivityIndicator size="large" color={accentColor} />
       </View>
     );
   }
@@ -261,7 +270,7 @@ const OtherUserProfile = () => {
                 borderColor: theme.border,
               }}
             >
-              <Icon name="Lock" size={28} color="#FF9933" />
+              <Icon name="Lock" size={28} color={accentColor} />
 
               <Text
                 style={{
@@ -289,6 +298,14 @@ const OtherUserProfile = () => {
           </View>
         ) : (
           <>
+            <ProfileStats
+              posts={userData?.stats?.totalPosts}
+              followers={userData?.stats?.followers}
+              following={userData?.stats?.following}
+              friends={userData?.stats?.friends}
+              onFollowersClick={() => openConnections("followers")}
+              onFollowingClick={() => openConnections("following")}
+            />
             {/* TABS */}
             <View
               style={{
@@ -316,7 +333,7 @@ const OtherUserProfile = () => {
                     paddingVertical: 12,
                     borderBottomWidth: 2,
                     borderBottomColor:
-                      activeTab === tab.key ? "#FF9933" : "transparent",
+                      activeTab === tab.key ? accentColor : "transparent",
                   }}
                 >
                   <Text
@@ -389,7 +406,7 @@ const OtherUserProfile = () => {
                           marginBottom: 12,
                         }}
                       >
-                        <Icon name="User" size={20} color="#FF9933" />
+                        <Icon name="User" size={20} color={accentColor} />
                         <Text
                           style={{
                             fontSize: 18,
@@ -436,7 +453,7 @@ const OtherUserProfile = () => {
                         marginBottom: 12,
                       }}
                     >
-                      <Icon name="Info" size={20} color="#FF9933" />
+                      <Icon name="Info" size={20} color={accentColor} />
                       <Text
                         style={{
                           fontSize: 18,
@@ -546,7 +563,7 @@ const OtherUserProfile = () => {
                           marginBottom: 12,
                         }}
                       >
-                        <Icon name="Heart" size={20} color="#FF9933" />
+                        <Icon name="Heart" size={20} color={accentColor} />
                         <Text
                           style={{
                             fontSize: 18,
@@ -589,7 +606,7 @@ const OtherUserProfile = () => {
                                 >
                                   <Text
                                     style={{
-                                      color: "#FF9933",
+                                      color: accentColor,
                                       fontSize: 12,
                                       fontWeight: "500",
                                     }}
@@ -670,7 +687,7 @@ const OtherUserProfile = () => {
                         marginBottom: 12,
                       }}
                     >
-                      <Icon name="Compass" size={20} color="#FF9933" />
+                      <Icon name="Compass" size={20} color={accentColor} />
                       <Text
                         style={{
                           fontSize: 18,
@@ -741,11 +758,11 @@ const OtherUserProfile = () => {
                                   <Icon
                                     name="MapPin"
                                     size={14}
-                                    color="#FF9933"
+                                    color={accentColor}
                                   />
                                   <Text
                                     style={{
-                                      color: "#FF9933",
+                                      color: accentColor,
                                       fontSize: 12,
                                       fontWeight: "500",
                                     }}
@@ -784,7 +801,7 @@ const OtherUserProfile = () => {
                         marginBottom: 12,
                       }}
                     >
-                      <Icon name="BarChart2" size={20} color="#FF9933" />
+                      <Icon name="BarChart2" size={20} color={accentColor} />
                       <Text
                         style={{
                           fontSize: 18,

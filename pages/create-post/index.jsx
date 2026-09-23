@@ -33,7 +33,7 @@ const MAX_FILES = 10;
 const MAX_IMG_SZ = 10 * 1024 * 1024;
 const MAX_VID_SZ = 100 * 1024 * 1024;
 const MAX_VID_SECONDS = 90;
-const S = "#FF9933";
+const S = "#A23F00";
 
 const TRIP_TYPES = [
   { value: "solo", label: "Solo", emoji: "🎒" },
@@ -140,7 +140,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
             )}
           </View>
           <View>
-            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#0f172a" }}>
+            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#261913" }}>
               {user?.name}
             </Text>
             <Text style={{ fontSize: 12, color: "#94a3b8" }}>Sharing a travel story…</Text>
@@ -163,7 +163,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
               lineHeight: 26,
               textAlignVertical: "top",
               fontFamily: Fonts.inter.regular,
-              color: dk ? "#fff" : "#0f172a",
+              color: dk ? "#fff" : "#261913",
               letterSpacing: -0.16,
             }}
           />
@@ -233,7 +233,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
                   flex: 1,
                   fontSize: 14,
                   fontFamily: Fonts.inter.semibold,
-                  color: dk ? "#fff" : "#0f172a",
+                  color: dk ? "#fff" : "#261913",
                 }}
               />
               {city ? <Icon name="Check" size={14} color={S} /> : null}
@@ -255,7 +255,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
                   shadowRadius: 12,
                   elevation: 8,
                   zIndex: 10,
-                  backgroundColor: dk ? "#1a1a1a" : "#fff",
+                  backgroundColor: dk ? "#1A1F29" : "#fff",
                   borderWidth: 1,
                   borderColor: "rgba(0,0,0,0.08)",
                   maxHeight: 200,
@@ -276,7 +276,7 @@ const StepStory = ({ content, setContent, city, setCity, user, dk }) => {
                     }}
                   >
                     <Icon name="MapPin" size={12} color={S} />
-                    <Text style={{ fontSize: 14, color: dk ? "#fff" : "#0f172a" }}>{c}</Text>
+                    <Text style={{ fontSize: 14, color: dk ? "#fff" : "#261913" }}>{c}</Text>
                   </Pressable>
                 ))}
               </View>
@@ -862,7 +862,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
             <Icon name="Image" size={26} color={S} strokeWidth={2.5} />
           </View>
           <View style={{ alignItems: "center" }}>
-            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#0f172a" }}>
+            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#261913" }}>
               Add photos & videos
             </Text>
             <Text style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>
@@ -989,7 +989,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
         <View style={{ marginTop: 20 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 10 }}>
             <Icon name="Music" size={15} color={S} />
-            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#0f172a" }}>
+            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.bold, color: dk ? "#fff" : "#261913" }}>
               Background music
             </Text>
             <View
@@ -1041,7 +1041,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
                   style={{
                     fontSize: 14,
                     fontFamily: Fonts.inter.bold,
-                    color: dk ? "#fff" : "#0f172a",
+                    color: dk ? "#fff" : "#261913",
                   }}
                 >
                   Add a song
@@ -1095,7 +1095,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
                     style={{
                       fontSize: 14,
                       fontFamily: Fonts.inter.bold,
-                      color: dk ? "#fff" : "#0f172a",
+                      color: dk ? "#fff" : "#261913",
                     }}
                   >
                     {music.name}
@@ -1189,7 +1189,7 @@ const StepMedia = ({ mediaItems, setMediaItems, music, setMusic, dk }) => {
                       style={{
                         fontSize: 12,
                         fontFamily: Fonts.inter.bold,
-                        color: dk ? "#fff" : "#0f172a",
+                        color: dk ? "#fff" : "#261913",
                       }}
                     >
                       Select clip · max 30 sec
@@ -1331,7 +1331,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
           style={{
             fontSize: 14,
             fontFamily: Fonts.inter.bold,
-            color: dk ? "#fff" : "#0f172a",
+            color: dk ? "#fff" : "#261913",
             marginBottom: 12,
           }}
         >
@@ -1380,7 +1380,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
           style={{
             fontSize: 14,
             fontFamily: Fonts.inter.bold,
-            color: dk ? "#fff" : "#0f172a",
+            color: dk ? "#fff" : "#261913",
             marginBottom: 10,
           }}
         >
@@ -1405,7 +1405,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
           <Text
             style={{
               fontSize: 14,
-              color: metadata.travelDate ? (dk ? "#fff" : "#0f172a") : "#94a3b8",
+              color: metadata.travelDate ? (dk ? "#fff" : "#261913") : "#94a3b8",
             }}
           >
             {metadata.travelDate
@@ -1432,7 +1432,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
           style={{
             fontSize: 14,
             fontFamily: Fonts.inter.bold,
-            color: dk ? "#fff" : "#0f172a",
+            color: dk ? "#fff" : "#261913",
             marginBottom: 10,
           }}
         >
@@ -1455,7 +1455,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
                   backgroundColor: active
                     ? "rgba(255,153,51,0.08)"
                     : dk
-                      ? "#1a1a1a"
+                      ? "#1A1F29"
                       : "rgba(0,0,0,0.03)",
                   borderWidth: 1.5,
                   borderColor: active ? S : "rgba(0,0,0,0.08)",
@@ -1479,7 +1479,7 @@ const StepTag = ({ metadata, setMetadata, dk }) => {
                     style={{
                       fontSize: 14,
                       fontFamily: Fonts.inter.bold,
-                      color: active ? S : dk ? "#fff" : "#0f172a",
+                      color: active ? S : dk ? "#fff" : "#261913",
                     }}
                   >
                     {opt.label}
@@ -1624,7 +1624,7 @@ const StepReview = ({ content, city, mediaItems, music, metadata, user, dk }) =>
                 fontSize: 12,
                 flex: 1,
                 lineHeight: 18,
-                color: dk ? "#fff" : "#0f172a",
+                color: dk ? "#fff" : "#261913",
               }}
             >
               {row.value}
@@ -1781,8 +1781,8 @@ const CreatePost = () => {
     }
   };
 
-  const bg = dk ? "#111" : "#fff";
-  const bdr = dk ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)";
+  const bg = dk ? "#0B0E14" : "#FFF8F6";
+  const bdr = dk ? "#2D3748" : "#E1BFB2";
 
   return (
     <View style={{ flex: 1, backgroundColor: bg, paddingTop: 0 }}>
@@ -1817,7 +1817,7 @@ const CreatePost = () => {
             <Icon
               name={step > 0 ? "ChevronLeft" : "X"}
               size={18}
-              color={dk ? "#fff" : "#0f172a"}
+              color={dk ? "#fff" : "#261913"}
             />
           </Pressable>
 
@@ -1874,7 +1874,7 @@ const CreatePost = () => {
               fontSize: 20,
               fontFamily: Fonts.playfair?.black || Fonts.inter.bold,
               letterSpacing: -0.4,
-              color: dk ? "#fff" : "#0f172a",
+              color: dk ? "#fff" : "#261913",
             }}
           >
             {STEPS[step].hint}
@@ -1950,7 +1950,7 @@ const CreatePost = () => {
               <LinearGradient
                 colors={
                   canNext
-                    ? [S, "#FF6B35"]
+                    ? [S, "#BA4D10"]
                     : dk
                       ? ["rgba(255,255,255,0.08)", "rgba(255,255,255,0.08)"]
                       : ["rgba(0,0,0,0.07)", "rgba(0,0,0,0.07)"]
@@ -1999,7 +1999,7 @@ const CreatePost = () => {
               <LinearGradient
                 colors={
                   isReady
-                    ? [S, "#FF6B35"]
+                    ? [S, "#BA4D10"]
                     : dk
                       ? ["rgba(255,255,255,0.08)", "rgba(255,255,255,0.08)"]
                       : ["rgba(0,0,0,0.07)", "rgba(0,0,0,0.07)"]

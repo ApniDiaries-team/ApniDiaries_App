@@ -84,12 +84,12 @@ export const useDarkMode = () => {
 };
 
 export const lightTheme = {
-  bgPrimary: "#FFFFFF",
-  bgSecondary: "#F7FAFC",
-  bgCard: "#EDF2F7",
-  textPrimary: "#1A202C",
-  textSecondary: "#4A5568",
-  border: "#E2E8F0",
+  bgPrimary: "#FFF8F6",
+  bgSecondary: "#FFF1EC",
+  bgCard: "#FFFFFF",
+  textPrimary: "#261913",
+  textSecondary: "#594137",
+  border: "#E1BFB2",
 };
 
 export const darkTheme = {

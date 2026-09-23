@@ -1,28 +1,33 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
+  Alert,
+  Modal,
   Pressable,
   ScrollView,
   Text,
+  TextInput,
   View,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useContext } from 'react';
 import Icon from '../../components/AppIcon';
 import { useDarkMode } from '../../context/DarkModeContext';
+import { AppContext } from '../../context/AppContext';
 import { Fonts } from '../../constants/theme';
-import { getUserSettings, updateUserSettings } from '../../services/settings.api';
+import { deleteAccount, getUserSettings, updateUserSettings } from '../../services/settings.api';
 
 // ── Dropdown Select (matches web designs exactly) ─────────────────────────────
 const Dropdown = ({ label, description, options, value, onChange, isDarkMode }) => {
   const [open, setOpen] = useState(false);
   const selected = options.find((o) => o.value === value);
 
-  const bg = isDarkMode ? '#1a2233' : '#fff';
-  const bgDropdown = isDarkMode ? '#1e2b3a' : '#fff';
-  const border = isDarkMode ? '#2d3f55' : '#d1d5db';
-  const borderOpen = '#F97316';
-  const textPrimary = isDarkMode ? '#f1f5f9' : '#111827';
-  const textSecondary = isDarkMode ? '#94a3b8' : '#6b7280';
+  const bg = isDarkMode ? '#1A1F29' : '#FFF1EC';
+  const bgDropdown = isDarkMode ? '#1E242F' : '#FFFFFF';
+  const border = isDarkMode ? '#2D3748' : '#E1BFB2';
+  const borderOpen = isDarkMode ? '#ED8936' : '#A23F00';
+  const textPrimary = isDarkMode ? '#FFFFFF' : '#261913';
+  const textSecondary = isDarkMode ? '#A0AEC0' : '#594137';
 
   return (
     <View style={{ gap: 6, zIndex: open ? 999 : 1 }}>
@@ -52,7 +57,7 @@ const Dropdown = ({ label, description, options, value, onChange, isDarkMode }) 
         <Icon
           name={open ? 'ChevronUp' : 'ChevronDown'}
           size={18}
-          color={open ? '#F97316' : textSecondary}
+          color={open ? borderOpen : textSecondary}
         />
       </Pressable>
 
@@ -87,16 +92,16 @@ const Dropdown = ({ label, description, options, value, onChange, isDarkMode }) 
                   justifyContent: 'space-between',
                   paddingHorizontal: 16,
                   paddingVertical: 14,
-                  backgroundColor: isSelected ? '#F97316' : 'transparent',
+                  backgroundColor: isSelected ? borderOpen : 'transparent',
                   borderTopWidth: i > 0 ? 1 : 0,
-                  borderTopColor: isDarkMode ? '#2d3f55' : '#f3f4f6',
+                  borderTopColor: isDarkMode ? '#2D3748' : '#FFF1EC',
                 }}
               >
                 <Text
                   style={{
                     fontSize: 14,
                     fontWeight: isSelected ? '600' : '500',
-                    color: isSelected ? '#fff' : textPrimary,
+                  color: isSelected ? (isDarkMode ? '#0B0E14' : '#fff') : textPrimary,
                   }}
                 >
                   {opt.label}
@@ -105,7 +110,7 @@ const Dropdown = ({ label, description, options, value, onChange, isDarkMode }) 
                   <Text
                     style={{
                       fontSize: 12,
-                      color: isSelected ? 'rgba(255,255,255,0.8)' : textSecondary,
+                      color: isSelected ? (isDarkMode ? 'rgba(11,14,20,0.8)' : 'rgba(255,255,255,0.8)') : textSecondary,
                       flexShrink: 1,
                       textAlign: 'right',
                       marginLeft: 8,
@@ -132,30 +137,14 @@ const Dropdown = ({ label, description, options, value, onChange, isDarkMode }) 
 
 // ── Checkbox Item ─────────────────────────────────────────────────────────────
 const CheckboxItem = ({ label, description, checked, onChange, isDarkMode }) => {
-  const textPrimary = isDarkMode ? '#f1f5f9' : '#111827';
-  const textSecondary = isDarkMode ? '#94a3b8' : '#6b7280';
+  const textPrimary = isDarkMode ? '#FFFFFF' : '#261913';
+  const textSecondary = isDarkMode ? '#A0AEC0' : '#594137';
 
   return (
     <Pressable
       onPress={() => onChange(!checked)}
-      style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 14, paddingVertical: 4 }}
+      style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 14, paddingVertical: 4 }}
     >
-      <View
-        style={{
-          width: 24,
-          height: 24,
-          borderRadius: 6,
-          borderWidth: 2,
-          borderColor: checked ? '#F97316' : (isDarkMode ? '#4b5563' : '#d1d5db'),
-          backgroundColor: checked ? '#F97316' : 'transparent',
-          alignItems: 'center',
-          justifyContent: 'center',
-          marginTop: 1,
-          flexShrink: 0,
-        }}
-      >
-        {checked && <Icon name="Check" size={13} color="#fff" />}
-      </View>
       <View style={{ flex: 1 }}>
         <Text style={{ fontSize: 14, fontWeight: '600', color: textPrimary, lineHeight: 20 }}>
           {label}
@@ -166,42 +155,48 @@ const CheckboxItem = ({ label, description, checked, onChange, isDarkMode }) => 
           </Text>
         )}
       </View>
+      <View style={{ width: 46, height: 27, borderRadius: 14, justifyContent: 'center', padding: 3, backgroundColor: checked ? (isDarkMode ? '#ED8936' : '#A23F00') : (isDarkMode ? '#2D3748' : '#E1BFB2'), flexShrink: 0 }}>
+        <View style={{ width: 21, height: 21, borderRadius: 11, backgroundColor: '#FFFFFF', alignSelf: checked ? 'flex-end' : 'flex-start', shadowColor: '#000', shadowOpacity: 0.14, shadowRadius: 2, elevation: 1 }} />
+      </View>
     </Pressable>
   );
 };
 
 // ── Section Card ──────────────────────────────────────────────────────────────
-const Section = ({ title, icon, children, isDarkMode, zIndex = 1 }) => {
-  const bg = isDarkMode ? '#131c2b' : '#fff';
-  const border = isDarkMode ? '#1e2d42' : '#e5e7eb';
-  const textPrimary = isDarkMode ? '#e2e8f0' : '#111827';
-  const textSecondary = isDarkMode ? '#64748b' : '#6b7280';
+const Section = ({ title, icon, children, isDarkMode, zIndex = 1, onLayout, danger = false }) => {
+  const bg = danger ? (isDarkMode ? 'rgba(252,129,129,0.06)' : '#FFF4F2') : (isDarkMode ? '#1E242F' : '#FFFFFF');
+  const border = danger ? (isDarkMode ? 'rgba(252,129,129,0.25)' : '#E8B8B0') : (isDarkMode ? '#2D3748' : '#E1BFB2');
+  const textPrimary = isDarkMode ? '#FFFFFF' : '#261913';
+  const textSecondary = isDarkMode ? '#A0AEC0' : '#594137';
+  const headingColor = danger ? (isDarkMode ? '#FC8181' : '#BA1A1A') : textPrimary;
 
   return (
     <View
       style={{
         backgroundColor: bg,
-        borderRadius: 16,
+        borderRadius: 18,
         padding: 20,
         borderWidth: 1,
         borderColor: border,
         gap: 18,
         zIndex,
       }}
+      onLayout={onLayout}
     >
       {/* Section header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-        <Icon name={icon} size={18} color={textSecondary} />
+        <Icon name={icon} size={18} color={danger ? headingColor : textSecondary} />
         <Text
           style={{
             fontSize: 17,
             fontFamily: Fonts.playfair?.bold,
-            color: textPrimary,
+            color: headingColor,
           }}
         >
           {title}
         </Text>
       </View>
+      <View style={{ height: 1, backgroundColor: border, marginTop: -8 }} />
       {children}
     </View>
   );
@@ -210,10 +205,18 @@ const Section = ({ title, icon, children, isDarkMode, zIndex = 1 }) => {
 // ── Main Component ────────────────────────────────────────────────────────────
 const SettingsPage = () => {
   const router = useRouter();
+  const { logout } = useContext(AppContext);
   const { isDarkMode } = useDarkMode();
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletePassword, setDeletePassword] = useState('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showDeletePassword, setShowDeletePassword] = useState(false);
   const [toast, setToast] = useState(null);
+  const [activeSection, setActiveSection] = useState('privacy');
+  const scrollRef = useRef(null);
+  const sectionOffsets = useRef({});
 
   const [formData, setFormData] = useState({
     profileVisibility: 'public',
@@ -290,6 +293,28 @@ const SettingsPage = () => {
     }
   };
 
+  const handleDeleteAccount = async () => {
+    if (!deletePassword.trim()) {
+      showToast('error', 'Enter your password to confirm account deletion.');
+      return;
+    }
+    setDeleteLoading(true);
+    try {
+      const response = await deleteAccount(deletePassword);
+      if (response?.data?.success) {
+        setShowDeleteModal(false);
+        await logout?.();
+        router.replace('/home');
+      } else {
+        showToast('error', response?.data?.message || 'Failed to delete account.');
+      }
+    } catch (error) {
+      showToast('error', error?.response?.data?.message || 'Could not delete your account.');
+    } finally {
+      setDeleteLoading(false);
+    }
+  };
+
   const profileVisibilityOptions = [
     { value: 'public', label: 'Public', description: 'Anyone can view your profile' },
     { value: 'friends', label: 'Friends Only', description: 'Only your friends can view' },
@@ -301,16 +326,27 @@ const SettingsPage = () => {
     { value: 'nobody', label: 'Nobody', description: 'Disable messages' },
   ];
 
-  const bgPage = isDarkMode ? '#0b0e14' : '#f1f5f9';
-  const bgCard = isDarkMode ? '#131c2b' : '#fff';
-  const border = isDarkMode ? '#1e2d42' : '#e5e7eb';
-  const textPrimary = isDarkMode ? '#f1f5f9' : '#111827';
-  const textSecondary = isDarkMode ? '#64748b' : '#6b7280';
+  const bgPage = isDarkMode ? '#0B0E14' : '#FFF8F6';
+  const bgCard = isDarkMode ? '#1E242F' : '#FFFFFF';
+  const border = isDarkMode ? '#2D3748' : '#E1BFB2';
+  const textPrimary = isDarkMode ? '#FFFFFF' : '#261913';
+  const textSecondary = isDarkMode ? '#A0AEC0' : '#594137';
+  const sections = [
+    { id: 'privacy', label: 'Privacy', icon: 'Lock' },
+    { id: 'notifications', label: 'Notifications', icon: 'Bell' },
+    { id: 'discovery', label: 'Discovery', icon: 'Compass' },
+    { id: 'travel', label: 'Travel', icon: 'MapPinned' },
+    { id: 'security', label: 'Security', icon: 'Shield' },
+  ];
+  const scrollToSection = (id) => {
+    setActiveSection(id);
+    scrollRef.current?.scrollTo({ y: Math.max(0, (sectionOffsets.current[id] || 0) - 12), animated: true });
+  };
 
   if (loading) {
     return (
       <View style={{ flex: 1, backgroundColor: bgPage, alignItems: 'center', justifyContent: 'center' }}>
-        <ActivityIndicator size="large" color="#F97316" />
+        <ActivityIndicator size="large" color="#A23F00" />
       </View>
     );
   }
@@ -340,69 +376,53 @@ const SettingsPage = () => {
       )}
 
       <ScrollView
-        contentContainerStyle={{ padding: 16, paddingBottom: 120, gap: 16 }}
+        ref={scrollRef}
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 16, paddingBottom: 24, gap: 16 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
-        {/* ── Page Header ── */}
-        <View
-          style={{
-            backgroundColor: bgCard,
-            borderRadius: 16,
-            padding: 20,
-            borderWidth: 1,
-            borderColor: border,
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 14,
-          }}
-        >
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 2 }}>
           <Pressable
             onPress={() => router.back()}
-            style={{
-              width: 38,
-              height: 38,
-              borderRadius: 10,
-              backgroundColor: isDarkMode ? '#1e2b3a' : '#f3f4f6',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8, paddingRight: 12 }}
           >
-            <Icon name="ArrowLeft" size={20} color={textSecondary} />
+            <Icon name="ArrowLeft" size={16} color={textSecondary} />
+            <Text style={{ color: textSecondary, fontFamily: Fonts.inter.semibold, fontSize: 12 }}>Back</Text>
           </Pressable>
-
-          <View
-            style={{
-              width: 46,
-              height: 46,
-              borderRadius: 13,
-              backgroundColor: isDarkMode ? 'rgba(59,130,246,0.18)' : 'rgba(59,130,246,0.1)',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Icon name="Shield" size={24} color={isDarkMode ? '#60a5fa' : '#3b82f6'} />
-          </View>
-
-          <View style={{ flex: 1 }}>
-            <Text
-              style={{
-                fontSize: 22,
-                fontFamily: Fonts.playfair?.bold,
-                color: textPrimary,
-                lineHeight: 28,
-              }}
-            >
-              Privacy & Settings
-            </Text>
-            <Text style={{ fontSize: 13, color: textSecondary, marginTop: 3, lineHeight: 18 }}>
-              Manage your profile visibility and notification preferences
-            </Text>
-          </View>
+          <View style={{ flex: 1, height: 1, backgroundColor: border, marginLeft: 4 }} />
         </View>
 
+        <View style={{ gap: 5 }}>
+          <Text style={{ color: isDarkMode ? '#ED8936' : '#A23F00', fontFamily: Fonts.inter.bold, fontSize: 10, letterSpacing: 1.8 }}>
+            ACCOUNT PREFERENCES
+          </Text>
+          <Text style={{ color: textPrimary, fontFamily: Fonts.playfair.bold, fontSize: 26 }}>
+            Privacy & Settings
+          </Text>
+          <Text style={{ color: textSecondary, fontFamily: Fonts.inter.regular, fontSize: 13, lineHeight: 19 }}>
+            Manage your profile visibility and notification preferences.
+          </Text>
+        </View>
+
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingVertical: 2 }}>
+          {sections.map((section) => {
+            const selected = activeSection === section.id;
+            return (
+              <Pressable
+                key={section.id}
+                onPress={() => scrollToSection(section.id)}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 7, paddingHorizontal: 13, paddingVertical: 10, borderRadius: 22, backgroundColor: selected ? (isDarkMode ? '#1A1F29' : '#FFE9E1') : bgCard, borderWidth: 1, borderColor: selected ? (isDarkMode ? '#ED8936' : '#A23F00') : border }}
+              >
+                <Icon name={section.icon} size={14} color={selected ? (isDarkMode ? '#ED8936' : '#A23F00') : textSecondary} />
+                <Text style={{ color: selected ? (isDarkMode ? '#ED8936' : '#A23F00') : textSecondary, fontSize: 12, fontFamily: Fonts.inter.semibold }}>{section.label}</Text>
+              </Pressable>
+            );
+          })}
+        </ScrollView>
+
         {/* ── Privacy Controls — high zIndex so dropdowns overlap below ── */}
-        <Section title="Privacy Controls" icon="Lock" isDarkMode={isDarkMode} zIndex={20}>
+        <Section title="Privacy Controls" icon="Lock" isDarkMode={isDarkMode} zIndex={20} onLayout={(event) => { sectionOffsets.current.privacy = event.nativeEvent.layout.y; }}>
           <Dropdown
             label="Profile Visibility"
             description="Control who can see your profile"
@@ -422,7 +442,7 @@ const SettingsPage = () => {
         </Section>
 
         {/* ── Notification Preferences ── */}
-        <Section title="Notification Preferences" icon="Bell" isDarkMode={isDarkMode} zIndex={10}>
+        <Section title="Notification Preferences" icon="Bell" isDarkMode={isDarkMode} zIndex={10} onLayout={(event) => { sectionOffsets.current.notifications = event.nativeEvent.layout.y; }}>
           <CheckboxItem
             label="Email notifications for new followers"
             description="Get notified when someone follows you"
@@ -454,7 +474,7 @@ const SettingsPage = () => {
         </Section>
 
         {/* ── Discovery Settings ── */}
-        <Section title="Discovery Settings" icon="Compass" isDarkMode={isDarkMode} zIndex={5}>
+        <Section title="Discovery Settings" icon="Compass" isDarkMode={isDarkMode} zIndex={5} onLayout={(event) => { sectionOffsets.current.discovery = event.nativeEvent.layout.y; }}>
           <CheckboxItem
             label="Show my profile in city-based discovery"
             description="Let travelers in your city find you"
@@ -478,58 +498,104 @@ const SettingsPage = () => {
           />
         </Section>
 
+        <Section title="Travel Preferences" icon="MapPinned" isDarkMode={isDarkMode} zIndex={4} onLayout={(event) => { sectionOffsets.current.travel = event.nativeEvent.layout.y; }}>
+          <Text style={{ fontSize: 13, color: textSecondary, lineHeight: 20 }}>
+            Trip style, budget range, and companion preferences are coming soon.
+          </Text>
+        </Section>
+
+        <Section title="Security" icon="Shield" isDarkMode={isDarkMode} zIndex={3} danger onLayout={(event) => { sectionOffsets.current.security = event.nativeEvent.layout.y; }}>
+          <View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 7, marginBottom: 8 }}>
+              <Icon name="Trash2" size={15} color={isDarkMode ? '#FC8181' : '#BA1A1A'} />
+              <Text style={{ color: isDarkMode ? '#FC8181' : '#BA1A1A', fontFamily: Fonts.inter.bold, fontSize: 13 }}>Danger Zone</Text>
+            </View>
+            <Text style={{ color: textSecondary, fontFamily: Fonts.inter.regular, fontSize: 12, lineHeight: 19, marginBottom: 14 }}>
+              Account deletion permanently removes your posts, trips, messages, and profile data.
+            </Text>
+            <Pressable
+              onPress={() => { setDeletePassword(''); setShowDeleteModal(true); }}
+              style={{ alignSelf: 'flex-start', flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 14, paddingVertical: 10, borderWidth: 1, borderColor: isDarkMode ? 'rgba(252,129,129,0.45)' : '#BA1A1A', borderRadius: 12 }}
+            >
+              <Icon name="Trash2" size={15} color={isDarkMode ? '#FC8181' : '#BA1A1A'} />
+              <Text style={{ color: isDarkMode ? '#FC8181' : '#BA1A1A', fontFamily: Fonts.inter.semibold, fontSize: 12 }}>Delete my account</Text>
+            </Pressable>
+          </View>
+        </Section>
+
         {/* ── Info note ── */}
         <View
           style={{
             flexDirection: 'row',
             alignItems: 'flex-start',
             gap: 12,
-            backgroundColor: isDarkMode ? 'rgba(59,130,246,0.08)' : '#eff6ff',
+            backgroundColor: isDarkMode ? 'rgba(162,63,0,0.08)' : '#FFF1EC',
             borderRadius: 12,
             borderWidth: 1,
-            borderColor: isDarkMode ? 'rgba(59,130,246,0.2)' : '#bfdbfe',
+            borderColor: isDarkMode ? 'rgba(162,63,0,0.2)' : '#E1BFB2',
             padding: 14,
           }}
         >
-          <Icon name="Info" size={17} color={isDarkMode ? '#60a5fa' : '#3b82f6'} />
+          <Icon name="Info" size={17} color={isDarkMode ? '#A23F00' : '#A23F00'} />
           <Text style={{ flex: 1, fontSize: 13, color: textSecondary, lineHeight: 20 }}>
             Your privacy is important to us. You can change these settings anytime.
           </Text>
         </View>
 
-        {/* ── Save Button ── */}
+      </ScrollView>
+      <View style={{ paddingHorizontal: 16, paddingTop: 12, paddingBottom: 18, backgroundColor: bgCard, borderTopWidth: 1, borderTopColor: border }}>
         <Pressable
           onPress={handleSave}
           disabled={saving}
-          style={{
-            borderRadius: 14,
-            paddingVertical: 16,
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'row',
-            gap: 10,
-            opacity: saving ? 0.7 : 1,
-            backgroundColor: '#F97316',
-            shadowColor: '#F97316',
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.35,
-            shadowRadius: 10,
-            elevation: 5,
-          }}
+          style={{ borderRadius: 14, paddingVertical: 14, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 9, opacity: saving ? 0.7 : 1, backgroundColor: isDarkMode ? '#ED8936' : '#A23F00', shadowColor: isDarkMode ? '#ED8936' : '#A23F00', shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.22, shadowRadius: 8, elevation: 3 }}
         >
-          <Icon name={saving ? 'Loader' : 'Save'} size={18} color="#fff" />
-          <Text
-            style={{
-              fontSize: 16,
-              fontFamily: Fonts.playfair?.bold,
-              color: '#fff',
-              letterSpacing: 0.3,
-            }}
-          >
+          <Icon name={saving ? 'Loader' : 'Save'} size={17} color={isDarkMode ? '#0B0E14' : '#fff'} />
+          <Text style={{ fontSize: 15, fontFamily: Fonts.inter.bold, color: isDarkMode ? '#0B0E14' : '#fff' }}>
             {saving ? 'Saving...' : 'Save Settings'}
           </Text>
         </Pressable>
-      </ScrollView>
+      </View>
+      <Modal visible={showDeleteModal} transparent animationType="fade" onRequestClose={() => setShowDeleteModal(false)}>
+        <View style={{ flex: 1, justifyContent: 'center', padding: 22, backgroundColor: 'rgba(0,0,0,0.62)' }}>
+          <View style={{ backgroundColor: bgCard, borderRadius: 22, borderWidth: 1, borderColor: isDarkMode ? 'rgba(252,129,129,0.3)' : '#E8B8B0', padding: 22 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 15 }}>
+              <View style={{ width: 42, height: 42, borderRadius: 14, backgroundColor: isDarkMode ? 'rgba(252,129,129,0.14)' : '#FDE3D9', alignItems: 'center', justifyContent: 'center' }}>
+                <Icon name="Trash2" size={19} color={isDarkMode ? '#FC8181' : '#BA1A1A'} />
+              </View>
+              <View>
+                <Text style={{ color: textPrimary, fontFamily: Fonts.playfair.bold, fontSize: 19 }}>Delete account?</Text>
+                <Text style={{ color: textSecondary, fontFamily: Fonts.inter.regular, fontSize: 11, marginTop: 2 }}>This action cannot be undone.</Text>
+              </View>
+            </View>
+            <Text style={{ color: textSecondary, fontFamily: Fonts.inter.regular, fontSize: 13, lineHeight: 20, marginBottom: 16 }}>
+              Enter your password to permanently remove your ApniDiaries account and its data.
+            </Text>
+            <Text style={{ color: textPrimary, fontFamily: Fonts.inter.semibold, fontSize: 12, marginBottom: 7 }}>Confirm your password</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor, backgroundColor: isDarkMode ? '#0B0E14' : '#FFF1EC', borderRadius: 12, paddingHorizontal: 12 }}>
+              <TextInput
+                value={deletePassword}
+                onChangeText={setDeletePassword}
+                placeholder="Enter your password"
+                placeholderTextColor={textSecondary}
+                secureTextEntry={!showDeletePassword}
+                autoCapitalize="none"
+                style={{ flex: 1, paddingVertical: 12, color: textPrimary, fontFamily: Fonts.inter.regular, fontSize: 14 }}
+              />
+              <Pressable onPress={() => setShowDeletePassword((value) => !value)} hitSlop={8}>
+                <Icon name={showDeletePassword ? 'EyeOff' : 'Eye'} size={17} color={textSecondary} />
+              </Pressable>
+            </View>
+            <View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
+              <Pressable onPress={() => setShowDeleteModal(false)} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 44, borderWidth: 1, borderColor, borderRadius: 12 }}>
+                <Text style={{ color: textPrimary, fontFamily: Fonts.inter.semibold, fontSize: 13 }}>Cancel</Text>
+              </Pressable>
+              <Pressable onPress={handleDeleteAccount} disabled={deleteLoading} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 44, backgroundColor: '#BA1A1A', borderRadius: 12, opacity: deleteLoading ? 0.6 : 1 }}>
+                <Text style={{ color: '#FFFFFF', fontFamily: Fonts.inter.bold, fontSize: 13 }}>{deleteLoading ? 'Deleting…' : 'Delete account'}</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };

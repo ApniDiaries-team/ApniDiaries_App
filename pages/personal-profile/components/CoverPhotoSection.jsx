@@ -1,8 +1,12 @@
 import * as ImagePicker from "expo-image-picker";
-import { Image, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
+import Icon from "../../../components/AppIcon";
+import { Fonts } from "../../../constants/theme";
+import { useDarkMode } from "../../../context/DarkModeContext";
 import { getCoverPhotoUrl } from "../../../helper/DefaultImageUrl";
 
 const CoverPhotoSection = ({ coverPhoto, onCoverPhotoChange, isEditing }) => {
+  const { isDarkMode } = useDarkMode();
   const handlePickImage = async () => {
     try {
       const { status } =
@@ -35,8 +39,30 @@ const CoverPhotoSection = ({ coverPhoto, onCoverPhotoChange, isEditing }) => {
         resizeMode="cover"
       />
 
-      {/* ✅ Edit overlay — matches web's hover overlay with camera icon + label */}
-
+      {isEditing && (
+        <Pressable
+          onPress={handlePickImage}
+          style={{
+            position: "absolute",
+            right: 16,
+            bottom: 14,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 7,
+            paddingHorizontal: 13,
+            paddingVertical: 9,
+            borderRadius: 22,
+            backgroundColor: isDarkMode ? "rgba(11,14,20,0.82)" : "rgba(255,248,246,0.94)",
+            borderWidth: 1,
+            borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
+          }}
+        >
+          <Icon name="Camera" size={15} color={isDarkMode ? "#ED8936" : "#A23F00"} />
+          <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 11, color: isDarkMode ? "#FFFFFF" : "#261913" }}>
+            Edit cover
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 };

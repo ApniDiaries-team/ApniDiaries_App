@@ -88,7 +88,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
         {/* Header */}
         <View className="flex-row items-center gap-3 mb-4 pb-4 border-b border-slate-100 dark:border-slate-800">
           <View className="p-2 rounded-lg bg-orange-50 dark:bg-orange-950/30">
-            <Icon name="MapPin" size={18} color="#FF9933" />
+            <Icon name="MapPin" size={18} color="#A23F00" />
           </View>
           <View className="flex-1">
             <Text className="text-base font-playfair-bold font-bold text-slate-900 dark:text-slate-100">Destinations</Text>
@@ -96,7 +96,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
           </View>
           {selectedCity !== 'all' && (
             <Pressable onPress={clearFilter} className="px-2 py-1">
-              <Text className="text-xs font-semibold" style={{ color: '#FF9933' }}>Clear</Text>
+              <Text className="text-xs font-semibold" style={{ color: '#A23F00' }}>Clear</Text>
             </Pressable>
           )}
         </View>
@@ -132,9 +132,9 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
                     className={`w-full flex-row items-center gap-2 px-3 py-3 border-b border-slate-50 dark:border-slate-700 last:border-b-0 ${selectedCity === city ? 'bg-orange-50 dark:bg-orange-900/20' : ''
                       }`}
                   >
-                    <Icon name="MapPin" size={14} color="#FF9933" />
-                    <Text className={`text-sm ${selectedCity === city ? 'font-bold text-[#FF9933]' : 'text-slate-900 dark:text-slate-100'}`}>{city}</Text>
-                    {selectedCity === city && <Icon name="Check" size={14} color="#FF9933" />}
+                    <Icon name="MapPin" size={14} color="#A23F00" />
+                    <Text className={`text-sm ${selectedCity === city ? 'font-bold text-[#A23F00]' : 'text-slate-900 dark:text-slate-100'}`}>{city}</Text>
+                    {selectedCity === city && <Icon name="Check" size={14} color="#A23F00" />}
                   </Pressable>
                 ))}
               </ScrollView>
@@ -153,10 +153,10 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
                 }`}
             >
               <View className="flex-row items-center gap-2">
-                <View className={`p-1.5 rounded ${selectedCity === 'all' ? 'bg-[#FF9933]' : 'bg-slate-50 dark:bg-slate-800'}`}>
+                <View className={`p-1.5 rounded ${selectedCity === 'all' ? 'bg-[#A23F00]' : 'bg-slate-50 dark:bg-slate-800'}`}>
                   <Icon name="Globe" size={14} color={selectedCity === 'all' ? '#fff' : '#64748b'} />
                 </View>
-                <Text className={`text-sm font-medium ${selectedCity === 'all' ? 'text-[#FF9933]' : 'text-slate-600 dark:text-slate-300'}`}>All Destinations</Text>
+                <Text className={`text-sm font-medium ${selectedCity === 'all' ? 'text-[#A23F00]' : 'text-slate-600 dark:text-slate-300'}`}>All Destinations</Text>
               </View>
               <View className="px-2 py-0.5 rounded bg-slate-50 dark:bg-slate-800">
                 <Text className="text-xs text-slate-500 dark:text-slate-400 font-bold">{totalPosts || 'All'}</Text>
@@ -174,13 +174,13 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
                     }`}
                 >
                   <View className="flex-row items-center gap-2">
-                    <View className={`p-1.5 rounded ${isActive ? 'bg-[#FF9933]' : 'bg-slate-50 dark:bg-slate-800'}`}>
+                    <View className={`p-1.5 rounded ${isActive ? 'bg-[#A23F00]' : 'bg-slate-50 dark:bg-slate-800'}`}>
                       <Icon name="MapPin" size={14} color={isActive ? '#fff' : '#64748b'} />
                     </View>
                     <View>
-                      <Text className={`text-sm font-medium ${isActive ? 'text-[#FF9933]' : 'text-slate-600 dark:text-slate-300'}`}>{cityName}</Text>
+                      <Text className={`text-sm font-medium ${isActive ? 'text-[#A23F00]' : 'text-slate-600 dark:text-slate-300'}`}>{cityName}</Text>
                       {selectedCitiesList.includes(cityName) && !isActive && (
-                        <Text className="text-[10px] text-[#FF9933]">Recently selected</Text>
+                        <Text className="text-[10px] text-[#A23F00]">Recently selected</Text>
                       )}
                     </View>
                   </View>
@@ -188,7 +188,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
                     {typeof city !== 'string' && city?.postCount > 0 && (
                       <Text className="text-xs text-slate-400 dark:text-slate-500">{city.postCount}</Text>
                     )}
-                    {isActive && <Icon name="Check" size={14} color="#FF9933" />}
+                    {isActive && <Icon name="Check" size={14} color="#A23F00" />}
                   </View>
                 </Pressable>
               )
@@ -200,8 +200,8 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
               onPress={() => setExpanded(!expanded)}
               className="flex-row items-center justify-center gap-1 py-3 border-t border-slate-50 dark:border-slate-800"
             >
-              <Icon name={expanded ? "ChevronUp" : "ChevronDown"} size={14} color="#FF9933" />
-              <Text className="text-xs font-bold" style={{ color: '#FF9933' }}>
+              <Icon name={expanded ? "ChevronUp" : "ChevronDown"} size={14} color="#A23F00" />
+              <Text className="text-xs font-bold" style={{ color: '#A23F00' }}>
                 {expanded ? 'Show less' : `+${popularCities.length - 6} more destinations`}
               </Text>
             </Pressable>
@@ -215,7 +215,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
                   key={category}
                   className="px-3 py-1.5 rounded-full border border-orange-200 dark:border-orange-900/30 bg-orange-50 dark:bg-orange-950/20"
                 >
-                  <Text className="text-[10px] font-bold text-[#FF9933]">{category}</Text>
+                  <Text className="text-[10px] font-bold text-[#A23F00]">{category}</Text>
                 </Pressable>
               ))}
             </View>
@@ -230,14 +230,14 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
     <View className="mb-6">
       <View className="flex-row items-center justify-between mb-4">
         <View className="flex-row items-center gap-2">
-          <Icon name="MapPin" size={20} color="#FF9933" />
+          <Icon name="MapPin" size={20} color="#A23F00" />
           <Text className="text-xl font-playfair-bold font-bold text-slate-900 dark:text-slate-100">Filter by City</Text>
         </View>
 
         <View className="flex-row items-center gap-2">
           {selectedCity !== 'all' && (
             <Pressable onPress={clearFilter} className="px-2 py-1">
-              <Text className="text-xs font-semibold" style={{ color: '#FF9933' }}>Clear</Text>
+              <Text className="text-xs font-semibold" style={{ color: '#A23F00' }}>Clear</Text>
             </Pressable>
           )}
           <Pressable onPress={() => setShowSearch(!showSearch)} className="p-1.5 rounded-lg bg-white dark:bg-slate-950 shadow-sm">
@@ -276,9 +276,9 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
                 className={`flex-row items-center gap-3 px-4 py-4 border-b border-slate-50 dark:border-slate-700 last:border-b-0 ${selectedCity === city ? 'bg-orange-50 dark:bg-orange-900/20' : ''
                   }`}
               >
-                <Icon name="MapPin" size={16} color="#FF9933" />
-                <Text className={`text-base flex-1 ${selectedCity === city ? 'font-bold text-[#FF9933]' : 'text-slate-900 dark:text-slate-100'}`}>{city}</Text>
-                {selectedCity === city && <Icon name="Check" size={18} color="#FF9933" />}
+                <Icon name="MapPin" size={16} color="#A23F00" />
+                <Text className={`text-base flex-1 ${selectedCity === city ? 'font-bold text-[#A23F00]' : 'text-slate-900 dark:text-slate-100'}`}>{city}</Text>
+                {selectedCity === city && <Icon name="Check" size={18} color="#A23F00" />}
               </Pressable>
             ))}
           </ScrollView>
@@ -289,7 +289,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
         <Pressable
           onPress={() => handleCitySelect('all')}
           className={`px-5 py-3 rounded-2xl border-[1.5px] items-center justify-center ${selectedCity === 'all'
-            ? 'bg-[#FF9933] border-[#FF9933] shadow-md shadow-[#FF9933]/30'
+            ? 'bg-[#A23F00] border-[#A23F00] shadow-md shadow-[#A23F00]/30'
             : 'bg-white dark:bg-slate-900 border-slate-900 dark:border-slate-500'
             }`}
         >
@@ -311,7 +311,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
               key={cityName}
               onPress={() => handleCitySelect(cityName)}
               className={`px-5 py-3 rounded-2xl border-[1.5px] relative items-center justify-center ${isActive
-                ? 'bg-[#FF9933] border-[#FF9933] shadow-md shadow-[#FF9933]/30'
+                ? 'bg-[#A23F00] border-[#A23F00] shadow-md shadow-[#A23F00]/30'
                 : 'bg-white dark:bg-slate-900 border-slate-900 dark:border-slate-500'
                 }`}
             >
@@ -326,7 +326,7 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
                 )}
               </View>
               {selectedCitiesList.includes(cityName) && !isActive && (
-                <View className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#FF9933]" />
+                <View className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#A23F00]" />
               )}
             </Pressable>
           )
@@ -336,11 +336,11 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
           <Pressable
             onPress={() => setExpanded(!expanded)}
             className={`px-5 py-3 rounded-2xl border-[1.5px] items-center justify-center ${expanded
-              ? 'bg-orange-50 dark:bg-orange-950/30 border-[#FF9933]'
+              ? 'bg-orange-50 dark:bg-orange-950/30 border-[#A23F00]'
               : 'bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700'
               }`}
           >
-            <Text className={`text-sm font-bold ${expanded ? 'text-[#FF9933]' : 'text-slate-400 dark:text-slate-500'}`}>
+            <Text className={`text-sm font-bold ${expanded ? 'text-[#A23F00]' : 'text-slate-400 dark:text-slate-500'}`}>
               {expanded ? 'Show less' : `+${popularCities.length - 4} more`}
             </Text>
           </Pressable>
@@ -350,13 +350,13 @@ const CityFilterChips = ({ selectedCity, onCitySelect, cities: propCities, total
       {selectedCity !== 'all' && (
         <View className="mt-4 p-4 rounded-2xl bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900/30 flex-row items-center justify-between">
           <View className="flex-row items-center gap-2">
-            <View className="w-2.5 h-2.5 rounded-full bg-[#FF9933] animate-pulse" />
+            <View className="w-2.5 h-2.5 rounded-full bg-[#A23F00] animate-pulse" />
             <Text className="text-sm text-slate-700 dark:text-slate-300">
-              Active filter: <Text className="font-bold text-[#FF9933]">{selectedCity}</Text>
+              Active filter: <Text className="font-bold text-[#A23F00]">{selectedCity}</Text>
             </Text>
           </View>
           <Pressable onPress={clearFilter}>
-            <Text className="text-xs font-bold text-[#FF9933]">Clear</Text>
+            <Text className="text-xs font-bold text-[#A23F00]">Clear</Text>
           </Pressable>
         </View>
       )}

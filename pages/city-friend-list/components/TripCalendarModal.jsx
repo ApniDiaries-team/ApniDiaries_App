@@ -20,10 +20,10 @@ const TripCalendarModal = ({ isOpen, onClose, trips = [] }) => {
 
   const colors = {
     bgCard: isDarkMode ? "#1E242F" : "#FFFFFF",
-    bgSecondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
+    bgSecondary: isDarkMode ? "#1A1F29" : "#FFF1EC",
     textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
     textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-    border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
+    border: isDarkMode ? "#2D3748" : "#E1BFB2",
     overlay: "rgba(0,0,0,0.5)",
   };
 

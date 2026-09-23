@@ -10,83 +10,248 @@ import {
   View,
 } from "react-native";
 import Icon from "../../../components/AppIcon";
-import { Fonts, Shadow } from "../../../constants/theme";
 import { useDarkMode } from "../../../context/DarkModeContext";
+import { Fonts } from "../../../constants/theme";
 import { ViewField } from "./ViewField";
 
-// Mirrors web pages/my-trips/components/CreateTripModal.jsx (mobile/single-
-// column rendering of its responsive grid).
-const VISIBILITY_OPTIONS = [
-  { value: "only_me", label: "Only Me", desc: "Just for you — private journal", icon: "Eye" },
-  { value: "private", label: "Private", desc: "Friends can see & join", icon: "Lock" },
-  { value: "public", label: "Public", desc: "Anyone can discover & join", icon: "Globe2" },
-];
+// ── ViewField — matches web: import { ViewField } from './ViewField' ──
+// const ViewField = ({ label, value }) => {
+//   const { isDarkMode } = useDarkMode();
+//   return (
+//     <View style={{ gap: 4 }}>
+//       <Text
+//         style={{
+//           fontSize: 14,
+//           fontWeight: "500",
+//           color: isDarkMode ? "#9ca3af" : "#6b7280",
+//         }}
+//       >
+//         {label}
+//       </Text>
+//       <Text style={{ fontSize: 16, color: isDarkMode ? "#f9fafb" : "#111827" }}>
+//         {value || "—"}
+//       </Text>
+//     </View>
+//   );
+// };
+// ── TripTypeDropdown ───────────────────────────────────────
+const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
+  const [open, setOpen] = useState(false);
+  const selected = options.find((o) => o.value === value);
 
-const TRIP_TYPE_OPTIONS = [
-  { value: "solo", label: "Solo Trip" },
-  { value: "couple", label: "Couple Trip" },
-  { value: "family", label: "Family Trip" },
-  { value: "friends", label: "Friends Trip" },
-  { value: "group", label: "Group Trip" },
-];
+  return (
+    <View style={{ gap: 6, zIndex: 20 }}>
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: "500",
+          color: isDarkMode ? "#f9fafb" : "#111827",
+        }}
+      >
+        Trip Type
+      </Text>
 
-const IndexField = ({ index, label, theme, children, sub, error }) => (
-  <View style={{ gap: 8 }}>
-    <Text
+      {/* Trigger */}
+      <Pressable
+        onPress={() => setOpen((prev) => !prev)}
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderRadius: 8,
+          borderWidth: 1,
+          borderColor: open ? "#9ca3af" : isDarkMode ? "#374151" : "#e5e7eb",
+          backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 14,
+            color: selected
+              ? isDarkMode
+                ? "#f9fafb"
+                : "#111827"
+              : isDarkMode
+                ? "#6b7280"
+                : "#9ca3af",
+          }}
+        >
+          {selected ? selected.label : "Select trip type"}
+        </Text>
+        <Icon
+          name={open ? "ChevronUp" : "ChevronDown"}
+          size={16}
+          color={isDarkMode ? "#9ca3af" : "#6b7280"}
+        />
+      </Pressable>
+
+      {/* Dropdown list */}
+      {open && (
+        <View
+          style={{
+            borderRadius: 8,
+            borderWidth: 1,
+            borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+            backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+            overflow: "hidden",
+            elevation: 8,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.12,
+            shadowRadius: 8,
+          }}
+        >
+          {options.map((opt) => (
+            <Pressable
+              key={opt.value}
+              onPress={() => {
+                onChange(opt.value);
+                setOpen(false);
+              }}
+              style={{
+                paddingHorizontal: 16,
+                paddingVertical: 12,
+                backgroundColor:
+                  value === opt.value ? "#FF9933" : "transparent",
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 14,
+                  fontWeight: value === opt.value ? "600" : "400",
+                  color:
+                    value === opt.value
+                      ? "#fff"
+                      : isDarkMode
+                        ? "#f9fafb"
+                        : "#111827",
+                }}
+              >
+                {opt.label}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+};
+
+// ── InputField — matches web: <Input label required error description> ──
+const InputField = ({
+  label,
+  value,
+  onChangeText,
+  placeholder,
+  error,
+  keyboardType,
+  required,
+  description,
+  isDarkMode,
+}) => (
+  <View style={{ gap: 6 }}>
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
+      <Text
+        style={{
+          fontSize: 14,
+          fontWeight: "500",
+          color: isDarkMode ? "#f9fafb" : "#111827",
+        }}
+      >
+        {label}
+      </Text>
+      {required && <Text style={{ color: "#ef4444" }}>*</Text>}
+    </View>
+    <TextInput
+      value={value}
+      onChangeText={onChangeText}
+      placeholder={placeholder}
+      placeholderTextColor={isDarkMode ? "#6b7280" : "#9ca3af"}
+      keyboardType={keyboardType || "default"}
       style={{
-        fontSize: 10,
-        fontFamily: Fonts.body.bold,
-        letterSpacing: 1,
-        textTransform: "uppercase",
-        color: theme.onSurfaceVariant,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        borderRadius: 8,
+        borderWidth: 1,
+        borderColor: error ? "#ef4444" : isDarkMode ? "#374151" : "#e5e7eb",
+        backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+        fontSize: 14,
+        color: isDarkMode ? "#f9fafb" : "#111827",
       }}
-    >
-      {index}. {label}
-    </Text>
-    {children}
-    {sub && <Text style={{ fontSize: 12, color: theme.onSurfaceVariant }}>{sub}</Text>}
-    {error && <Text style={{ fontSize: 12, color: theme.error }}>{error}</Text>}
+    />
+    {description && !error && (
+      <Text style={{ fontSize: 12, color: isDarkMode ? "#9ca3af" : "#6b7280" }}>
+        {description}
+      </Text>
+    )}
+    {error && <Text style={{ fontSize: 12, color: "#ef4444" }}>{error}</Text>}
   </View>
 );
 
-const UnderlineInput = ({ theme, style, ...props }) => (
-  <TextInput
-    placeholderTextColor={theme.outline}
-    style={[
-      {
-        borderBottomWidth: 1,
-        borderBottomColor: theme.outlineVariant,
-        paddingVertical: 8,
-        fontSize: 15,
-        color: theme.onSurface,
-      },
-      style,
-    ]}
-    {...props}
-  />
-);
-
-const DateField = ({ label, value, onChange, theme, error, minDate }) => {
+// ── DateField — replaces web <Input type='date' min='2026-01-01'> ──
+const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
   const [show, setShow] = useState(false);
-  const parsed = value ? new Date(value) : new Date();
+  const minDate = new Date("2026-01-01");
+  const parsed = value ? new Date(value) : minDate;
 
   const handleChange = (event, selectedDate) => {
     setShow(Platform.OS === "ios");
-    if (selectedDate) onChange(selectedDate.toISOString().split("T")[0]);
+    if (selectedDate) {
+      onChange(selectedDate.toISOString().split("T")[0]);
+    }
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <Pressable onPress={() => setShow(true)}>
-        <UnderlineInput
-          theme={theme}
-          value={value}
-          placeholder="YYYY-MM-DD"
-          editable={false}
-          pointerEvents="none"
+    <View style={{ gap: 6, flex: 1 }}>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
+        <Text
+          style={{
+            fontSize: 14,
+            fontWeight: "500",
+            color: isDarkMode ? "#f9fafb" : "#111827",
+          }}
+        >
+          {label}
+        </Text>
+        {required && <Text style={{ color: "#ef4444" }}>*</Text>}
+      </View>
+      <Pressable
+        onPress={() => setShow(true)}
+        style={{
+          paddingHorizontal: 16,
+          paddingVertical: 12,
+          borderRadius: 8,
+          borderWidth: 1,
+          borderColor: error ? "#ef4444" : isDarkMode ? "#374151" : "#e5e7eb",
+          backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 14,
+            color: value
+              ? isDarkMode
+                ? "#f9fafb"
+                : "#111827"
+              : isDarkMode
+                ? "#6b7280"
+                : "#9ca3af",
+          }}
+        >
+          {value || "Select date"}
+        </Text>
+        <Icon
+          name="Calendar"
+          size={16}
+          color={isDarkMode ? "#9ca3af" : "#6b7280"}
         />
       </Pressable>
-      {error && <Text style={{ fontSize: 12, color: theme.error, marginTop: 4 }}>{error}</Text>}
+      {error && <Text style={{ fontSize: 12, color: "#ef4444" }}>{error}</Text>}
       {show && (
         <DateTimePicker
           value={parsed}
@@ -100,8 +265,10 @@ const DateField = ({ label, value, onChange, theme, error, minDate }) => {
   );
 };
 
+// ── Main Component ─────────────────────────────────────────
 const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
-  const { theme } = useDarkMode();
+  const { isDarkMode } = useDarkMode();
+
   const [formData, setFormData] = useState({
     title: "",
     destination: "",
@@ -110,23 +277,30 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
     description: "",
     tripType: "solo",
     budget: "",
-    visibility: "only_me",
   });
   const [errors, setErrors] = useState({});
-  const [tripTypeOpen, setTripTypeOpen] = useState(false);
 
+  // matches web tripTypeOptions exactly — label/value objects
+  const tripTypeOptions = [
+    { value: "solo", label: "Solo Trip" },
+    { value: "couple", label: "Couple Trip" },
+    { value: "family", label: "Family Trip" },
+    { value: "friends", label: "Friends Trip" },
+    { value: "group", label: "Group Trip" },
+  ];
+
+  // matches web useEffect exactly
   useEffect(() => {
     if (tripData && action !== "Create") {
       setFormData({
         title: tripData.title || "",
         destination: tripData.destination || "",
-        startDate: tripData.startDate?.slice(0, 10) || tripData.start_date?.slice(0, 10) || "",
-        endDate: tripData.endDate?.slice(0, 10) || tripData.end_date?.slice(0, 10) || "",
-        tripType: tripData.tripType || tripData.trip_type || "",
-        tripStatus: tripData.status || "planned",
+        startDate: tripData.start_date?.slice(0, 10),
+        endDate: tripData.end_date?.slice(0, 10),
+        tripType: tripData.trip_type || "",
+        tripStatus: tripData.trip_status || "planned",
         budget: tripData.budget || "",
         description: tripData.description || "",
-        visibility: tripData.visibility || "only_me",
       });
     } else {
       setFormData({
@@ -138,29 +312,56 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
         tripStatus: "planned",
         budget: "",
         description: "",
-        visibility: "only_me",
       });
     }
   }, [tripData, isOpen]);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    if (errors?.[field]) setErrors((prev) => ({ ...prev, [field]: "" }));
+    if (errors?.[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
   };
 
+  // matches web validateForm exactly
   const validateForm = () => {
     const newErrors = {};
+
     if (!formData?.title?.trim()) newErrors.title = "Trip title is required";
-    if (!formData?.destination?.trim()) newErrors.destination = "Destination is required";
+    if (!formData?.destination?.trim())
+      newErrors.destination = "Destination is required";
     if (!formData?.startDate) newErrors.startDate = "Start date is required";
     if (!formData?.endDate) newErrors.endDate = "End date is required";
-    if (formData?.startDate && formData?.endDate && new Date(formData.endDate) < new Date(formData.startDate))
-      newErrors.endDate = "End date must be after start date";
+
+    if (formData?.startDate && formData?.endDate) {
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
+      if (end < start) newErrors.endDate = "End date must be after start date";
+    }
+
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return Object.keys(newErrors)?.length === 0;
   };
 
-  const reset = () =>
+  // matches web handleSubmit exactly
+  const handleSubmit = () => {
+    if (validateForm()) {
+      onSubmit(formData, action);
+      setFormData({
+        title: "",
+        destination: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+        tripType: "solo",
+        budget: "",
+      });
+      setErrors({});
+    }
+  };
+
+  // matches web handleClose exactly
+  const handleClose = () => {
     setFormData({
       title: "",
       destination: "",
@@ -169,304 +370,303 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
       description: "",
       tripType: "solo",
       budget: "",
-      visibility: "only_me",
     });
-
-  const handleSubmit = () => {
-    if (validateForm()) {
-      onSubmit(formData, action);
-      reset();
-      setErrors({});
-    }
-  };
-
-  const handleClose = () => {
-    reset();
     setErrors({});
     onClose();
   };
 
+  // matches web: if (!isOpen) return null
+
   const isView = action === "View";
-  const visLabel = VISIBILITY_OPTIONS.find((v) => v.value === formData.visibility)?.label || formData.visibility;
 
   return (
-    <Modal visible={isOpen} transparent animationType="fade" onRequestClose={handleClose}>
-      <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" }}>
-        <Pressable style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0 }} onPress={handleClose} />
+    <Modal
+      visible={isOpen}
+      transparent
+      animationType="fade"
+      onRequestClose={handleClose}
+    >
+      {/* matches web: fixed inset-0 z-[1100] flex items-center justify-center p-4 */}
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "rgba(0,0,0,0.5)",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: 16,
+        }}
+      >
+        {/* Backdrop tap to close — matches web: onClick={handleClose} on overlay */}
+        <Pressable
+          style={{
+            position: "absolute",
+            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+          }}
+          onPress={handleClose}
+        />
 
+        {/* matches web: bg-[var(--color-bg-card)] rounded-xl max-w-2xl max-h-[90vh] border */}
         <View
           style={{
-            backgroundColor: theme.surfaceContainerLowest,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-            maxHeight: "92%",
+            backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+            borderRadius: 12,
+            width: "100%",
+            maxWidth: 672, // max-w-2xl
+            maxHeight: "90%",
             borderWidth: 1,
-            borderColor: theme.outlineVariant,
+            borderColor: isDarkMode ? "#374151" : "#e5e7eb",
             overflow: "hidden",
-            ...Shadow.soft,
           }}
         >
-          {/* Header */}
+          {/* ── Sticky Header — matches web: sticky top-0 bg-card border-b px-6 py-4 ── */}
           <View
             style={{
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              padding: 20,
+              paddingHorizontal: 24,
+              paddingVertical: 16,
               borderBottomWidth: 1,
-              borderBottomColor: theme.outlineVariant,
+              borderBottomColor: isDarkMode ? "#374151" : "#e5e7eb",
+              backgroundColor: isDarkMode ? "#1f2937" : "#fff",
             }}
           >
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
-              <Icon name="Map" size={22} color={theme.primary} />
-              <Text style={{ fontFamily: Fonts.display.semibold, fontSize: 20, color: theme.onSurface }}>
+            {/* matches web: flex items-center gap-3 */}
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 12 }}
+            >
+              {/* matches web: p-2 rounded-lg bg-blue-500/10 */}
+              <View
+                style={{
+                  padding: 8,
+                  borderRadius: 8,
+                  backgroundColor: "rgba(59,130,246,0.1)",
+                }}
+              >
+                <Icon name="Plus" size={20} color="#3b82f6" />
+              </View>
+              {/* matches web: text-xl md:text-2xl font-semibold text-[var(--color-text-primary)] */}
+              <Text
+                style={{
+                  fontSize: 20,
+                  fontFamily: Fonts.playfair.bold,
+                  color: isDarkMode ? "#f9fafb" : "#111827",
+                }}
+              >
                 {action} Trip
               </Text>
             </View>
-            <Pressable onPress={handleClose} hitSlop={10}>
-              <Icon name="X" size={22} color={theme.onSurfaceVariant} />
+
+            {/* Close button — matches web: p-2 rounded-lg hover:bg-secondary */}
+            <Pressable
+              onPress={handleClose}
+              style={{
+                padding: 8,
+                borderRadius: 8,
+                backgroundColor: isDarkMode
+                  ? "rgba(255,255,255,0.1)"
+                  : "transparent",
+              }}
+              aria-label="Close modal"
+            >
+              <Icon
+                name="X"
+                size={20}
+                color={isDarkMode ? "#9ca3af" : "#6b7280"}
+              />
             </Pressable>
           </View>
 
-          <ScrollView contentContainerStyle={{ padding: 20, gap: 24, paddingBottom: 32 }}>
+          {/* ── Form — matches web: p-6 space-y-6 ── */}
+          <ScrollView
+            contentContainerStyle={{ padding: 24, gap: 24, paddingBottom: 32 }}
+          >
+            {/* Trip Title */}
             {isView ? (
-              <ViewField label="Trip Title" value={formData.title} />
+              <ViewField label="Trip Title" value={formData?.title} />
             ) : (
-              <IndexField index="01" label="Trip Title" theme={theme} error={errors?.title}>
-                <UnderlineInput
-                  theme={theme}
-                  placeholder="e.g., Summer Adventure in Himalayas"
-                  value={formData.title}
-                  onChangeText={(v) => handleChange("title", v)}
-                />
-              </IndexField>
+              <InputField
+                label="Trip Title"
+                value={formData?.title}
+                onChangeText={(v) => handleChange("title", v)}
+                placeholder="e.g., Summer Adventure in Himalayas"
+                error={errors?.title}
+                required
+                isDarkMode={isDarkMode}
+              />
             )}
 
+            {/* Destination */}
             {isView ? (
-              <ViewField label="Destination" value={formData.destination} />
+              <ViewField label="Destination" value={formData?.destination} />
             ) : (
-              <IndexField index="02" label="Destination" theme={theme} error={errors?.destination}>
-                <UnderlineInput
-                  theme={theme}
-                  placeholder="e.g., Manali, Himachal Pradesh"
-                  value={formData.destination}
-                  onChangeText={(v) => handleChange("destination", v)}
-                />
-              </IndexField>
+              <InputField
+                label="Destination"
+                value={formData?.destination}
+                onChangeText={(v) => handleChange("destination", v)}
+                placeholder="e.g., Manali, Himachal Pradesh"
+                error={errors?.destination}
+                required
+                isDarkMode={isDarkMode}
+              />
             )}
 
+            {/* Date Range — matches web: grid grid-cols-1 md:grid-cols-2 gap-6 */}
             {isView ? (
+              <View style={{ flexDirection: "row", gap: 24 }}>
+                <View style={{ flex: 1 }}>
+                  <ViewField label="Start Date" value={formData?.startDate} />
+                </View>
+                <View style={{ flex: 1 }}>
+                  <ViewField label="End Date" value={formData?.endDate} />
+                </View>
+              </View>
+            ) : (
               <View style={{ flexDirection: "row", gap: 16 }}>
-                <View style={{ flex: 1 }}><ViewField label="Start Date" value={formData.startDate} /></View>
-                <View style={{ flex: 1 }}><ViewField label="End Date" value={formData.endDate} /></View>
-              </View>
-            ) : (
-              <View style={{ flexDirection: "row", gap: 20 }}>
-                <View style={{ flex: 1 }}>
-                  <IndexField index="03" label="Start Date" theme={theme}>
-                    <DateField
-                      label="Start Date"
-                      value={formData.startDate}
-                      onChange={(v) => handleChange("startDate", v)}
-                      theme={theme}
-                      error={errors?.startDate}
-                    />
-                  </IndexField>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <IndexField index="04" label="End Date" theme={theme}>
-                    <DateField
-                      label="End Date"
-                      value={formData.endDate}
-                      onChange={(v) => handleChange("endDate", v)}
-                      theme={theme}
-                      error={errors?.endDate}
-                    />
-                  </IndexField>
-                </View>
+                <DateField
+                  label="Start Date"
+                  value={formData?.startDate}
+                  onChange={(v) => handleChange("startDate", v)}
+                  error={errors?.startDate}
+                  required
+                  isDarkMode={isDarkMode}
+                />
+                <DateField
+                  label="End Date"
+                  value={formData?.endDate}
+                  onChange={(v) => handleChange("endDate", v)}
+                  error={errors?.endDate}
+                  required
+                  isDarkMode={isDarkMode}
+                />
               </View>
             )}
 
+            {/* Trip Type — matches web: <Select options={tripTypeOptions}> */}
             {isView ? (
-              <ViewField label="Trip Type" value={formData.tripType} />
+              <ViewField label="Trip Type" value={formData?.tripType} />
             ) : (
-              <IndexField index="05" label="Trip Type" theme={theme}>
-                <Pressable
-                  onPress={() => setTripTypeOpen((o) => !o)}
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    borderBottomWidth: 1,
-                    borderBottomColor: theme.outlineVariant,
-                    paddingVertical: 8,
-                  }}
-                >
-                  <Text style={{ fontSize: 15, color: formData.tripType ? theme.onSurface : theme.outline }}>
-                    {TRIP_TYPE_OPTIONS.find((t) => t.value === formData.tripType)?.label || "Select classification"}
-                  </Text>
-                  <Icon name="ChevronDown" size={16} color={theme.outline} />
-                </Pressable>
-                {tripTypeOpen && (
-                  <View
-                    style={{
-                      marginTop: 8,
-                      borderRadius: 12,
-                      borderWidth: 1,
-                      borderColor: theme.outlineVariant,
-                      overflow: "hidden",
-                    }}
-                  >
-                    {TRIP_TYPE_OPTIONS.map((t) => (
-                      <Pressable
-                        key={t.value}
-                        onPress={() => {
-                          handleChange("tripType", t.value);
-                          setTripTypeOpen(false);
-                        }}
-                        style={{
-                          paddingHorizontal: 14,
-                          paddingVertical: 12,
-                          backgroundColor:
-                            formData.tripType === t.value ? theme.primaryFixed : "transparent",
-                        }}
-                      >
-                        <Text style={{ fontSize: 14, color: theme.onSurface }}>{t.label}</Text>
-                      </Pressable>
-                    ))}
-                  </View>
-                )}
-              </IndexField>
+              <TripTypeDropdown
+                options={tripTypeOptions}
+                value={formData?.tripType}
+                onChange={(v) => handleChange("tripType", v)}
+                isDarkMode={isDarkMode}
+              />
             )}
 
-            {/* Visibility */}
+            {/* Budget — matches web: description='Estimated budget in ₹ INR' */}
             {isView ? (
-              <ViewField label="Visibility" value={visLabel} />
+              <ViewField label="Budget" value={formData?.budget} />
             ) : (
-              <View style={{ gap: 12 }}>
+              <InputField
+                label="Budget (Optional)"
+                value={String(formData?.budget || "")}
+                onChangeText={(v) => handleChange("budget", v)}
+                placeholder="e.g., 25000"
+                keyboardType="numeric"
+                description="Estimated budget in ₹ INR"
+                isDarkMode={isDarkMode}
+              />
+            )}
+
+            {/* Description — matches web: textarea rows={4} */}
+            {isView ? (
+              <ViewField label="Description" value={formData?.description} />
+            ) : (
+              <View style={{ gap: 8 }}>
+                {/* matches web: <label className='block text-sm font-medium text-[var(--color-text-primary)] mb-2'> */}
                 <Text
                   style={{
-                    fontSize: 10,
-                    fontFamily: Fonts.body.bold,
-                    letterSpacing: 1,
-                    textTransform: "uppercase",
-                    color: theme.onSurfaceVariant,
+                    fontSize: 14,
+                    fontWeight: "500",
+                    color: isDarkMode ? "#f9fafb" : "#111827",
                   }}
                 >
-                  06. Security Clearance
+                  Description (Optional)
                 </Text>
-                {VISIBILITY_OPTIONS.map((opt) => {
-                  const active = formData.visibility === opt.value;
-                  return (
-                    <Pressable
-                      key={opt.value}
-                      onPress={() => handleChange("visibility", opt.value)}
-                      style={{
-                        flexDirection: "row",
-                        alignItems: "flex-start",
-                        padding: 14,
-                        borderRadius: 12,
-                        borderWidth: 1,
-                        borderColor: active ? theme.primary : theme.outlineVariant,
-                        backgroundColor: active ? theme.primaryFixed : "transparent",
-                      }}
-                    >
-                      <Icon name={opt.icon} size={18} color={active ? theme.primary : theme.onSurfaceVariant} />
-                      <View style={{ marginLeft: 12, flex: 1 }}>
-                        <Text style={{ fontSize: 14, fontFamily: Fonts.body.semibold, color: theme.onSurface }}>
-                          {opt.label}
-                        </Text>
-                        <Text style={{ fontSize: 12, color: theme.onSurfaceVariant, marginTop: 2 }}>
-                          {opt.desc}
-                        </Text>
-                      </View>
-                      {active && <Icon name="Check" size={18} color={theme.primary} />}
-                    </Pressable>
-                  );
-                })}
+                {/* matches web: textarea bg-[var(--color-bg-secondary)] border border-[var(--color-border)] */}
+                <TextInput
+                  value={formData?.description}
+                  onChangeText={(v) => handleChange("description", v)}
+                  placeholder="Add trip details, itinerary highlights, or special notes..."
+                  placeholderTextColor={isDarkMode ? "#6b7280" : "#9ca3af"}
+                  multiline
+                  numberOfLines={4}
+                  textAlignVertical="top"
+                  style={{
+                    paddingHorizontal: 16,
+                    paddingVertical: 12,
+                    borderRadius: 8,
+                    borderWidth: 1,
+                    borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+                    backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+                    fontSize: 14,
+                    color: isDarkMode ? "#f9fafb" : "#111827",
+                    minHeight: 100,
+                  }}
+                />
               </View>
             )}
 
-            {isView ? (
-              <ViewField label="Budget" value={formData.budget ? `₹${formData.budget}` : "—"} />
-            ) : (
-              <IndexField index="07" label="Estimated Budget (Opt)" theme={theme}>
-                <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 6 }}>
-                  <Text style={{ fontSize: 15, color: theme.onSurfaceVariant, paddingBottom: 8 }}>₹</Text>
-                  <UnderlineInput
-                    theme={theme}
-                    style={{ flex: 1 }}
-                    placeholder="25,000"
-                    keyboardType="numeric"
-                    value={String(formData.budget || "")}
-                    onChangeText={(v) => handleChange("budget", v)}
-                  />
-                </View>
-              </IndexField>
-            )}
-
-            {isView ? (
-              <ViewField label="Description" value={formData.description || "—"} />
-            ) : (
-              <IndexField index="08" label="Notes (Opt)" theme={theme}>
-                <TextInput
-                  value={formData.description}
-                  onChangeText={(v) => handleChange("description", v)}
-                  placeholder="Add trip details, highlights, or special notes..."
-                  placeholderTextColor={theme.outline}
-                  multiline
-                  numberOfLines={3}
-                  textAlignVertical="top"
+            {/* Action buttons — matches web: {action !== 'View' && ...}
+                flex flex-col-reverse sm:flex-row gap-3 pt-4
+                In RN: row layout, Cancel first */}
+            {action !== "View" && (
+              <View style={{ flexDirection: "flex", gap: 12, paddingTop: 16 }}>
+                {/* Submit — matches web: Button variant='default' iconName='Plus' */}
+                <Pressable
+                  onPress={handleSubmit}
                   style={{
-                    borderBottomWidth: 1,
-                    borderBottomColor: theme.outlineVariant,
-                    paddingVertical: 8,
-                    fontSize: 15,
-                    color: theme.onSurface,
-                    minHeight: 72,
+                    flex: 1,
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderWidth: 1.5,
+                    borderColor: "#FF9933",
+                    gap: 8,
+                    paddingVertical: 13,
+                    borderRadius: 20,
+                    backgroundColor: "#FF9933",
                   }}
-                />
-              </IndexField>
+                >
+                  <Icon name="Plus" size={16} color="#fff" />
+                  <Text
+                    style={{ fontSize: 14, fontWeight: "600", color: "#fff" }}
+                  >
+                    {action === "Update" ? "Update Trip" : "Create Trip"}
+                  </Text>
+                </Pressable>
+
+                {/* Cancel — matches web: Button variant='outline' */}
+                <Pressable
+                  onPress={handleClose}
+                  style={{
+                    flex: 1,
+                    paddingVertical: 13,
+                    borderRadius: 20,
+                    borderWidth: 1.5,
+                    borderColor: "#FF9933",
+                    alignItems: "center",
+                    backgroundColor: "transparent",
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      fontWeight: "600",
+                      color: "#FF9933",
+                    }}
+                  >
+                    Cancel
+                  </Text>
+                </Pressable>
+              </View>
             )}
           </ScrollView>
-
-          {/* Footer */}
-          {!isView && (
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                gap: 16,
-                alignItems: "center",
-                padding: 20,
-                borderTopWidth: 1,
-                borderTopColor: theme.outlineVariant,
-              }}
-            >
-              <Pressable onPress={handleClose} style={{ paddingVertical: 12, paddingHorizontal: 8 }}>
-                <Text style={{ fontSize: 14, fontFamily: Fonts.body.semibold, color: theme.onSurfaceVariant }}>
-                  Cancel
-                </Text>
-              </Pressable>
-              <Pressable
-                onPress={handleSubmit}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  gap: 8,
-                  paddingHorizontal: 24,
-                  paddingVertical: 13,
-                  borderRadius: 12,
-                  backgroundColor: theme.primary,
-                }}
-              >
-                <Icon name={action === "Update" ? "Save" : "Plus"} size={16} color="#FFFFFF" />
-                <Text style={{ color: "#FFFFFF", fontSize: 14, fontFamily: Fonts.body.semibold }}>
-                  {action === "Update" ? "Update Trip" : "Create Trip"}
-                </Text>
-              </Pressable>
-            </View>
-          )}
         </View>
       </View>
     </Modal>

@@ -393,7 +393,7 @@ const EmojiPanel = ({ onSelect, isDarkMode }) => {
 const StickerPanel = ({ onSelect, isDarkMode }) => {
   const bg = isDarkMode ? "#1E242F" : "#ffffff";
   const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
-  const sub = isDarkMode ? "#A0AEC0" : "#A9917F";
+  const sub = isDarkMode ? "#A0AEC0" : "#94a3b8";
 
   return (
     <View
@@ -444,9 +444,9 @@ const GifPanel = ({ onSelect, isDarkMode }) => {
 
   const bg = isDarkMode ? "#1E242F" : "#ffffff";
   const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
-  const inputBg = isDarkMode ? "#1A1F29" : "#FFF1EC";
-  const sub = isDarkMode ? "#A0AEC0" : "#A9917F";
-  const textColor = isDarkMode ? "#ffffff" : "#261913";
+  const inputBg = isDarkMode ? "#1A1F29" : "#f1f5f9";
+  const sub = isDarkMode ? "#A0AEC0" : "#94a3b8";
+  const textColor = isDarkMode ? "#ffffff" : "#0f172a";
 
   const fetchGifs = async (q = "") => {
     setLoading(true);
@@ -731,8 +731,8 @@ const GifPanel = ({ onSelect, isDarkMode }) => {
 const AttachSheet = ({ open, onClose, onAttachOption, isDarkMode }) => {
   const bg = isDarkMode ? "#1E242F" : "#ffffff";
   const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
-  const sub = isDarkMode ? "#A0AEC0" : "#8D7165";
-  const textPrimary = isDarkMode ? "#ffffff" : "#261913";
+  const sub = isDarkMode ? "#A0AEC0" : "#64748b";
+  const textPrimary = isDarkMode ? "#ffffff" : "#0f172a";
 
   return (
     <Modal
@@ -797,7 +797,7 @@ const AttachSheet = ({ open, onClose, onAttachOption, isDarkMode }) => {
                 width: 28,
                 height: 28,
                 borderRadius: 14,
-                backgroundColor: isDarkMode ? "#1A1F29" : "#FFE9E1",
+                backgroundColor: isDarkMode ? "#1A1F29" : "#f3f4f6",
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -877,8 +877,8 @@ const MessageInput = ({
   const bgSecondary = isDarkMode ? "#1A1F29" : "#F7FAFC";
   const bgCard = isDarkMode ? "#1E242F" : "#ffffff";
   const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
-  const sub = isDarkMode ? "#A0AEC0" : "#8D7165";
-  const textPrimary = isDarkMode ? "#ffffff" : "#3C2D27";
+  const sub = isDarkMode ? "#A0AEC0" : "#64748b";
+  const textPrimary = isDarkMode ? "#ffffff" : "#1e293b";
 
   const closeAllPickers = () => {
     setShowEmoji(false);

@@ -26,7 +26,7 @@ const FilterModal = ({ isOpen, onClose, onApply }) => {
           <View className="flex-row items-center justify-between mb-4">
             <Text className="text-lg font-semibold text-gray-900">Filter By Cities</Text>
             <Pressable onPress={onClose}>
-              <Icon name="X" size={20} color="#8D7165" />
+              <Icon name="X" size={20} color="#6b7280" />
             </Pressable>
           </View>
 
@@ -40,7 +40,7 @@ const FilterModal = ({ isOpen, onClose, onApply }) => {
                 <View
                   className="w-5 h-5 rounded border-2 items-center justify-center"
                   style={{
-                    borderColor: selectedCities.includes(city) ? '#000' : '#D8C2B6',
+                    borderColor: selectedCities.includes(city) ? '#000' : '#d1d5db',
                     backgroundColor: selectedCities.includes(city) ? '#000' : 'transparent',
                   }}
                 >

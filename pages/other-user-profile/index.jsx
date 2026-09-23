@@ -11,9 +11,7 @@ import {
 import ProfileQuickActionsModal from "@/components/ui/ProfileQuickActionsModal";
 import Icon from "../../components/AppIcon";
 import PostCard, { AudioManager } from "./components/PostCard";
-import CoverPhotoSection from "./components/CoverPhotoSection";
 import ProfileHeader from "./components/ProfileHeader";
-import ProfileStats from "./components/ProfileStats";
 import ShareProfileModal from "./components/ShareProfileModal";
 
 import {
@@ -233,8 +231,6 @@ const OtherUserProfile = () => {
         showsVerticalScrollIndicator={false}
       >
         {/* PROFILE HEADER COMPONENT */}
-        <CoverPhotoSection coverPhoto={userData?.user?.cover_photo} />
-
         <ProfileHeader
           userData={userData}
           isFollowing={isFollowing}
@@ -245,15 +241,6 @@ const OtherUserProfile = () => {
           onShareProfile={handleShareProfile}
           onMoreActions={handleMoreActions}
           canViewProfile={canViewProfile}
-        />
-
-        <ProfileStats
-          posts={userData?.stats?.totalPosts}
-          followers={userData?.stats?.followers}
-          following={userData?.stats?.following}
-          friends={userData?.stats?.friends}
-          onFollowersClick={() => router.push({ pathname: "/followers", params: { userId, tab: "followers" } })}
-          onFollowingClick={() => router.push({ pathname: "/followers", params: { userId, tab: "following" } })}
         />
 
         {!canViewProfile ? (

@@ -24,30 +24,25 @@ const CallEventBubble = ({ call, isOutgoing, onCallAgain }) => {
       ? "PhoneOutgoing"
       : "PhoneIncoming";
 
-  // Mirrors web CallEventBubble.jsx: missed → error, outgoing → primary, incoming → tertiary
-  const errorColor = isDarkMode ? "#F87171" : "#BA1A1A";
-  const primaryColor = isDarkMode ? "#ED8936" : "#A23F00";
-  const tertiaryColor = isDarkMode ? "#63B3ED" : "#006590";
-
   const colors = isMissed
     ? {
-        bg: "rgba(186,26,26,0.07)",
-        border: "rgba(186,26,26,0.16)",
-        icon: errorColor,
-        iconBg: "rgba(186,26,26,0.1)",
+        bg: "rgba(239,68,68,0.07)",
+        border: "rgba(239,68,68,0.16)",
+        icon: "#ef4444",
+        iconBg: "rgba(239,68,68,0.1)",
       }
     : isOutgoing
       ? {
-          bg: "rgba(162,63,0,0.07)",
-          border: "rgba(162,63,0,0.16)",
-          icon: primaryColor,
-          iconBg: "rgba(162,63,0,0.1)",
+          bg: "rgba(59,130,246,0.07)",
+          border: "rgba(59,130,246,0.16)",
+          icon: "#3b82f6",
+          iconBg: "rgba(59,130,246,0.1)",
         }
       : {
-          bg: "rgba(0,101,144,0.07)",
-          border: "rgba(0,101,144,0.16)",
-          icon: tertiaryColor,
-          iconBg: "rgba(0,101,144,0.1)",
+          bg: "rgba(34,197,94,0.07)",
+          border: "rgba(34,197,94,0.16)",
+          icon: "#22c55e",
+          iconBg: "rgba(34,197,94,0.1)",
         };
 
   const handleCallAgain = () => {
@@ -101,7 +96,7 @@ const CallEventBubble = ({ call, isOutgoing, onCallAgain }) => {
             style={{
               fontSize: 14,
               fontWeight: "600",
-              color: isDarkMode ? "#fff" : "#261913",
+              color: isDarkMode ? "#fff" : "#111827",
             }}
           >
             {label}
@@ -112,7 +107,7 @@ const CallEventBubble = ({ call, isOutgoing, onCallAgain }) => {
               style={{
                 fontSize: 12,
                 marginTop: 2,
-                color: isDarkMode ? "#A9917F" : "#8D7165",
+                color: isDarkMode ? "#9CA3AF" : "#6B7280",
               }}
             >
               {formatDuration(call.duration)}

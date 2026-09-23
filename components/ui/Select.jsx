@@ -60,7 +60,7 @@ const Select = React.forwardRef(
     return (
       <View>
         {label && (
-          <Text className="text-sm font-medium mb-1" style={{ color: error ? '#ef4444' : '#594137' }}>
+          <Text className="text-sm font-medium mb-1" style={{ color: error ? '#ef4444' : '#374151' }}>
             {label}{required && <Text className="text-red-500"> *</Text>}
           </Text>
         )}
@@ -74,28 +74,28 @@ const Select = React.forwardRef(
             justifyContent: 'space-between',
             height: 40,
             borderWidth: 1,
-            borderColor: error ? '#ef4444' : '#EDD6CD',
+            borderColor: error ? '#ef4444' : '#e5e7eb',
             borderRadius: 8,
             paddingHorizontal: 12,
-            backgroundColor: disabled ? '#FFE9E1' : '#FFF1EC',
+            backgroundColor: disabled ? '#f3f4f6' : '#f9fafb',
             opacity: disabled ? 0.6 : 1,
           }}
         >
           <Text
             className="flex-1 text-sm"
-            style={{ color: hasValue ? '#261913' : '#A9917F' }}
+            style={{ color: hasValue ? '#111827' : '#9ca3af' }}
             numberOfLines={1}
           >
             {getSelectedDisplay()}
           </Text>
           <View className="flex-row items-center gap-1">
-            {loading && <ActivityIndicator size="small" color="#A9917F" />}
+            {loading && <ActivityIndicator size="small" color="#9ca3af" />}
             {clearable && hasValue && !loading && (
               <Pressable onPress={() => onChange?.(multiple ? [] : '')} className="p-1">
-                <Icon name="X" size={14} color="#A9917F" />
+                <Icon name="X" size={14} color="#9ca3af" />
               </Pressable>
             )}
-            <Icon name="ChevronDown" size={16} color="#A9917F" />
+            <Icon name="ChevronDown" size={16} color="#9ca3af" />
           </View>
         </Pressable>
 
@@ -115,12 +115,12 @@ const Select = React.forwardRef(
               {/* Search */}
               {searchable && (
                 <View className="flex-row items-center border-b border-gray-100 px-3 py-2 gap-2">
-                  <Icon name="Search" size={16} color="#A9917F" />
+                  <Icon name="Search" size={16} color="#9ca3af" />
                   <TextInput
                     value={searchTerm}
                     onChangeText={setSearchTerm}
                     placeholder="Search options..."
-                    placeholderTextColor="#A9917F"
+                    placeholderTextColor="#9ca3af"
                     className="flex-1 text-sm text-gray-800"
                     autoFocus
                   />
@@ -143,12 +143,12 @@ const Select = React.forwardRef(
                         opacity: option.disabled ? 0.4 : 1,
                       }}
                     >
-                      <Text className="flex-1 text-sm" style={{ color: isSelected(option.value) ? '#fff' : '#261913' }}>
+                      <Text className="flex-1 text-sm" style={{ color: isSelected(option.value) ? '#fff' : '#111827' }}>
                         {option.label}
                       </Text>
                       {multiple && isSelected(option.value) && <Icon name="Check" size={16} color="#fff" />}
                       {option.description && (
-                        <Text className="text-xs ml-2" style={{ color: isSelected(option.value) ? 'rgba(255,255,255,0.8)' : '#A9917F' }}>
+                        <Text className="text-xs ml-2" style={{ color: isSelected(option.value) ? 'rgba(255,255,255,0.8)' : '#9ca3af' }}>
                           {option.description}
                         </Text>
                       )}

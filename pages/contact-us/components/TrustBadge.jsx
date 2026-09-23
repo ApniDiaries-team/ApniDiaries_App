@@ -2,11 +2,11 @@ import { Text, View } from 'react-native';
 import Icon from '../../../components/AppIcon';
 
 const TrustBadge = ({ icon, text, description, isDarkMode }) => {
-  const bg = isDarkMode ? '#1a2535' : '#FFF1EC';
-  const border = isDarkMode ? '#1e2d42' : '#EDD6CD';
+  const bg = isDarkMode ? '#1a2535' : '#f9fafb';
+  const border = isDarkMode ? '#1e2d42' : '#e5e7eb';
   const iconBg = isDarkMode ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.06)';
-  const textPrimary = isDarkMode ? '#e2e8f0' : '#261913';
-  const textSecondary = isDarkMode ? '#8D7165' : '#8D7165';
+  const textPrimary = isDarkMode ? '#e2e8f0' : '#111827';
+  const textSecondary = isDarkMode ? '#64748b' : '#6b7280';
 
   return (
     <View

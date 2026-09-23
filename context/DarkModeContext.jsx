@@ -8,7 +8,6 @@ import React, {
   useState,
 } from "react";
 import { Appearance } from "react-native";
-import { DarkPalette, LightPalette } from "../constants/theme";
 
 const DarkModeContext = createContext(null);
 
@@ -84,8 +83,20 @@ export const useDarkMode = () => {
   return context;
 };
 
-// Theme tokens now come from constants/theme.ts so the mobile app shares the
-// exact palette of the refreshed web app. Legacy keys (bgPrimary, bgSecondary,
-// bgCard, textPrimary, textSecondary, border) are preserved.
-export const lightTheme = LightPalette;
-export const darkTheme = DarkPalette;
+export const lightTheme = {
+  bgPrimary: "#FFFFFF",
+  bgSecondary: "#F7FAFC",
+  bgCard: "#EDF2F7",
+  textPrimary: "#1A202C",
+  textSecondary: "#4A5568",
+  border: "#E2E8F0",
+};
+
+export const darkTheme = {
+  bgPrimary: "#0B0E14",
+  bgSecondary: "#1A1F29",
+  bgCard: "#1E242F",
+  textPrimary: "#FFFFFF",
+  textSecondary: "#A0AEC0",
+  border: "#2D3748",
+};

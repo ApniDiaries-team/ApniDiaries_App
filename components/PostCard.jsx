@@ -10,7 +10,7 @@ const PostCard = ({ profileImage, name, time, content, likes = 2, comments = 3, 
           <Image source={{ uri: profileImage }} className="w-10 h-10 rounded-full" resizeMode="cover" />
         ) : (
           <View className="w-10 h-10 rounded-full bg-gray-200 items-center justify-center">
-            <Icon name="User" size={18} color="#A9917F" />
+            <Icon name="User" size={18} color="#9ca3af" />
           </View>
         )}
         <View>
@@ -25,15 +25,15 @@ const PostCard = ({ profileImage, name, time, content, likes = 2, comments = 3, 
       {/* Actions */}
       <View className="flex-row items-center gap-6">
         <Pressable className="flex-row items-center gap-1">
-          <Icon name="Heart" size={16} color="#A9917F" />
+          <Icon name="Heart" size={16} color="#9ca3af" />
           <Text className="text-sm text-gray-500">{likes}</Text>
         </Pressable>
         <Pressable className="flex-row items-center gap-1">
-          <Icon name="MessageCircle" size={16} color="#A9917F" />
+          <Icon name="MessageCircle" size={16} color="#9ca3af" />
           <Text className="text-sm text-gray-500">{comments}</Text>
         </Pressable>
         <Pressable className="flex-row items-center gap-1">
-          <Icon name="Bookmark" size={16} color="#A9917F" />
+          <Icon name="Bookmark" size={16} color="#9ca3af" />
           <Text className="text-sm text-gray-500">{saves}</Text>
         </Pressable>
       </View>

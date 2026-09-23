@@ -158,7 +158,7 @@ export default function Login() {
             value={email}
             onChangeText={setEmail}
             placeholder="Email address"
-            placeholderTextColor="#A9917F"
+            placeholderTextColor="#9CA3AF"
             keyboardType="email-address"
             autoCapitalize="none"
             autoComplete="email"
@@ -176,7 +176,7 @@ export default function Login() {
             value={password}
             onChangeText={setPassword}
             placeholder="Password"
-            placeholderTextColor="#A9917F"
+            placeholderTextColor="#9CA3AF"
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoComplete="password"
@@ -289,7 +289,7 @@ export default function Login() {
           }}
         >
           {isGoogleLoading ? (
-            <ActivityIndicator color="#6B5546" size="small" />
+            <ActivityIndicator color="#4B5563" size="small" />
           ) : (
             <View className="flex-row items-center gap-2">
               <GoogleIcon />

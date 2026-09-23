@@ -1,10 +1,10 @@
 import {
-  PlusJakartaSans_400Regular,
-  PlusJakartaSans_500Medium,
-  PlusJakartaSans_600SemiBold,
-  PlusJakartaSans_700Bold,
-  PlusJakartaSans_800ExtraBold,
-} from "@expo-google-fonts/plus-jakarta-sans";
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_800ExtraBold,
+} from "@expo-google-fonts/inter";
 import {
   PlayfairDisplay_400Regular,
   PlayfairDisplay_500Medium,
@@ -15,9 +15,8 @@ import {
 import { useFonts } from "expo-font";
 import { Redirect } from "expo-router";
 import { useContext } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Platform, Text, View } from "react-native";
 import "react-native-get-random-values";
-import { Fonts, LightPalette } from "../constants/theme";
 import { AppContext } from "../context/AppContext";
 
 // NOTE: Do NOT override global.WebSocket here.
@@ -27,11 +26,11 @@ import { AppContext } from "../context/AppContext";
 
 export default function Index() {
   const [fontsLoaded] = useFonts({
-    PlusJakartaSans_400Regular,
-    PlusJakartaSans_500Medium,
-    PlusJakartaSans_600SemiBold,
-    PlusJakartaSans_700Bold,
-    PlusJakartaSans_800ExtraBold,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_800ExtraBold,
     PlayfairDisplay_400Regular,
     PlayfairDisplay_500Medium,
     PlayfairDisplay_600SemiBold,
@@ -48,25 +47,9 @@ export default function Index() {
 
   if (!fontsLoaded || isLoading || !isBootstrapped) {
     return (
-      <View
-        style={{
-          flex: 1,
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: LightPalette.surface,
-        }}
-      >
-        <ActivityIndicator size="large" color={LightPalette.brand} />
-        <Text
-          style={{
-            marginTop: 12,
-            fontSize: 14,
-            color: LightPalette.onSurfaceVariant,
-            fontFamily: fontsLoaded ? Fonts.body.medium : undefined,
-          }}
-        >
-          Loading Apni Diaries...
-        </Text>
+      <View className="flex-1 justify-center items-center bg-orange-50">
+        <ActivityIndicator size="large" color="#EAB308" />
+        <Text className="mt-2.5 text-gray-500">Loading Apni Diaries...</Text>
       </View>
     );
   }

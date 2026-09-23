@@ -56,14 +56,14 @@ const GlobalChatIndicator = () => {
         >
           <View className="flex-row items-start gap-3">
             <View className="w-9 h-9 rounded-full bg-gray-100 items-center justify-center">
-              <Icon name="User" size={18} color="#A9917F" />
+              <Icon name="User" size={18} color="#9ca3af" />
             </View>
             <View className="flex-1">
               <Text className="text-sm font-semibold text-gray-800">{latestMessage.sender}</Text>
               <Text className="text-xs text-gray-400" numberOfLines={1}>{latestMessage.text}</Text>
             </View>
             <Pressable onPress={() => setLatestMessage(null)} className="p-1">
-              <Icon name="X" size={14} color="#A9917F" />
+              <Icon name="X" size={14} color="#9ca3af" />
             </Pressable>
           </View>
         </Animated.View>
@@ -87,7 +87,7 @@ const GlobalChatIndicator = () => {
           elevation: 10,
         }}
       >
-        <Icon name="MessageCircle" size={24} color="#594137" />
+        <Icon name="MessageCircle" size={24} color="#374151" />
         {unreadCount > 0 && (
           <View
             style={{

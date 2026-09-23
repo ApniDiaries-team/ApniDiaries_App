@@ -13,7 +13,7 @@ const Field = ({ label, required, description, error, isDarkMode, children }) =>
         style={{
           fontSize: 14,
           fontWeight: '500',
-          color: isDarkMode ? '#FFF1EC' : '#261913',
+          color: isDarkMode ? '#f9fafb' : '#111827',
         }}
       >
         {label}
@@ -30,7 +30,7 @@ const Field = ({ label, required, description, error, isDarkMode, children }) =>
       <Text
         style={{
           fontSize: 12,
-          color: isDarkMode ? '#A9917F' : '#8D7165',
+          color: isDarkMode ? '#9ca3af' : '#6b7280',
         }}
       >
         {description}
@@ -55,10 +55,10 @@ const inputStyle = (isDarkMode) => ({
   paddingVertical: 12,
   borderRadius: 8,
   borderWidth: 1,
-  borderColor: isDarkMode ? '#594137' : '#EDD6CD',
-  backgroundColor: isDarkMode ? '#261913' : '#FFF1EC',
+  borderColor: isDarkMode ? '#374151' : '#e5e7eb',
+  backgroundColor: isDarkMode ? '#111827' : '#f9fafb',
   fontSize: 14,
-  color: isDarkMode ? '#FFF1EC' : '#261913',
+  color: isDarkMode ? '#f9fafb' : '#111827',
 })
 
 // ── Main Component ────────────────────────────────────────────────────
@@ -88,9 +88,9 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
       style={{
         borderRadius: 12,
         padding: 16,
-        backgroundColor: isDarkMode ? '#3C2D27' : '#fff',
+        backgroundColor: isDarkMode ? '#1f2937' : '#fff',
         borderWidth: 1,
-        borderColor: isDarkMode ? '#594137' : '#FFE9E1',
+        borderColor: isDarkMode ? '#374151' : '#f3f4f6',
         top: 25
       }}
     >
@@ -119,7 +119,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
           style={{
             fontSize: 18,
             fontWeight: '600',
-            color: isDarkMode ? '#FFF1EC' : '#261913',
+            color: isDarkMode ? '#f9fafb' : '#111827',
           }}
         >
           Basic Information
@@ -141,7 +141,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
             value={formData?.name || ''}
             onChangeText={(v) => onChange('name', v)}
             placeholder="Enter your full name"
-            placeholderTextColor={isDarkMode ? '#8D7165' : '#A9917F'}
+            placeholderTextColor={isDarkMode ? '#6b7280' : '#9ca3af'}
             style={inputStyle(isDarkMode)}
           />
         </Field>
@@ -158,7 +158,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
             value={formData?.username || ''}
             onChangeText={(v) => onChange('username', v)}
             placeholder="@username"
-            placeholderTextColor={isDarkMode ? '#8D7165' : '#A9917F'}
+            placeholderTextColor={isDarkMode ? '#6b7280' : '#9ca3af'}
             autoCapitalize="none"
             style={inputStyle(isDarkMode)}
           />
@@ -172,7 +172,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
               style={{
                 fontSize: 14,
                 fontWeight: '500',
-                color: isDarkMode ? '#FFF1EC' : '#261913',
+                color: isDarkMode ? '#f9fafb' : '#111827',
               }}
             >
               Bio
@@ -185,7 +185,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
             value={formData?.bio || ''}
             onChangeText={(v) => onChange('bio', v)}
             placeholder="Tell other travelers about yourself, your travel experiences, and what you're looking for..."
-            placeholderTextColor={isDarkMode ? '#8D7165' : '#A9917F'}
+            placeholderTextColor={isDarkMode ? '#6b7280' : '#9ca3af'}
             multiline
             maxLength={maxBioLength}
             style={[
@@ -200,7 +200,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
 
           {/* Description + counter row — matches: <div className='flex items-center justify-between'> */}
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <Text style={{ fontSize: 12, color: isDarkMode ? '#A9917F' : '#8D7165' }}>
+            <Text style={{ fontSize: 12, color: isDarkMode ? '#9ca3af' : '#6b7280' }}>
               Share your travel story and interests
             </Text>
             {/* Counter — matches amber warning at 90% */}
@@ -210,7 +210,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
                 fontWeight: '500',
                 color: bioLength > maxBioLength * 0.9
                   ? (isDarkMode ? '#FBBF24' : '#D97706')
-                  : (isDarkMode ? '#A9917F' : '#8D7165'),
+                  : (isDarkMode ? '#9ca3af' : '#6b7280'),
               }}
             >
               {bioLength}/{maxBioLength}
@@ -240,7 +240,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
             value={formData?.email || ''}
             onChangeText={(v) => onChange('email', v)}
             placeholder="your.email@example.com"
-            placeholderTextColor={isDarkMode ? '#8D7165' : '#A9917F'}
+            placeholderTextColor={isDarkMode ? '#6b7280' : '#9ca3af'}
             keyboardType="email-address"
             autoCapitalize="none"
             style={inputStyle(isDarkMode)}
@@ -258,7 +258,7 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
             value={formData?.phone || ''}
             onChangeText={(v) => onChange('phone', v)}
             placeholder="+91 98765 43210"
-            placeholderTextColor={isDarkMode ? '#8D7165' : '#A9917F'}
+            placeholderTextColor={isDarkMode ? '#6b7280' : '#9ca3af'}
             keyboardType="phone-pad"
             style={inputStyle(isDarkMode)}
           />
@@ -284,13 +284,13 @@ const BasicInfoSection = ({ formData, errors, onChange }) => {
               style={{
                 fontSize: 14,
                 color: formData?.dateOfBirth
-                  ? (isDarkMode ? '#FFF1EC' : '#261913')
-                  : (isDarkMode ? '#8D7165' : '#A9917F'),
+                  ? (isDarkMode ? '#f9fafb' : '#111827')
+                  : (isDarkMode ? '#6b7280' : '#9ca3af'),
               }}
             >
               {formData?.dateOfBirth || 'Select date of birth'}
             </Text>
-            <Icon name="Calendar" size={16} color={isDarkMode ? '#A9917F' : '#8D7165'} />
+            <Icon name="Calendar" size={16} color={isDarkMode ? '#9ca3af' : '#6b7280'} />
           </Pressable>
 
           {showDatePicker && (

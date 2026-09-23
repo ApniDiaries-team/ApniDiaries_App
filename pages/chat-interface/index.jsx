@@ -1120,15 +1120,15 @@ const styles = StyleSheet.create({
     textDecorationLine: "underline",
   },
   blockedByOtherBanner: {
-    backgroundColor: "#FFE9E1",
+    backgroundColor: "#f3f4f6",
     padding: 10,
     alignItems: "center",
     borderBottomWidth: 1,
-    borderColor: "#EDD6CD",
+    borderColor: "#e5e7eb",
   },
   blockedByOtherText: {
     fontSize: 13,
-    color: "#6B5546",
+    color: "#4b5563",
   },
 });
 

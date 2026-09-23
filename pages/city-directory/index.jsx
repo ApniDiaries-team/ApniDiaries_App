@@ -109,7 +109,7 @@ const CitiesDirectory = () => {
       <View
         style={{
           flex: 1,
-          backgroundColor: isDarkMode ? "#261913" : "#FFF1EC",
+          backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
           alignItems: "center",
           justifyContent: "center",
         }}
@@ -125,7 +125,7 @@ const CitiesDirectory = () => {
       <View
         style={{
           flex: 1,
-          backgroundColor: isDarkMode ? "#261913" : "#FFF1EC",
+          backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
           alignItems: "center",
           justifyContent: "center",
           paddingHorizontal: 24,
@@ -139,7 +139,7 @@ const CitiesDirectory = () => {
   return (
     // matches web: bg-[var(--color-bg-primary)]
     <View
-      style={{ flex: 1, backgroundColor: isDarkMode ? "#261913" : "#FFF1EC" }}
+      style={{ flex: 1, backgroundColor: isDarkMode ? "#111827" : "#f9fafb" }}
     >
       <ScrollView
         style={{ flex: 1 }}
@@ -153,7 +153,7 @@ const CitiesDirectory = () => {
               style={{
                 fontSize: 28,
                 fontFamily: Fonts.playfair.bold,
-                color: isDarkMode ? "#FFF1EC" : "#261913",
+                color: isDarkMode ? "#f9fafb" : "#111827",
                 marginBottom: 8,
               }}
             >
@@ -163,7 +163,7 @@ const CitiesDirectory = () => {
             <Text
               style={{
                 fontSize: 14,
-                color: isDarkMode ? "#A9917F" : "#8D7165",
+                color: isDarkMode ? "#9ca3af" : "#6b7280",
                 lineHeight: 20,
               }}
             >
@@ -215,7 +215,7 @@ const CitiesDirectory = () => {
                         style={{
                           fontSize: 20,
                           fontWeight: "700",
-                          color: isDarkMode ? "#FFF1EC" : "#261913",
+                          color: isDarkMode ? "#f9fafb" : "#111827",
                         }}
                       >
                         Trending Destinations
@@ -247,7 +247,7 @@ const CitiesDirectory = () => {
                         style={{
                           fontSize: 20,
                           fontWeight: "700",
-                          color: isDarkMode ? "#FFF1EC" : "#261913",
+                          color: isDarkMode ? "#f9fafb" : "#111827",
                         }}
                       >
                         All Destinations

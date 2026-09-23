@@ -9,11 +9,11 @@ import TrustBadge from './components/TrustBadge';
 const ContactUs = () => {
   const { isDarkMode } = useDarkMode();
 
-  const bgPage = isDarkMode ? '#0b0e14' : '#FFF1EC';
+  const bgPage = isDarkMode ? '#0b0e14' : '#f1f5f9';
   const bgCard = isDarkMode ? '#131c2b' : '#fff';
-  const border = isDarkMode ? '#1e2d42' : '#EDD6CD';
-  const textPrimary = isDarkMode ? '#FFF1EC' : '#261913';
-  const textSecondary = isDarkMode ? '#8D7165' : '#8D7165';
+  const border = isDarkMode ? '#1e2d42' : '#e5e7eb';
+  const textPrimary = isDarkMode ? '#f1f5f9' : '#111827';
+  const textSecondary = isDarkMode ? '#64748b' : '#6b7280';
 
   const contactInfo = [
     {

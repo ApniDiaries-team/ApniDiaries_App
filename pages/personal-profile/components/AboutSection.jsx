@@ -1,16 +1,7 @@
-import { useRouter } from "expo-router";
-import { Pressable, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import Icon from "../../../components/AppIcon";
-import { Fonts } from "../../../constants/theme";
-import { useDarkMode } from "../../../context/DarkModeContext";
 
-// Mirrors web pages/personal-profile/components/AboutSection.jsx — flat
-// surface-container-low cards (no border), empty-bio CTA, solid primary
-// preference pills.
 const AboutSection = ({ userData }) => {
-  const { theme } = useDarkMode();
-  const router = useRouter();
-
   const aboutItems = [
     { icon: "Mail", label: "Email", value: userData?.email },
     { icon: "Phone", label: "Phone", value: userData?.phone || "-" },
@@ -19,89 +10,53 @@ const AboutSection = ({ userData }) => {
       label: "Joined",
       value: userData?.created_at
         ? new Date(userData.created_at).toLocaleDateString("en-IN", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          })
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        })
         : "-",
     },
     { icon: "MapPin", label: "Current City", value: userData?.city },
   ];
 
-  const cardStyle = {
-    backgroundColor: theme.surfaceContainerLow,
-    borderRadius: 16,
-    padding: 18,
-    marginBottom: 16,
-  };
-  const titleStyle = { fontFamily: Fonts.display.semibold, fontSize: 17, color: theme.onSurface, marginBottom: 14 };
+  const cardClasses = "bg-profile-card dark:bg-profile-card-dark rounded-xl p-4 border border-profile-border dark:border-profile-border-dark mb-4";
 
   return (
     <View>
       {/* About Me */}
-      <View style={cardStyle}>
-        <Text style={titleStyle}>About Me</Text>
-        {userData?.bio ? (
-          <Text style={{ fontSize: 14, color: theme.onSurfaceVariant, lineHeight: 21 }}>{userData.bio}</Text>
-        ) : (
-          <View style={{ alignItems: "center", paddingVertical: 20 }}>
-            <View
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: 999,
-                alignItems: "center",
-                justifyContent: "center",
-                marginBottom: 12,
-                backgroundColor: theme.surfaceVariant,
-              }}
-            >
-              <Icon name="FileText" size={22} color={theme.onSurfaceVariant} />
-            </View>
-            <Text style={{ fontSize: 14, color: theme.onSurfaceVariant, textAlign: "center", marginBottom: 16 }}>
-              Share your story. Add a short bio to let others get to know you.
-            </Text>
-            <Pressable
-              onPress={() => router.push({ pathname: "/edit-personal-details", params: { scrollTo: "bio" } })}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                gap: 8,
-                paddingHorizontal: 18,
-                paddingVertical: 10,
-                borderRadius: 999,
-                backgroundColor: theme.primary,
-              }}
-            >
-              <Icon name="Plus" size={16} color="#FFFFFF" />
-              <Text style={{ color: "#FFFFFF", fontSize: 13, fontFamily: Fonts.body.semibold }}>Add Bio</Text>
-            </Pressable>
-          </View>
-        )}
+      <View className={cardClasses}>
+        <Text className="text-lg font-playfair-bold text-profile-text-primary dark:text-profile-text-primary-dark mb-3">
+          About Me
+        </Text>
+        <Text className="text-sm text-profile-text-secondary dark:text-profile-text-secondary-dark leading-5">
+          {userData?.bio}
+        </Text>
       </View>
 
       {/* Contact Information */}
-      <View style={cardStyle}>
-        <Text style={titleStyle}>Contact Information</Text>
-        <View style={{ gap: 16 }}>
+      <View className={cardClasses}>
+        <Text className="text-lg font-playfair-bold text-profile-text-primary dark:text-profile-text-primary-dark mb-4">
+          Contact Information
+        </Text>
+        <View className="gap-4">
           {aboutItems.map((item, index) => (
-            <View key={index} style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-              <View
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: 12,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: theme.surfaceVariant,
-                }}
-              >
-                <Icon name={item.icon} size={19} color={theme.primary} />
+            <View
+              key={index}
+              className="flex-row items-center gap-3"
+            >
+              <View className="w-10 h-10 rounded-lg bg-profile-secondary dark:bg-profile-secondary-dark items-center justify-center border border-profile-border dark:border-profile-border-dark">
+                <Icon
+                  name={item.icon}
+                  size={20}
+                  className="text-profile-indicator dark:text-profile-indicator-dark"
+                />
               </View>
-              <View style={{ flex: 1, minWidth: 0 }}>
-                <Text style={{ fontSize: 11, color: theme.onSurfaceVariant, marginBottom: 2 }}>{item.label}</Text>
+              <View className="flex-1">
+                <Text className="text-[10px] uppercase tracking-wider text-profile-text-secondary dark:text-profile-text-secondary-dark mb-0.5">
+                  {item.label}
+                </Text>
                 <Text
-                  style={{ fontSize: 14, fontFamily: Fonts.body.semibold, color: theme.onSurface }}
+                  className="text-sm font-medium text-profile-text-primary dark:text-profile-text-primary-dark"
                   numberOfLines={1}
                 >
                   {item.value}
@@ -113,28 +68,23 @@ const AboutSection = ({ userData }) => {
       </View>
 
       {/* Travel Preferences */}
-      {userData?.interest?.length > 0 && (
-        <View style={cardStyle}>
-          <Text style={titleStyle}>Travel Preferences</Text>
-          <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-            {userData.interest.map((preference, index) => (
-              <View
-                key={index}
-                style={{
-                  paddingHorizontal: 14,
-                  paddingVertical: 7,
-                  borderRadius: 999,
-                  backgroundColor: theme.primary,
-                }}
-              >
-                <Text style={{ fontSize: 12, fontFamily: Fonts.body.semibold, color: "#FFFFFF" }}>
-                  {preference}
-                </Text>
-              </View>
-            ))}
-          </View>
+      <View className={cardClasses}>
+        <Text className="text-lg font-playfair-bold text-profile-text-primary dark:text-profile-text-primary-dark mb-4">
+          Travel Preferences
+        </Text>
+        <View className="flex-row flex-wrap gap-2">
+          {userData?.interest?.map((preference, index) => (
+            <View
+              key={index}
+              className="px-3 py-1.5 bg-profile-secondary dark:bg-profile-secondary-dark rounded-full border border-profile-border dark:border-profile-border-dark"
+            >
+              <Text className="text-xs font-medium text-profile-indicator dark:text-profile-indicator-dark">
+                {preference}
+              </Text>
+            </View>
+          ))}
         </View>
-      )}
+      </View>
     </View>
   );
 };

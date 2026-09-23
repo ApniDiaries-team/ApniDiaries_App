@@ -316,7 +316,7 @@ const NavBar = () => {
                         style={{
                           fontFamily: Fonts.playfair.bold,
                           fontSize: 20,
-                          color: isDarkMode ? "#fff" : "#261913",
+                          color: isDarkMode ? "#fff" : "#111827",
                         }}
                       >
                         {user?.name}
@@ -324,7 +324,7 @@ const NavBar = () => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: isDarkMode ? "#D8C2B6" : "#6B5546",
+                          color: isDarkMode ? "#d1d5db" : "#4b5563",
                         }}
                       >
                         {user?.email}
@@ -356,7 +356,7 @@ const NavBar = () => {
                         style={{
                           fontSize: 18,
                           fontWeight: "500",
-                          color: isDarkMode ? "#EDD6CD" : "#594137",
+                          color: isDarkMode ? "#e5e7eb" : "#374151",
                         }}
                       >
                         {item.label}
@@ -368,7 +368,7 @@ const NavBar = () => {
                   <View
                     className="my-2 h-[1px]"
                     style={{
-                      backgroundColor: isDarkMode ? "#594137" : "#FFE9E1",
+                      backgroundColor: isDarkMode ? "#374151" : "#f3f4f6",
                     }}
                   />
 
@@ -378,7 +378,7 @@ const NavBar = () => {
                       style={{
                         fontWeight: "500",
                         fontSize: 16,
-                        color: isDarkMode ? "#EDD6CD" : "#594137",
+                        color: isDarkMode ? "#e5e7eb" : "#374151",
                       }}
                     >
                       Dark Mode

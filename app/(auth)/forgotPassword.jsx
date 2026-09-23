@@ -382,7 +382,7 @@ export default function ForgotPassword() {
               </Text>
               <TextInput
                 placeholder="you@example.com"
-                placeholderTextColor="#A9917F"
+                placeholderTextColor="#9ca3af"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
@@ -473,7 +473,7 @@ export default function ForgotPassword() {
               <View>
                 <TextInput
                   placeholder="Min. 8 characters"
-                  placeholderTextColor="#A9917F"
+                  placeholderTextColor="#9ca3af"
                   value={newPassword}
                   onChangeText={setNewPassword}
                   secureTextEntry={!showNewPwd}
@@ -501,7 +501,7 @@ export default function ForgotPassword() {
               <View>
                 <TextInput
                   placeholder="Repeat your password"
-                  placeholderTextColor="#A9917F"
+                  placeholderTextColor="#9ca3af"
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
                   secureTextEntry={!showConfirm}

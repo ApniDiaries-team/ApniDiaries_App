@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Image, Modal, Pressable, Text, View } from "react-native";
 import Icon from "../../../components/AppIcon";
 import { useDarkMode } from "../../../context/DarkModeContext";
-import { Fonts } from "../../../constants/theme";
 
 // ─── Tick Icon ────────────────────────────────────────────────────────────────
 const TickIcon = ({ status }) => {
@@ -17,7 +16,7 @@ const TickIcon = ({ status }) => {
   }
 
   // Double tick — delivered or read
-  const color = status === "read" ? "#00A5E9" : "rgba(255,255,255,0.7)";
+  const color = status === "read" ? "#53BDEB" : "rgba(255,255,255,0.7)";
   return (
     <View style={{ flexDirection: "row" }}>
       <Icon name="Check" size={12} color={color} />
@@ -70,7 +69,7 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
             alignItems: "center",
             gap: 8,
             backgroundColor: isSent
-              ? isDarkMode ? "rgba(237,137,54,0.15)" : "rgba(162,63,0,0.08)"
+              ? "rgba(0,122,255,0.1)"
               : isDarkMode
                 ? "#1A1F29"
                 : "#fff",
@@ -84,13 +83,13 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
           <Icon
             name="EyeOff"
             size={14}
-            color={isDarkMode ? "#A0AEC0" : "#8D7165"}
+            color={isDarkMode ? "#A0AEC0" : "#6b7280"}
           />
           <Text
             style={{
               fontSize: 12,
               fontStyle: "italic",
-              color: isDarkMode ? "#A0AEC0" : "#8D7165",
+              color: isDarkMode ? "#A0AEC0" : "#6b7280",
             }}
           >
             Opened
@@ -99,7 +98,7 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
             style={{
               fontSize: 10,
               marginLeft: "auto",
-              color: isDarkMode ? "#A0AEC0" : "#8D7165",
+              color: isDarkMode ? "#A0AEC0" : "#6b7280",
             }}
           >
             {time}
@@ -128,12 +127,12 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
           overflow: "hidden",
           borderWidth: 1.5,
           borderColor: isSent
-            ? isDarkMode ? "rgba(237,137,54,0.4)" : "rgba(162,63,0,0.3)"
+            ? "rgba(0,122,255,0.3)"
             : isDarkMode
               ? "rgba(255,255,255,0.1)"
               : "rgba(0,0,0,0.1)",
           backgroundColor: isSent
-            ? isDarkMode ? "rgba(237,137,54,0.12)" : "rgba(162,63,0,0.1)"
+            ? "rgba(0,122,255,0.08)"
             : isDarkMode
               ? "#1A1F29"
               : "#fff",
@@ -156,27 +155,27 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: isSent
-                ? isDarkMode ? "rgba(237,137,54,0.2)" : "rgba(162,63,0,0.12)"
+                ? "rgba(0,122,255,0.15)"
                 : "rgba(255,153,51,0.12)",
             }}
           >
             <Icon
               name={isSent ? "Lock" : "Eye"}
               size={18}
-              color={isDarkMode ? "#ED8936" : "#A23F00"}
+              color={isSent ? "#007AFF" : "#FF9933"}
             />
           </View>
           <Text
             style={{
               fontSize: 12,
               fontWeight: "600",
-              color: isDarkMode ? "#ED8936" : "#A23F00",
+              color: isSent ? "#007AFF" : "#FF9933",
             }}
           >
             {isSent ? "Once-view sent" : "Tap to view"}
           </Text>
           <Text
-            style={{ fontSize: 10, color: isDarkMode ? "#A0AEC0" : "#8D7165" }}
+            style={{ fontSize: 10, color: isDarkMode ? "#A0AEC0" : "#6b7280" }}
           >
             {message.mediaType === "video" ? "Video" : "Photo"} · disappears
             after viewing
@@ -333,7 +332,7 @@ const StickerBubble = ({ message, isSent }) => {
             gap: 4,
           }}
         >
-          <Text style={{ fontSize: 10, color: "#8D7165" }}>{time}</Text>
+          <Text style={{ fontSize: 10, color: "#6b7280" }}>{time}</Text>
           {isSent && <TickIcon status={message?.status} />}
         </View>
       </View>
@@ -363,10 +362,10 @@ const MediaBubble = ({ message, isSent, isDarkMode }) => {
           maxWidth: "70%",
           borderRadius: 16,
           overflow: "hidden",
-          backgroundColor: isSent ? (isDarkMode ? "#ED8936" : "#A23F00") : isDarkMode ? "#1E242F" : "#FFFFFF",
+          backgroundColor: isSent ? "#007AFF" : isDarkMode ? "#1A1F29" : "#fff",
           borderWidth: 1,
           borderColor: isSent
-            ? (isDarkMode ? "#ED8936" : "#A23F00")
+            ? "#007AFF"
             : isDarkMode
               ? "rgba(255,255,255,0.1)"
               : "rgba(0,0,0,0.1)",
@@ -445,7 +444,7 @@ const MediaBubble = ({ message, isSent, isDarkMode }) => {
               paddingHorizontal: 12,
               paddingVertical: 6,
               backgroundColor: isSent
-                ? (isDarkMode ? "#ED8936" : "#A23F00")
+                ? "#007AFF"
                 : isDarkMode
                   ? "#1A1F29"
                   : "#fff",
@@ -454,7 +453,7 @@ const MediaBubble = ({ message, isSent, isDarkMode }) => {
             <Text
               style={{
                 fontSize: 14,
-                color: isSent ? "white" : isDarkMode ? "white" : "#261913",
+                color: isSent ? "white" : isDarkMode ? "white" : "#111827",
               }}
             >
               {message.text}
@@ -534,10 +533,10 @@ const MessageBubble = ({ message, isSent }) => {
             paddingHorizontal: 12,
             paddingVertical: 8,
             backgroundColor: isSent
-              ? isDarkMode ? "rgba(237,137,54,0.15)" : "rgba(162,63,0,0.08)"
+              ? "rgba(0,122,255,0.1)"
               : isDarkMode
                 ? "#1A1F29"
-                : "#FFF1EC",
+                : "#f9fafb",
             borderWidth: 1,
             borderStyle: "dashed",
             borderColor: isDarkMode
@@ -549,13 +548,13 @@ const MessageBubble = ({ message, isSent }) => {
             <Icon
               name="Lock"
               size={12}
-              color={isDarkMode ? "#A0AEC0" : "#8D7165"}
+              color={isDarkMode ? "#A0AEC0" : "#6b7280"}
             />
             <Text
               style={{
                 fontSize: 12,
                 fontStyle: "italic",
-                color: isDarkMode ? "#A0AEC0" : "#8D7165",
+                color: isDarkMode ? "#A0AEC0" : "#6b7280",
               }}
             >
               Encrypted message
@@ -572,7 +571,7 @@ const MessageBubble = ({ message, isSent }) => {
             <Text
               style={{
                 fontSize: 10,
-                color: isDarkMode ? "#A0AEC0" : "#8D7165",
+                color: isDarkMode ? "#A0AEC0" : "#6b7280",
               }}
             >
               {time}
@@ -603,7 +602,7 @@ const MessageBubble = ({ message, isSent }) => {
             paddingHorizontal: 12,
             paddingTop: 8,
             paddingBottom: 6,
-            backgroundColor: isDarkMode ? "#ED8936" : "#A23F00",
+            backgroundColor: "#007AFF",
           }}
         >
           <Text
@@ -662,7 +661,7 @@ const MessageBubble = ({ message, isSent }) => {
           style={{
             fontSize: 15,
             lineHeight: 20,
-            color: isDarkMode ? "#fff" : "#261913",
+            color: isDarkMode ? "#fff" : "#111827",
           }}
         >
           {message?.text}
@@ -675,7 +674,7 @@ const MessageBubble = ({ message, isSent }) => {
           }}
         >
           <Text
-            style={{ fontSize: 10, color: isDarkMode ? "#A0AEC0" : "#8D7165" }}
+            style={{ fontSize: 10, color: isDarkMode ? "#A0AEC0" : "#6b7280" }}
           >
             {time}
           </Text>

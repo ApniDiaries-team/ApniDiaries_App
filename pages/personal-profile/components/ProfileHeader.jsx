@@ -1,107 +1,107 @@
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import Icon from "../../../components/AppIcon";
-import { Fonts } from "../../../constants/theme";
-import { useDarkMode } from "../../../context/DarkModeContext";
 import { getProfilePhotoUrl } from "../../../helper/DefaultImageUrl";
 
-// Mirrors web pages/personal-profile/components/ProfileHeader.jsx (mobile-
-// width rendering: avatar + name sit in a row, action buttons follow below
-// as an outline-pill pair — Followers/Following now live in ProfileStats).
-const ProfileHeader = ({ profileData, onEditProfile, onShareProfile }) => {
-  const { theme } = useDarkMode();
+const ProfileHeader = ({
+  profileData,
+  onEditProfile,
+  onShareProfile,
+  onFollowersClick,
+  onFollowingClick,
+}) => {
 
   return (
-    <View style={{ paddingHorizontal: 16, marginTop: -48 }}>
-      <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 14 }}>
-        <View style={{ position: "relative" }}>
-          <View
-            style={{
-              width: 88,
-              height: 88,
-              borderRadius: 999,
-              overflow: "hidden",
-              borderWidth: 4,
-              borderColor: theme.surface,
-              backgroundColor: theme.surfaceContainerLow,
-            }}
-          >
+    <View className="px-4 pb-4">
+      {/* Avatar — centered, overlapping cover photo */}
+      <View className="items-center -mt-[52px]">
+        <View className="relative">
+          <View className="w-[100px] h-[100px] rounded-full overflow-hidden border-4 border-profile-primary dark:border-profile-primary-dark bg-profile-card dark:bg-profile-card-dark shadow-lg elevation-6">
             <Image
-              source={{ uri: getProfilePhotoUrl(profileData?.user?.profile_photo) }}
-              style={{ width: "100%", height: "100%" }}
+              source={{
+                uri: getProfilePhotoUrl(profileData?.user?.profile_photo),
+              }}
+              className="w-full h-full"
               resizeMode="cover"
             />
           </View>
-          <View
-            style={{
-              position: "absolute",
-              bottom: 3,
-              right: 3,
-              width: 16,
-              height: 16,
-              borderRadius: 999,
-              backgroundColor: "#10B981",
-              borderWidth: 2,
-              borderColor: theme.surface,
-            }}
-          />
-        </View>
-
-        <View style={{ flex: 1, paddingBottom: 4 }}>
-          <Text
-            style={{ fontFamily: Fonts.display.bold, fontSize: 21, color: theme.onSurface }}
-            numberOfLines={1}
-          >
-            {profileData?.user?.name}
-          </Text>
-          <Text style={{ fontSize: 14, color: theme.secondary || theme.onSurfaceVariant, marginTop: 1 }}>
-            @{profileData?.user?.username}
-          </Text>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 4 }}>
-            <Icon name="MapPin" size={13} color={theme.onSurfaceVariant} />
-            <Text style={{ fontSize: 12, color: theme.onSurfaceVariant }}>{profileData?.city}</Text>
-          </View>
+          {/* Online dot */}
+          <View className="absolute bottom-1.5 right-1.5 w-4 h-4 rounded-full bg-emerald-500 border-2 border-profile-primary dark:border-profile-primary-dark" />
         </View>
       </View>
 
-      <View style={{ flexDirection: "row", gap: 12, marginTop: 16 }}>
-        <Pressable
+      {/* Name, username, location — centered */}
+      <View className="items-center mt-3">
+        <Text className="text-2xl font-playfair-bold text-profile-text-primary dark:text-profile-text-primary-dark">
+          {profileData?.user?.name}
+        </Text>
+        <Text className="text-sm text-profile-text-secondary dark:text-profile-text-secondary-dark mt-0.5">
+          @{profileData?.user?.username}
+        </Text>
+        <View className="flex-row items-center gap-1 mt-1">
+          <Icon name="MapPin" size={16} className="text-profile-text-secondary dark:text-profile-text-secondary-dark" />
+          <Text className="text-sm text-profile-text-secondary dark:text-profile-text-secondary-dark">
+            {profileData?.city}
+          </Text>
+        </View>
+
+        {/* Followers / Following */}
+        <View className="flex-row gap-8 mt-4">
+          <Pressable
+            onPress={onFollowersClick}
+            className="items-center"
+          >
+            <Text className="text-xl font-semibold text-profile-text-primary dark:text-profile-text-primary-dark">
+              {profileData?.stats?.followers?.toLocaleString("en-IN") ?? 0}
+            </Text>
+            <Text className="text-[13px] text-profile-text-secondary dark:text-profile-text-secondary-dark">
+              Followers
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={onFollowingClick}
+            className="items-center"
+          >
+            <Text className="text-xl font-semibold text-profile-text-primary dark:text-profile-text-primary-dark">
+              {profileData?.stats?.following?.toLocaleString("en-IN") ?? 0}
+            </Text>
+            <Text className="text-[13px] text-profile-text-secondary dark:text-profile-text-secondary-dark">
+              Following
+            </Text>
+          </Pressable>
+        </View>
+      </View>
+
+      {/* Action buttons — full width, stacked */}
+      <View className="gap-2.5 mt-5">
+        <TouchableOpacity
           onPress={onEditProfile}
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            paddingVertical: 11,
-            borderRadius: 999,
-            borderWidth: 1,
-            borderColor: theme.outline,
-          }}
+          activeOpacity={0.7}
+          className="flex-row items-center justify-center gap-2 py-3.5 rounded-[20px] border border-profile-border dark:border-profile-border-dark bg-profile-secondary dark:bg-profile-secondary-dark"
         >
-          <Icon name="Edit" size={15} color={theme.onSurface} />
-          <Text style={{ fontSize: 13, fontFamily: Fonts.body.semibold, color: theme.onSurface }}>
+          <Icon
+            name="Edit"
+            size={16}
+            className="text-profile-text-primary dark:text-profile-text-primary-dark"
+          />
+          <Text className="text-base font-medium text-profile-text-primary dark:text-profile-text-primary-dark">
             Edit Profile
           </Text>
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+
+        <TouchableOpacity
           onPress={onShareProfile}
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            paddingVertical: 11,
-            borderRadius: 999,
-            borderWidth: 1,
-            borderColor: theme.outline,
-          }}
+          activeOpacity={0.7}
+          className="flex-row items-center justify-center gap-2 py-3.5 rounded-[20px] border border-profile-border dark:border-profile-border-dark bg-profile-secondary dark:bg-profile-secondary-dark"
         >
-          <Icon name="Share2" size={15} color={theme.onSurface} />
-          <Text style={{ fontSize: 13, fontFamily: Fonts.body.semibold, color: theme.onSurface }}>
+          <Icon
+            name="Share2"
+            size={16}
+            className="text-profile-text-primary dark:text-profile-text-primary-dark"
+          />
+          <Text className="text-base font-medium text-profile-text-primary dark:text-profile-text-primary-dark">
             Share Profile
           </Text>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

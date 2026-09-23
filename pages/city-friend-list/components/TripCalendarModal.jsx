@@ -21,8 +21,8 @@ const TripCalendarModal = ({ isOpen, onClose, trips = [] }) => {
   const colors = {
     bgCard: isDarkMode ? "#1E242F" : "#FFFFFF",
     bgSecondary: isDarkMode ? "#1A1F29" : "#F7FAFC",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#261913",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#8D7165",
+    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
     border: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)",
     overlay: "rgba(0,0,0,0.5)",
   };
@@ -474,7 +474,7 @@ const TripCalendarModal = ({ isOpen, onClose, trips = [] }) => {
                             trip.status === "ongoing"
                               ? "#dcfce7"
                               : trip.status === "completed"
-                                ? "#FFE9E1"
+                                ? "#f3f4f6"
                                 : "#dbeafe",
                         }}
                       >
@@ -487,7 +487,7 @@ const TripCalendarModal = ({ isOpen, onClose, trips = [] }) => {
                               trip.status === "ongoing"
                                 ? "#15803d"
                                 : trip.status === "completed"
-                                  ? "#6B5546"
+                                  ? "#4b5563"
                                   : "#1d4ed8",
                           }}
                         >

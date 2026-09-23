@@ -58,22 +58,22 @@ const SearchOverlay = ({ isOpen, onClose }) => {
         {/* Header */}
         <View className="flex-row items-center gap-3 px-4 py-3 border-b border-gray-100">
           <Pressable onPress={onClose} className="w-9 h-9 rounded-lg bg-gray-100 items-center justify-center">
-            <Icon name="ArrowLeft" size={20} color="#594137" />
+            <Icon name="ArrowLeft" size={20} color="#374151" />
           </Pressable>
           <View className="flex-1 flex-row items-center bg-gray-100 rounded-xl px-3 py-2 gap-2">
-            <Icon name="Search" size={18} color="#A9917F" />
+            <Icon name="Search" size={18} color="#9ca3af" />
             <TextInput
               ref={inputRef}
               value={searchQuery}
               onChangeText={setSearchQuery}
               placeholder="Search travelers, cities..."
-              placeholderTextColor="#A9917F"
+              placeholderTextColor="#9ca3af"
               className="flex-1 text-sm text-gray-800"
               returnKeyType="search"
             />
             {searchQuery.length > 0 && (
               <Pressable onPress={() => setSearchQuery('')}>
-                <Icon name="X" size={16} color="#A9917F" />
+                <Icon name="X" size={16} color="#9ca3af" />
               </Pressable>
             )}
           </View>
@@ -97,9 +97,9 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                   onPress={() => setSearchQuery(search)}
                   className="flex-row items-center gap-3 p-3 rounded-xl bg-gray-50 mb-2"
                 >
-                  <Icon name="Clock" size={16} color="#A9917F" />
+                  <Icon name="Clock" size={16} color="#9ca3af" />
                   <Text className="flex-1 text-sm text-gray-700">{search}</Text>
-                  <Icon name="ArrowUpLeft" size={14} color="#A9917F" />
+                  <Icon name="ArrowUpLeft" size={14} color="#9ca3af" />
                 </Pressable>
               ))}
             </View>
@@ -108,7 +108,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
           {/* No Results */}
           {searchQuery && !isSearching && searchResults.length === 0 && (
             <View className="items-center py-16">
-              <Icon name="SearchX" size={48} color="#D8C2B6" />
+              <Icon name="SearchX" size={48} color="#d1d5db" />
               <Text className="mt-3 text-base font-semibold text-gray-700">No results found</Text>
               <Text className="text-sm text-gray-400">Try different keywords</Text>
             </View>
@@ -121,7 +121,7 @@ const SearchOverlay = ({ isOpen, onClose }) => {
                 {result.avatar || result.image ? (
                   <Image src={result.avatar || result.image} alt={result.name} className="w-10 h-10 rounded-full" />
                 ) : (
-                  <Icon name={result.type === 'city' ? 'MapPin' : 'User'} size={20} color="#A9917F" />
+                  <Icon name={result.type === 'city' ? 'MapPin' : 'User'} size={20} color="#9ca3af" />
                 )}
               </View>
               <View className="flex-1">

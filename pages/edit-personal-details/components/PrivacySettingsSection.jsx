@@ -21,16 +21,16 @@ const PrivacySettingsSection = ({ formData, onChange }) => {
   const { isDarkMode } = useDarkMode()
   const colors = {
     saffron: '#FF9933',
-    textPrimary: isDarkMode ? '#FFF1EC' : '#261913',
+    textPrimary: isDarkMode ? '#F9FAFB' : '#111827',
   }
 
   return (
     <View
       className="rounded-xl p-4 md:p-6 lg:p-8 mt-4"
       style={{
-        backgroundColor: isDarkMode ? '#3C2D27' : '#fff',
+        backgroundColor: isDarkMode ? '#1f2937' : '#fff',
         borderWidth: 1,
-        borderColor: isDarkMode ? '#594137' : '#FFE9E1',
+        borderColor: isDarkMode ? '#374151' : '#f3f4f6',
         top: 40
       }}
     >
@@ -52,7 +52,7 @@ const PrivacySettingsSection = ({ formData, onChange }) => {
         <Text
           className="text-lg md:text-xl font-semibold"
           style={{
-            color: isDarkMode ? '#FFF1EC' : '#261913',
+            color: isDarkMode ? '#f9fafb' : '#111827',
           }}
         >
           Privacy & Notifications
@@ -93,7 +93,7 @@ const PrivacySettingsSection = ({ formData, onChange }) => {
         >
           {[
             { color: colors.saffron, label: "Public", desc: "Visible to all community members" },
-            { color: isDarkMode ? "#A9917F" : "#8D7165", label: "Friends Only", desc: "Only your connections can see" },
+            { color: isDarkMode ? "#9CA3AF" : "#6B7280", label: "Friends Only", desc: "Only your connections can see" },
             { color: "#f97316", label: "Private", desc: "Only visible to you" },
           ].map((item) => (
             <View key={item.label} style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
@@ -110,7 +110,7 @@ const PrivacySettingsSection = ({ formData, onChange }) => {
           <Text
             className="text-sm font-medium"
             style={{
-              color: isDarkMode ? '#FFF1EC' : '#261913',
+              color: isDarkMode ? '#f9fafb' : '#111827',
             }}
           >
             Notification Preferences
@@ -127,7 +127,7 @@ const PrivacySettingsSection = ({ formData, onChange }) => {
           <Text
             className="text-sm font-medium"
             style={{
-              color: isDarkMode ? '#FFF1EC' : '#261913',
+              color: isDarkMode ? '#f9fafb' : '#111827',
             }}
           >
             Discovery Settings

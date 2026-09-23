@@ -1,84 +1,35 @@
-import React, { useState } from "react";
-import { Text, TextInput, View } from "react-native";
-import { Fonts } from "../../constants/theme";
-import { useDarkMode } from "../../context/DarkModeContext";
+import React from 'react'
+import { Text, TextInput, View } from 'react-native'
 
-/**
- * Input – mirrors the web text field: rounded-xl, warm hairline border,
- * brand-orange focus ring, Plus Jakarta Sans copy.
- */
 const Input = React.forwardRef(
-  (
-    {
-      type = "text",
-      label,
-      description,
-      error,
-      required = false,
-      value,
-      onChangeText,
-      onChange,
-      placeholder,
-      style,
-      containerStyle,
-      secureTextEntry,
-      keyboardType,
-      multiline,
-      numberOfLines,
-      maxLength,
-      editable,
-      onFocus,
-      onBlur,
-      ...props
-    },
-    ref,
+  ({ type = 'text', label, description, error, required = false, value, onChangeText, onChange, placeholder, style, containerStyle, secureTextEntry, keyboardType, multiline, numberOfLines, maxLength, editable, ...props }, ref
   ) => {
-    const { theme } = useDarkMode();
-    const [focused, setFocused] = useState(false);
-
     // Derive react-native keyboard type from the web `type`
     const deriveKeyboardType = () => {
-      if (keyboardType) return keyboardType;
+      if (keyboardType) return keyboardType
       switch (type) {
-        case "number":
-          return "numeric";
-        case "tel":
-          return "phone-pad";
-        case "email":
-          return "email-address";
-        case "url":
-          return "url";
-        default:
-          return "default";
+        case 'number': return 'numeric'
+        case 'tel': return 'phone-pad'
+        case 'email': return 'email-address'
+        case 'url': return 'url'
+        default: return 'default'
       }
-    };
+    }
 
     // Handle both web (onChange) and RN (onChangeText) style callbacks
     const handleChangeText = (text) => {
-      onChangeText?.(text);
-      onChange?.({ target: { value: text } });
-    };
+      onChangeText?.(text)
+      onChange?.({ target: { value: text } })
+    }
 
-    const isSecure = secureTextEntry || type === "password";
-    const borderColor = error
-      ? theme.error
-      : focused
-        ? theme.brand
-        : theme.outlineVariant;
+    const isSecure = secureTextEntry || type === 'password'
 
     return (
       <View style={[{ marginBottom: 4 }, containerStyle]}>
         {label && (
-          <Text
-            style={{
-              fontFamily: Fonts.body.semibold,
-              fontSize: 13,
-              marginBottom: 6,
-              color: error ? theme.error : theme.onSurface,
-            }}
-          >
+          <Text className="text-sm font-medium mb-1" style={{ color: error ? '#ef4444' : '#374151' }}>
             {label}
-            {required && <Text style={{ color: theme.error }}> *</Text>}
+            {required && <Text className="text-red-500"> *</Text>}
           </Text>
         )}
         <TextInput
@@ -86,68 +37,35 @@ const Input = React.forwardRef(
           value={value}
           onChangeText={handleChangeText}
           placeholder={placeholder}
-          placeholderTextColor={theme.outline}
+          placeholderTextColor="#9ca3af"
           secureTextEntry={isSecure}
           keyboardType={deriveKeyboardType()}
           multiline={multiline}
           numberOfLines={numberOfLines}
           maxLength={maxLength}
           editable={editable}
-          onFocus={(e) => {
-            setFocused(true);
-            onFocus?.(e);
-          }}
-          onBlur={(e) => {
-            setFocused(false);
-            onBlur?.(e);
-          }}
           style={[
             {
-              minHeight: multiline ? 88 : 44,
-              borderWidth: focused ? 2 : 1,
-              borderColor,
-              borderRadius: 12,
-              paddingHorizontal: 14,
-              paddingVertical: multiline ? 12 : 0,
+              height: multiline ? undefined : 40,
+              borderWidth: 1,
+              borderColor: error ? '#ef4444' : '#e5e7eb',
+              borderRadius: 8,
+              paddingHorizontal: 12,
+              paddingVertical: multiline ? 10 : 0,
               fontSize: 14,
-              fontFamily: Fonts.body.regular,
-              color: theme.onSurface,
-              backgroundColor: theme.surfaceContainerLowest,
-              textAlignVertical: multiline ? "top" : "center",
-              opacity: editable === false ? 0.5 : 1,
+              color: '#111827',
+              backgroundColor: '#f9fafb',
             },
             style,
           ]}
           {...props}
         />
-        {description && !error && (
-          <Text
-            style={{
-              fontFamily: Fonts.body.regular,
-              fontSize: 12,
-              marginTop: 4,
-              color: theme.outline,
-            }}
-          >
-            {description}
-          </Text>
-        )}
-        {error && (
-          <Text
-            style={{
-              fontFamily: Fonts.body.medium,
-              fontSize: 12,
-              marginTop: 4,
-              color: theme.error,
-            }}
-          >
-            {error}
-          </Text>
-        )}
+        {description && !error && <Text className="text-xs text-gray-400 mt-1">{description}</Text>}
+        {error && <Text className="text-xs text-red-500 mt-1">{error}</Text>}
       </View>
-    );
-  },
-);
+    )
+  }
+)
 
-Input.displayName = "Input";
-export default Input;
+Input.displayName = 'Input'
+export default Input

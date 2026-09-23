@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
   pipOff: {
     flex: 1,
-    backgroundColor: "#3C2D27",
+    backgroundColor: "#1e293b",
     alignItems: "center",
     justifyContent: "center",
     gap: 4,

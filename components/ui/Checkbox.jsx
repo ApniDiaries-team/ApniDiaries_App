@@ -67,7 +67,7 @@ const Checkbox = React.forwardRef(
               ? '#ef4444'
               : checked || indeterminate
                 ? '#FF9933'
-                : isDarkMode ? '#8D7165' : '#D8C2B6',
+                : isDarkMode ? '#6b7280' : '#d1d5db',
             // matches web: data-[state=checked]:bg-primary
             backgroundColor: checked || indeterminate ? '#FF9933' : 'transparent',
             alignItems: 'center',
@@ -97,7 +97,7 @@ const Checkbox = React.forwardRef(
                   lineHeight: 18,
                   color: error
                     ? '#ef4444'                           // text-destructive
-                    : isDarkMode ? '#FFF1EC' : '#261913', // text-foreground
+                    : isDarkMode ? '#f9fafb' : '#111827', // text-foreground
                 }}
               >
                 {label}
@@ -113,7 +113,7 @@ const Checkbox = React.forwardRef(
               <Text
                 style={{
                   fontSize: 14,  // text-sm = 14px (web uses text-sm not text-xs)
-                  color: isDarkMode ? '#A9917F' : '#8D7165',  // text-muted-foreground
+                  color: isDarkMode ? '#9ca3af' : '#6b7280',  // text-muted-foreground
                 }}
               >
                 {description}
@@ -169,7 +169,7 @@ const CheckboxGroup = React.forwardRef(
               fontWeight: '500',
               color: error
                 ? '#ef4444'
-                : isDarkMode ? '#FFF1EC' : '#261913',
+                : isDarkMode ? '#f9fafb' : '#111827',
             }}
           >
             {label}
@@ -185,7 +185,7 @@ const CheckboxGroup = React.forwardRef(
           <Text
             style={{
               fontSize: 14,
-              color: isDarkMode ? '#A9917F' : '#8D7165',
+              color: isDarkMode ? '#9ca3af' : '#6b7280',
             }}
           >
             {description}

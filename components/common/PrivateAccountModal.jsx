@@ -90,7 +90,7 @@ const PrivateAccountModal = ({
               style={{
                 fontSize: 18,
                 fontFamily: "Inter_600SemiBold",
-                color: "#261913",
+                color: "#111827",
                 marginBottom: 8,
                 textAlign: "center",
               }}
@@ -103,7 +103,7 @@ const PrivateAccountModal = ({
               style={{
                 fontSize: 14,
                 fontFamily: "Inter_400Regular",
-                color: "#6B5546",
+                color: "#4B5563",
                 marginBottom: 24,
                 textAlign: "center",
                 lineHeight: 20,
@@ -146,16 +146,16 @@ const PrivateAccountModal = ({
                 style={({ pressed }) => ({
                   flex: 1,
                   borderWidth: 1,
-                  borderColor: "#D8C2B6",
+                  borderColor: "#D1D5DB",
                   paddingVertical: 10,
                   borderRadius: 8,
                   alignItems: "center",
-                  backgroundColor: pressed ? "#FFE9E1" : "transparent",
+                  backgroundColor: pressed ? "#F3F4F6" : "transparent",
                 })}
               >
                 <Text
                   style={{
-                    color: "#594137",
+                    color: "#374151",
                     fontSize: 14,
                     fontFamily: "Inter_600SemiBold",
                     textAlign: "center",

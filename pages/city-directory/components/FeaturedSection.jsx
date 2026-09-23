@@ -32,7 +32,7 @@ const FeaturedSection = ({ featuredCities }) => {
             style={{
               fontSize: 26,
               fontFamily: Fonts.playfair.bold,
-              color: isDarkMode ? "#FFF1EC" : "#261913",
+              color: isDarkMode ? "#f9fafb" : "#111827",
             }}
           >
             Featured Destinations
@@ -67,12 +67,12 @@ const CityItem = ({ city, isDarkMode, router }) => {
       style={{
         position: "relative",
         // matches web: bg-[var(--color-bg-card)] rounded-xl overflow-hidden h-64 md:h-80 lg:h-96
-        backgroundColor: isDarkMode ? "#3C2D27" : "#fff",
+        backgroundColor: isDarkMode ? "#1f2937" : "#fff",
         borderRadius: 12,
         overflow: "hidden",
         height: 256,
         borderWidth: 1,
-        borderColor: isDarkMode ? "#594137" : "#EDD6CD",
+        borderColor: isDarkMode ? "#374151" : "#e5e7eb",
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.15,

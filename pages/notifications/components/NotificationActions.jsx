@@ -10,8 +10,8 @@ const NotificationActions = ({ unreadCount, onMarkAllRead, onClearAll }) => {
 
   const colors = {
     card: isDarkMode ? "#1E242F" : "#EDF2F7", // Matched with Profile cards
-    textPrimary: isDarkMode ? "#FFFFFF" : "#261913",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#8D7165",
+    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
     accent: "#3b82f6",
   }
 

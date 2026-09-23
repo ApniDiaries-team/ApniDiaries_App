@@ -1,8 +1,8 @@
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useContext, useState } from 'react';
-import { Pressable, ScrollView, Text, View } from 'react-native';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Fonts, Palette } from '../../constants/theme';
 import ComingSoonModal from '../../components/common/ComingSoonModal';
@@ -16,7 +16,7 @@ const journeys = [
     action: 'Find Now',
     path: '/community-posts',
     colors: ['#2874D0', '#174EA6'],
-    icon: 'account-group-outline',
+    image: require('../../assets/find-buddies.png'),
   },
   {
     title: 'Book Hostels',
@@ -25,7 +25,7 @@ const journeys = [
     path: '/hostels',
     comingSoon: true,
     colors: ['#148A5B', '#087348'],
-    icon: 'home-city-outline',
+    image: require('../../assets/find-hostel.png'),
   },
   {
     title: 'Rent Bikes',
@@ -34,7 +34,7 @@ const journeys = [
     path: '/bike-rentals',
     comingSoon: true,
     colors: ['#D95C18', '#B6400D'],
-    icon: 'motorbike',
+    image: require('../../assets/bike-rental.png'),
   },
 ];
 
@@ -53,7 +53,7 @@ const JourneyCard = ({ item, onPress }) => (
       </View>
       <View style={{ width: 132, height: 132, alignItems: 'center', justifyContent: 'center', marginLeft: 4 }}>
         <View style={{ position: 'absolute', width: 112, height: 112, borderRadius: 56, backgroundColor: 'rgba(255,255,255,0.13)' }} />
-        <MaterialCommunityIcons name={item.icon} size={item.icon === 'motorbike' ? 100 : 92} color="rgba(255,255,255,0.94)" />
+        <Image source={item.image} resizeMode="contain" style={{ width: 132, height: 132, borderRadius: 16 }} />
       </View>
     </LinearGradient>
   </Pressable>

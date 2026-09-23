@@ -1,8 +1,8 @@
 import { Feather } from "@expo/vector-icons";
 import { usePathname, useRouter } from "expo-router";
 import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, Image, Pressable, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Image, Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import api from "../api/axios";
 import Logo from "../assets/Apni diaries logo 1.png";
 import { Fonts } from "../constants/theme";
@@ -13,8 +13,69 @@ import { useScroll } from "../context/ScrollContext";
 import ComingSoonModal from "./common/ComingSoonModal";
 import DarkModeToggle from "./common/DarkModeToggle";
 
-const { height } = Dimensions.get("window");
 const AUTH_ROUTES = ["/login", "/signup", "/forgotPassword"];
+
+const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onLogout }) => {
+  const background = isDarkMode ? "#0B0E14" : "#FFF8F6";
+  const foreground = isDarkMode ? "#FFF8F6" : "#261913";
+  const muted = isDarkMode ? "#A0AEC0" : "#594137";
+  const menuItems = [
+    { id: "home", label: "Home", path: "/landing" },
+    { id: "trips", label: "Trips", path: "/trips" },
+    { id: "cities", label: "Cities", path: "/cities" },
+    { id: "packages", label: "Packages", path: "/packages" },
+    { id: "bikes", label: "Bikes", path: "/bike-rentals" },
+    { id: "hostels", label: "Hostels", path: "/hostels" },
+    { id: "notifications", label: "Notifications", path: "/notifications" },
+    { id: "settings", label: "Settings", path: "/settings" },
+    { id: "contact-us", label: "Contact Us", path: "/contact-us" },
+  ];
+
+  return (
+    <Modal visible={visible} animationType="slide" onRequestClose={onClose} statusBarTranslucent={false}>
+      <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1, backgroundColor: background }}>
+        <View style={{ minHeight: 60, paddingHorizontal: 20, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: isDarkMode ? "#2D3748" : "#E1BFB2" }}>
+          <Image source={Logo} style={{ width: 100, height: 54, tintColor: isDarkMode ? "#FFF8F6" : undefined }} resizeMode="contain" />
+          <Pressable onPress={onClose} hitSlop={12} accessibilityRole="button" accessibilityLabel="Close menu">
+            <Feather name="x" size={26} color={isDarkMode ? "#FFF8F6" : "#A23F00"} />
+          </Pressable>
+        </View>
+
+        <ScrollView
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 16, paddingBottom: 28 }}
+          showsVerticalScrollIndicator
+          nestedScrollEnabled
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={{ backgroundColor: isDarkMode ? "#1A1F29" : "#FFF1EC", borderRadius: 16, padding: 16, marginBottom: 16, flexDirection: "row", alignItems: "center", gap: 14 }}>
+            <View style={{ height: 56, width: 56, borderRadius: 28, overflow: "hidden", backgroundColor: "#A23F00", alignItems: "center", justifyContent: "center" }}>
+              {user?.avatar ? <Image source={{ uri: user.avatar }} style={{ height: "100%", width: "100%" }} resizeMode="cover" /> : <Feather name="user" size={26} color="#fff" />}
+            </View>
+            <View style={{ flex: 1, minWidth: 0 }}>
+              <Text numberOfLines={1} style={{ fontFamily: Fonts.playfair.bold, fontSize: 19, color: foreground }}>{user?.name || "Traveler"}</Text>
+              <Text numberOfLines={1} style={{ fontFamily: Fonts.inter.regular, fontSize: 13, color: muted, marginTop: 2 }}>{user?.email}</Text>
+            </View>
+          </View>
+
+          {menuItems.map((item) => (
+            <Pressable key={item.id} onPress={() => onNavigate(item.path)} style={{ minHeight: 52, justifyContent: "center", borderBottomWidth: 1, borderBottomColor: isDarkMode ? "rgba(255,255,255,0.06)" : "rgba(225,191,178,0.45)" }}>
+              <Text style={{ fontFamily: Fonts.inter.medium, fontSize: 16, color: foreground }}>{item.label}</Text>
+            </Pressable>
+          ))}
+
+          <View style={{ minHeight: 58, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: isDarkMode ? "rgba(255,255,255,0.06)" : "rgba(225,191,178,0.45)" }}>
+            <Text style={{ fontFamily: Fonts.inter.medium, fontSize: 15, color: foreground }}>Dark Mode</Text>
+            <DarkModeToggle />
+          </View>
+          <Pressable onPress={onLogout} style={{ minHeight: 56, justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 15, color: "#BA1A1A" }}>Logout</Text>
+          </Pressable>
+        </ScrollView>
+      </SafeAreaView>
+    </Modal>
+  );
+};
 
 const NavBar = () => {
   const router = useRouter();
@@ -87,7 +148,6 @@ const NavBar = () => {
       <View
         style={{
           paddingTop: insets.top,
-          paddingBottom: insets.bottom,
           height: 45 + insets.top,
           paddingHorizontal: 16,
           flexDirection: "row",
@@ -160,7 +220,7 @@ const NavBar = () => {
       </View>
 
       {/* Hamburger Menu Overlay */}
-      {menuOpen && (
+      {menuOpen && !isUserLoggedIn && (
         <>
           <Pressable
             style={{
@@ -216,7 +276,12 @@ const NavBar = () => {
                 </View>
 
                 {/* Menu Content */}
-                <View className="px-5 py-4">
+                <ScrollView
+                  style={{ maxHeight: Math.max(160, height - 70 - insets.top - 58 - insets.bottom) }}
+                  contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 16, paddingBottom: 28 }}
+                  showsVerticalScrollIndicator
+                  keyboardShouldPersistTaps="handled"
+                >
                   {/* User Info Header */}
                   <View
                     style={{
@@ -343,7 +408,7 @@ const NavBar = () => {
                       Logout
                     </Text>
                   </Pressable>
-                </View>
+                </ScrollView>
               </View>
             </>
           ) : (
@@ -378,6 +443,15 @@ const NavBar = () => {
           )}
         </>
       )}
+
+      <LoggedInMenuModal
+        visible={menuOpen && isUserLoggedIn}
+        onClose={() => setMenuOpen(false)}
+        user={user}
+        isDarkMode={isDarkMode}
+        onNavigate={navigateTo}
+        onLogout={onLogout}
+      />
 
       <ComingSoonModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </>

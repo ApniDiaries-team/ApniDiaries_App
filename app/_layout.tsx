@@ -1,4 +1,5 @@
 import { Stack, usePathname } from "expo-router";
+import { StatusBar } from "react-native";
 import "react-native-get-random-values";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
@@ -8,8 +9,22 @@ import AppContextProvider from "../context/AppContext";
 import { DarkModeProvider } from "../context/DarkModeContext";
 import { NotificationProvider } from "../context/NotificationContext";
 import { ScrollProvider } from "../context/ScrollContext";
+import { Palette } from "../constants/theme";
+import { useDarkMode } from "../context/DarkModeContext";
 import "../global.css";
 import { CallProvider } from "../pages/call-interface/context/CallContext";
+
+function AppStatusBar({ pathname }: { pathname: string }) {
+  const { isDarkMode } = useDarkMode();
+  const immersiveSplash = pathname === "/home";
+  return (
+    <StatusBar
+      barStyle={immersiveSplash || isDarkMode ? "light-content" : "dark-content"}
+      backgroundColor={immersiveSplash ? "transparent" : isDarkMode ? Palette.dark.surface : Palette.light.surface}
+      translucent={immersiveSplash}
+    />
+  );
+}
 
 export default function RootLayout() {
   const pathname = usePathname();
@@ -31,6 +46,7 @@ export default function RootLayout() {
             <ScrollProvider>
               <CallProvider>
                 <>
+                  <AppStatusBar pathname={pathname} />
                   <Stack
                     screenOptions={{
                       headerShown: !shouldHideNav,

@@ -8,7 +8,6 @@ import {
   ImageBackground,
   Platform,
   Pressable,
-  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -78,12 +77,6 @@ export default function LandingScreen() {
 
   return (
     <View style={styles.root}>
-      <StatusBar
-        barStyle="light-content"
-        translucent
-        backgroundColor="transparent"
-      />
-
       <ImageBackground source={BG_IMAGE} style={styles.bg} resizeMode="cover">
         {/* ── Frosted glass blur panel — bottom 60% of screen ── */}
         <Animated.View

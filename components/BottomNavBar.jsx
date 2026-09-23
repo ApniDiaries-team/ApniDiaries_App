@@ -57,15 +57,19 @@ const BottomNavBar = () => {
           : undefined),
       }}
     >
-      <SafeAreaView edges={["bottom"]}>
+      <SafeAreaView
+        edges={["bottom"]}
+        style={{ width: "100%", backgroundColor: isDarkMode ? Palette.dark.surface : Palette.light.surfaceLowest }}
+      >
         <View
           style={{
-            top: 5,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-around",
-            height: 45,
-            paddingBottom: 4,
+            width: "100%",
+            height: 58,
+            paddingHorizontal: 4,
+            paddingVertical: 5,
           }}
         >
           {BOTTOM_TABS.map((tab) => {
@@ -99,7 +103,6 @@ const BottomNavBar = () => {
                     fontFamily: isActive
                       ? Fonts.inter.bold
                       : Fonts.inter.semibold,
-                    paddingLeft: 6,
                     color: tabColor,
                   }}
                 >

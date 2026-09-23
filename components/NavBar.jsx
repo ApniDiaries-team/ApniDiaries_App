@@ -123,7 +123,7 @@ const NavBar = () => {
                   color={iconColor(isDarkMode, isUserLoggedIn)}
                 />
               </Pressable>
- 
+
               <Pressable onPress={() => router.push("/notifications")}>
                 <Feather
                   name="bell"
@@ -310,9 +310,9 @@ const NavBar = () => {
                     { id: 'home', label: 'Home', path: '/' },
                     { id: 'trips', label: 'Trips', path: '/trips' },
                     { id: 'cities', label: 'Cities', path: '/cities' },
-                    { id: 'hostels', label: 'Hostels', comingSoon: true },
-                    { id: 'bike-rentals', label: 'Bikes', comingSoon: true },
-                    { id: 'package-lists', label: 'Packages', comingSoon: true },
+                    { id: 'hostels', label: 'Hostels', path: '/hostels' },
+                    { id: 'bike-rentals', label: 'Bikes', path: '/bike-rentals' },
+                    { id: 'package-lists', label: 'Packages', path: '/packages' },
                     { id: 'notifications', label: 'Notifications', path: '/notifications' },
                     { id: 'settings', label: 'Settings', path: '/settings' },
                     {

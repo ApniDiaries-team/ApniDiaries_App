@@ -169,7 +169,7 @@ const CommunityPosts = () => {
         // (Screen is blurred)
         AudioManager.pauseAll();
       };
-    }, []),
+    }, [])
   );
 
   // ── ADD: viewability config for AudioManager ─────────────────────────────────
@@ -199,7 +199,7 @@ const CommunityPosts = () => {
         setCities(r.data?.data?.cities || []);
         setTotalPosts(r.data?.data?.totalPosts || 0);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   // ── Load feed ────────────────────────────────────────────────────────────────
@@ -725,7 +725,7 @@ const CommunityPosts = () => {
         // ── ADD: these 2 props wire up AudioManager ──────────────────────────
         viewabilityConfig={viewabilityConfig}
         onViewableItemsChanged={onViewableItemsChanged}
-        // ────────────────────────────────────────────────────────────────────
+      // ────────────────────────────────────────────────────────────────────
       />
 
       {/* ── FAB ──────────────────────────────────────────────────────────────── */}

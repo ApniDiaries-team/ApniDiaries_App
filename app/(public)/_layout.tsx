@@ -8,7 +8,6 @@ export default function PublicLayout() {
       <Stack.Screen name="login" />
       <Stack.Screen name="signup" />
       <Stack.Screen name="forgot-password" />
-      <Stack.Screen name="terms-and-conditions" />
       {/* <Stack.Screen name="blogs/index" />
       <Stack.Screen name="blogs/[slug]" /> */}
     </Stack>

@@ -2,9 +2,9 @@
   "expo": {
     "name": "ApniDiaries",
     "slug": "native-app",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/AD.png",
+    "icon": "./assets/ApnLogo.png",
     "scheme": "nativeapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -24,12 +24,11 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#ffffff",
-        "foregroundImage": "./assets/AD.png"
+        "foregroundImage": "./assets/ApnLogo.png"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.apnidiaries.app",
-      "versionCode": 2,
       "enableProguardInReleaseBuilds": true,
       "enableShrinkResourcesInReleaseBuilds": true,
       "abiFilters": ["arm64-v8a"],
@@ -47,14 +46,14 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/AD.png"
+      "favicon": "./assets/ApnLogo.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "image": "./assets/AD.png",
+          "image": "./assets/ApnLogo.png",
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#ffffff",

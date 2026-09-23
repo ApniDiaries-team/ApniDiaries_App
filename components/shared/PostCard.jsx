@@ -20,7 +20,6 @@ import {
 import { memo, useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Alert,
   Animated,
   AppState,
   FlatList,
@@ -942,31 +941,12 @@ const LikesModal = ({
 // ─── Comment Row ──────────────────────────────────────────────────────────────
 const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) => {
   const dk = isDarkMode;
-  const [menuOpen, setMenuOpen] = useState(false);
   const ini = comment?.name
     ?.split(" ")
     .map((n) => n[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
-
-  const confirmDelete = () => {
-    setMenuOpen(false);
-    Alert.alert(
-      "Delete comment?",
-      "This can't be undone.",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Delete",
-          style: "destructive",
-          onPress: () => onDelete?.(comment?.id),
-        },
-      ],
-      { cancelable: true },
-    );
-  };
-
   return (
     <View style={{ flexDirection: "row", gap: 10, marginBottom: 12 }}>
       <Pressable onPress={() => onPressUser(comment?.user_id)} hitSlop={4}>
@@ -1025,69 +1005,13 @@ const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) =
         </Text>
       </View>
       {canDelete && (
-        <View>
-          <Pressable
-            onPress={() => setMenuOpen((v) => !v)}
-            hitSlop={10}
-            style={{ padding: 4 }}
-          >
-            <MoreHorizontal size={16} color={dk ? "#64748b" : "#94a3b8"} />
-          </Pressable>
-          {menuOpen && (
-            <>
-              {/* Tap-away backdrop to close the menu without deleting */}
-              <Pressable
-                onPress={() => setMenuOpen(false)}
-                style={{
-                  position: "absolute",
-                  top: -1000,
-                  left: -1000,
-                  right: -1000,
-                  bottom: -1000,
-                }}
-              />
-              <View
-                style={{
-                  position: "absolute",
-                  top: 22,
-                  right: 0,
-                  backgroundColor: dk ? "#1e293b" : "#ffffff",
-                  borderRadius: 10,
-                  paddingVertical: 4,
-                  minWidth: 110,
-                  shadowColor: "#000",
-                  shadowOffset: { width: 0, height: 2 },
-                  shadowOpacity: 0.15,
-                  shadowRadius: 6,
-                  elevation: 6,
-                  zIndex: 50,
-                }}
-              >
-                <Pressable
-                  onPress={confirmDelete}
-                  style={{
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 8,
-                    paddingVertical: 8,
-                    paddingHorizontal: 12,
-                  }}
-                >
-                  <Trash2 size={14} color="#ef4444" />
-                  <Text
-                    style={{
-                      fontFamily: Fonts.inter.regular,
-                      fontSize: 13,
-                      color: "#ef4444",
-                    }}
-                  >
-                    Delete
-                  </Text>
-                </Pressable>
-              </View>
-            </>
-          )}
-        </View>
+        <Pressable
+          onPress={() => onDelete?.(comment?.id)}
+          hitSlop={10}
+          style={{ padding: 4 }}
+        >
+          <Trash2 size={15} color={dk ? "#64748b" : "#94a3b8"} />
+        </Pressable>
       )}
     </View>
   );
@@ -1700,7 +1624,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
               comment={c}
               onPressUser={goUserProfile}
               isDarkMode={dk}
-              canDelete={user?.id === c.user_id}
+              canDelete={user?.id === c.user_id || user?.id === post?.user?.id}
               onDelete={handleDeleteComment}
             />
           ))
@@ -1877,7 +1801,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                 >
                   <MoreHorizontal size={17} color={subColor} />
                 </Pressable>
-                {MenuSheet()}
+                <MenuSheet />
               </View>
             </View>
 
@@ -1891,7 +1815,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
             <View
               style={{ paddingHorizontal: 10, paddingTop: 6, paddingBottom: 2 }}
             >
-              {ActionBar({ compact: false })}
+              <ActionBar compact={false} />
             </View>
 
             {likeCount > 0 && (
@@ -2109,7 +2033,7 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                 >
                   <MoreHorizontal size={16} color={subColor} />
                 </Pressable>
-                {MenuSheet()}
+                <MenuSheet />
               </View>
             </View>
 
@@ -2154,11 +2078,11 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                 marginTop: 2,
               }}
             />
-            {ActionBar({ compact: true })}
+            <ActionBar compact />
           </View>
         )}
 
-        {CommentsDrawer()}
+        <CommentsDrawer />
       </Animated.View>
 
       <LikesModal

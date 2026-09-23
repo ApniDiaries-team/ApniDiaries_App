@@ -576,7 +576,7 @@ export default function Signup() {
     await setupE2EE(userId, form.password, verificationToken); // move here
     await checkAuth(form.password);
     Toast.show({ type: "success", text1: "Signup successful!" });
-    router.replace("/community-posts");
+    router.replace("/landing");
   };
 
   // ── Resend OTP (mirrors web handleResendOtp) ──────────────────────────────

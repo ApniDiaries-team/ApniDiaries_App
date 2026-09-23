@@ -1,17 +1,20 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useEffect, useState } from "react";
 import {
+  KeyboardAvoidingView,
   Modal,
   Platform,
   Pressable,
   ScrollView,
+  StyleSheet,
   Text,
   TextInput,
   View,
+  useWindowDimensions,
 } from "react-native";
 import Icon from "../../../components/AppIcon";
 import { useDarkMode } from "../../../context/DarkModeContext";
-import { Fonts } from "../../../constants/theme";
+import { Fonts, Palette } from "../../../constants/theme";
 import { ViewField } from "./ViewField";
 
 // ── ViewField — matches web: import { ViewField } from './ViewField' ──
@@ -37,6 +40,7 @@ import { ViewField } from "./ViewField";
 // ── TripTypeDropdown ───────────────────────────────────────
 const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
   const [open, setOpen] = useState(false);
+  const palette = isDarkMode ? Palette.dark : Palette.light;
   const selected = options.find((o) => o.value === value);
 
   return (
@@ -44,8 +48,8 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
       <Text
         style={{
           fontSize: 14,
-          fontWeight: "500",
-          color: isDarkMode ? "#FFFFFF" : "#261913",
+          fontFamily: Fonts.inter.medium,
+          color: palette.text,
         }}
       >
         Trip Type
@@ -62,20 +66,15 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
           paddingVertical: 12,
           borderRadius: 8,
           borderWidth: 1,
-          borderColor: open ? "#A0AEC0" : isDarkMode ? "#2D3748" : "#E1BFB2",
-          backgroundColor: isDarkMode ? "#261913" : "#FFFFFF",
+          borderColor: open ? palette.primary : palette.outlineVariant,
+          backgroundColor: isDarkMode ? Palette.dark.surfaceLow : Palette.light.surfaceLowest,
         }}
       >
         <Text
           style={{
             fontSize: 14,
-            color: selected
-              ? isDarkMode
-                ? "#FFFFFF"
-                : "#261913"
-              : isDarkMode
-                ? "#594137"
-                : "#A0AEC0",
+            fontFamily: Fonts.inter.regular,
+            color: selected ? palette.text : palette.outline,
           }}
         >
           {selected ? selected.label : "Select trip type"}
@@ -93,8 +92,8 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
           style={{
             borderRadius: 8,
             borderWidth: 1,
-            borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
-            backgroundColor: isDarkMode ? "#1E242F" : "#fff",
+            borderColor: palette.outlineVariant,
+            backgroundColor: isDarkMode ? Palette.dark.surfaceLowest : Palette.light.surfaceLowest,
             overflow: "hidden",
             elevation: 8,
             shadowColor: "#000",
@@ -114,19 +113,14 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
                 paddingHorizontal: 16,
                 paddingVertical: 12,
                 backgroundColor:
-                  value === opt.value ? (isDarkMode ? "#ED8936" : "#A23F00") : "transparent",
+                  value === opt.value ? (isDarkMode ? "rgba(237,137,54,0.14)" : "#FCE8DC") : "transparent",
               }}
             >
               <Text
                 style={{
                   fontSize: 14,
-                  fontWeight: value === opt.value ? "600" : "400",
-                  color:
-                    value === opt.value
-                      ? "#fff"
-                      : isDarkMode
-                        ? "#FFFFFF"
-                        : "#261913",
+                  fontFamily: value === opt.value ? Fonts.inter.semibold : Fonts.inter.regular,
+                  color: value === opt.value ? palette.primary : palette.text,
                 }}
               >
                 {opt.label}
@@ -156,8 +150,8 @@ const InputField = ({
       <Text
         style={{
           fontSize: 14,
-          fontWeight: "500",
-          color: isDarkMode ? "#FFFFFF" : "#261913",
+          fontFamily: Fonts.inter.medium,
+          color: isDarkMode ? Palette.dark.text : Palette.light.text,
         }}
       >
         {label}
@@ -168,21 +162,22 @@ const InputField = ({
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}
-      placeholderTextColor={isDarkMode ? "#594137" : "#A0AEC0"}
+      placeholderTextColor={isDarkMode ? Palette.dark.textVariant : Palette.light.outline}
       keyboardType={keyboardType || "default"}
       style={{
         paddingHorizontal: 16,
         paddingVertical: 12,
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: error ? "#ef4444" : isDarkMode ? "#2D3748" : "#E1BFB2",
-        backgroundColor: isDarkMode ? "#261913" : "#FFFFFF",
+        borderColor: error ? "#ef4444" : isDarkMode ? Palette.dark.outlineVariant : Palette.light.outlineVariant,
+        backgroundColor: isDarkMode ? Palette.dark.surfaceLow : Palette.light.surfaceLowest,
         fontSize: 14,
-        color: isDarkMode ? "#FFFFFF" : "#261913",
+        color: isDarkMode ? Palette.dark.text : Palette.light.text,
+        fontFamily: Fonts.inter.regular,
       }}
     />
     {description && !error && (
-      <Text style={{ fontSize: 12, color: isDarkMode ? "#A0AEC0" : "#594137" }}>
+      <Text style={{ fontSize: 12, color: isDarkMode ? Palette.dark.textVariant : Palette.light.textVariant, fontFamily: Fonts.inter.regular }}>
         {description}
       </Text>
     )}
@@ -192,6 +187,7 @@ const InputField = ({
 
 // ── DateField — replaces web <Input type='date' min='2026-01-01'> ──
 const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
+  const palette = isDarkMode ? Palette.dark : Palette.light;
   const [show, setShow] = useState(false);
   const minDate = new Date("2026-01-01");
   const parsed = value ? new Date(value) : minDate;
@@ -208,9 +204,9 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
       <View style={{ flexDirection: "row", alignItems: "center", gap: 3 }}>
         <Text
           style={{
-            fontSize: 14,
-            fontWeight: "500",
-            color: isDarkMode ? "#FFFFFF" : "#261913",
+          fontSize: 14,
+          fontFamily: Fonts.inter.medium,
+          color: palette.text,
           }}
         >
           {label}
@@ -224,8 +220,8 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
           paddingVertical: 12,
           borderRadius: 8,
           borderWidth: 1,
-          borderColor: error ? "#ef4444" : isDarkMode ? "#2D3748" : "#E1BFB2",
-          backgroundColor: isDarkMode ? "#261913" : "#FFFFFF",
+          borderColor: error ? "#ef4444" : palette.outlineVariant,
+          backgroundColor: isDarkMode ? Palette.dark.surfaceLow : Palette.light.surfaceLowest,
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
@@ -234,13 +230,8 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
         <Text
           style={{
             fontSize: 14,
-            color: value
-              ? isDarkMode
-                ? "#FFFFFF"
-                : "#261913"
-              : isDarkMode
-                ? "#594137"
-                : "#A0AEC0",
+            fontFamily: Fonts.inter.regular,
+            color: value ? palette.text : palette.outline,
           }}
         >
           {value || "Select date"}
@@ -248,7 +239,7 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
         <Icon
           name="Calendar"
           size={16}
-          color={isDarkMode ? "#A0AEC0" : "#594137"}
+          color={palette.outline}
         />
       </Pressable>
       {error && <Text style={{ fontSize: 12, color: "#ef4444" }}>{error}</Text>}
@@ -268,6 +259,9 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
 // ── Main Component ─────────────────────────────────────────
 const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
   const { isDarkMode } = useDarkMode();
+  const { width } = useWindowDimensions();
+  const compact = width < 420;
+  const palette = isDarkMode ? Palette.dark : Palette.light;
 
   const [formData, setFormData] = useState({
     title: "",
@@ -392,20 +386,20 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
       onRequestClose={handleClose}
     >
       {/* matches web: fixed inset-0 z-[1100] flex items-center justify-center p-4 */}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 16 }}
+      >
       <View
         style={{
-          flex: 1,
-          backgroundColor: "rgba(0,0,0,0.5)",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 16,
+          ...StyleSheet.absoluteFillObject,
+          backgroundColor: "rgba(0,0,0,0.58)",
         }}
-      >
+      />
         {/* Backdrop tap to close — matches web: onClick={handleClose} on overlay */}
         <Pressable
           style={{
             position: "absolute",
-            inset: 0,
             top: 0,
             left: 0,
             right: 0,
@@ -417,13 +411,18 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
         {/* matches web: bg-[var(--color-bg-card)] rounded-xl max-w-2xl max-h-[90vh] border */}
         <View
           style={{
-            backgroundColor: isDarkMode ? "#1E242F" : "#fff",
-            borderRadius: 12,
+            backgroundColor: palette.surfaceLowest,
+            borderRadius: 22,
             width: "100%",
             maxWidth: 672, // max-w-2xl
             maxHeight: "90%",
             borderWidth: 1,
-            borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
+            borderColor: palette.outlineVariant,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 12 },
+            shadowOpacity: 0.2,
+            shadowRadius: 24,
+            elevation: 12,
             overflow: "hidden",
           }}
         >
@@ -433,11 +432,11 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              paddingHorizontal: 24,
-              paddingVertical: 16,
+              paddingHorizontal: compact ? 18 : 24,
+              paddingVertical: 17,
               borderBottomWidth: 1,
-              borderBottomColor: isDarkMode ? "#2D3748" : "#E1BFB2",
-              backgroundColor: isDarkMode ? "#1E242F" : "#fff",
+              borderBottomColor: palette.outlineVariant,
+              backgroundColor: palette.surfaceLowest,
             }}
           >
             {/* matches web: flex items-center gap-3 */}
@@ -449,7 +448,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                 style={{
                   padding: 8,
                   borderRadius: 8,
-                  backgroundColor: "rgba(59,130,246,0.1)",
+                  backgroundColor: isDarkMode ? "rgba(237,137,54,0.14)" : "#FCE8DC",
                 }}
               >
                 <Icon name="Plus" size={20} color={(isDarkMode ? "#ED8936" : "#A23F00")} />
@@ -459,7 +458,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                 style={{
                   fontSize: 20,
                   fontFamily: Fonts.playfair.bold,
-                  color: isDarkMode ? "#FFFFFF" : "#261913",
+                  color: palette.text,
                 }}
               >
                 {action} Trip
@@ -481,14 +480,15 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
               <Icon
                 name="X"
                 size={20}
-                color={isDarkMode ? "#A0AEC0" : "#594137"}
+                color={palette.textVariant}
               />
             </Pressable>
           </View>
 
           {/* ── Form — matches web: p-6 space-y-6 ── */}
           <ScrollView
-            contentContainerStyle={{ padding: 24, gap: 24, paddingBottom: 32 }}
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={{ padding: compact ? 18 : 24, gap: 21, paddingBottom: 28 }}
           >
             {/* Trip Title */}
             {isView ? (
@@ -531,7 +531,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                 </View>
               </View>
             ) : (
-              <View style={{ flexDirection: "row", gap: 16 }}>
+              <View style={{ flexDirection: compact ? "column" : "row", gap: 16 }}>
                 <DateField
                   label="Start Date"
                   value={formData?.startDate}
@@ -568,7 +568,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
               <ViewField label="Visibility" value={{ only_me: "Only Me", private: "Private", public: "Public" }[formData?.visibility] || "Only Me"} />
             ) : (
               <View style={{ gap: 10 }}>
-                <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 12, letterSpacing: 0.8, textTransform: "uppercase", color: isDarkMode ? "#A0AEC0" : "#594137" }}>06. Security Clearance</Text>
+                <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 12, letterSpacing: 0.8, textTransform: "uppercase", color: palette.textVariant }}>06. Trip visibility</Text>
                 {[
                   { value: "only_me", label: "Only Me", description: "Just for you — private journal", icon: "Eye" },
                   { value: "private", label: "Private", description: "Friends can see and join", icon: "Lock" },
@@ -577,9 +577,9 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                   const active = (formData?.visibility || "only_me") === option.value;
                   return (
                     <Pressable key={option.value} onPress={() => handleChange("visibility", option.value)} style={{ flexDirection: "row", alignItems: "center", gap: 12, padding: 14, borderRadius: 12, borderWidth: 1, borderColor: active ? (isDarkMode ? "#ED8936" : "#A23F00") : isDarkMode ? "#2D3748" : "#E1BFB2", backgroundColor: active ? (isDarkMode ? "rgba(237,137,54,0.1)" : "rgba(162,63,0,0.05)") : "transparent" }}>
-                      <Icon name={option.icon} size={18} color={active ? (isDarkMode ? "#ED8936" : "#A23F00") : isDarkMode ? "#A0AEC0" : "#594137"} />
-                      <View style={{ flex: 1 }}><Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 14, color: isDarkMode ? "#FFFFFF" : "#261913" }}>{option.label}</Text><Text style={{ fontFamily: Fonts.inter.regular, fontSize: 12, color: isDarkMode ? "#A0AEC0" : "#594137", marginTop: 3 }}>{option.description}</Text></View>
-                      {active && <Icon name="Check" size={18} color={isDarkMode ? "#ED8936" : "#A23F00"} />}
+                      <Icon name={option.icon} size={18} color={active ? palette.primary : palette.textVariant} />
+                      <View style={{ flex: 1 }}><Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 14, color: palette.text }}>{option.label}</Text><Text style={{ fontFamily: Fonts.inter.regular, fontSize: 12, color: palette.textVariant, marginTop: 3 }}>{option.description}</Text></View>
+                      {active && <Icon name="Check" size={18} color={palette.primary} />}
                     </Pressable>
                   );
                 })}
@@ -610,7 +610,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                   style={{
                     fontSize: 14,
                     fontWeight: "500",
-                    color: isDarkMode ? "#FFFFFF" : "#261913",
+                    color: palette.text,
                   }}
                 >
                   Description (Optional)
@@ -620,7 +620,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                   value={formData?.description}
                   onChangeText={(v) => handleChange("description", v)}
                   placeholder="Add trip details, itinerary highlights, or special notes..."
-                  placeholderTextColor={isDarkMode ? "#594137" : "#A0AEC0"}
+                  placeholderTextColor={palette.outline}
                   multiline
                   numberOfLines={4}
                   textAlignVertical="top"
@@ -629,10 +629,11 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                     paddingVertical: 12,
                     borderRadius: 8,
                     borderWidth: 1,
-                    borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
-                    backgroundColor: isDarkMode ? "#261913" : "#FFFFFF",
+                    borderColor: palette.outlineVariant,
+                    backgroundColor: isDarkMode ? Palette.dark.surfaceLow : Palette.light.surfaceLowest,
                     fontSize: 14,
-                    color: isDarkMode ? "#FFFFFF" : "#261913",
+                    color: palette.text,
+                    fontFamily: Fonts.inter.regular,
                     minHeight: 100,
                   }}
                 />
@@ -643,7 +644,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                 flex flex-col-reverse sm:flex-row gap-3 pt-4
                 In RN: row layout, Cancel first */}
             {action !== "View" && (
-              <View style={{ flexDirection: "flex", gap: 12, paddingTop: 16 }}>
+              <View style={{ flexDirection: compact ? "column-reverse" : "row", gap: 12, paddingTop: 4 }}>
                 {/* Submit — matches web: Button variant='default' iconName='Plus' */}
                 <Pressable
                   onPress={handleSubmit}
@@ -656,7 +657,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                     borderColor: (isDarkMode ? "#ED8936" : "#A23F00"),
                     gap: 8,
                     paddingVertical: 13,
-                    borderRadius: 20,
+                    borderRadius: 14,
                     backgroundColor: (isDarkMode ? "#ED8936" : "#A23F00"),
                   }}
                 >
@@ -674,7 +675,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                   style={{
                     flex: 1,
                     paddingVertical: 13,
-                    borderRadius: 20,
+                    borderRadius: 14,
                     borderWidth: 1.5,
                     borderColor: (isDarkMode ? "#ED8936" : "#A23F00"),
                     alignItems: "center",
@@ -695,7 +696,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
             )}
           </ScrollView>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };

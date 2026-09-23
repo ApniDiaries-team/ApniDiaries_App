@@ -67,7 +67,7 @@ export default function Index() {
   }
 
   if (user) {
-    return <Redirect href="/community-posts" />;
+    return <Redirect href="/landing" />;
   }
 
   return <Redirect href="/home" />;

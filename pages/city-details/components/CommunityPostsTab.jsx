@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 import Icon from "../../../components/AppIcon";
+import { Fonts, Palette } from "../../../constants/theme";
 import { useDarkMode } from "../../../context/DarkModeContext";
 import { getFeed, toggleLike } from "../../../services/posts.api";
 
@@ -24,11 +25,12 @@ const CommunityPostsTab = ({ cityName, onCreatePost }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const bg = isDarkMode ? "#1f2937" : "#fff";
-  const border = isDarkMode ? "#374151" : "#e5e7eb";
-  const textPrimary = isDarkMode ? "#f9fafb" : "#111827";
-  const textSecondary = isDarkMode ? "#9ca3af" : "#6b7280";
-  const bgSecondary = isDarkMode ? "#374151" : "#f3f4f6";
+  const palette = isDarkMode ? Palette.dark : Palette.light;
+  const bg = palette.surfaceLowest;
+  const border = palette.outlineVariant;
+  const textPrimary = palette.text;
+  const textSecondary = palette.textVariant;
+  const bgSecondary = palette.surfaceLow;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -133,7 +135,7 @@ const CommunityPostsTab = ({ cityName, onCreatePost }) => {
       >
         {/* matches web: animate-spin border-b-2 border-blue-500 */}
         <ActivityIndicator size="large" color="#3b82f6" />
-        <Text style={{ marginLeft: 12, fontSize: 14, color: textSecondary }}>
+          <Text style={{ marginLeft: 12, fontSize: 14, color: textSecondary, fontFamily: Fonts.inter.regular }}>
           Loading posts...
         </Text>
       </View>
@@ -186,15 +188,15 @@ const CommunityPostsTab = ({ cityName, onCreatePost }) => {
                   borderRadius: 999,
                   borderWidth: 1,
                   backgroundColor:
-                    selectedFilter === opt.value ? "#FF9933" : "transparent",
+                    selectedFilter === opt.value ? palette.primary : "transparent",
                   borderColor:
-                    selectedFilter === opt.value ? "#FF9933" : border,
+                    selectedFilter === opt.value ? palette.primary : border,
                 }}
               >
                 <Text
                   style={{
                     fontSize: 12,
-                    fontWeight: "500",
+                    fontFamily: Fonts.inter.medium,
                     color:
                       selectedFilter === opt.value ? "#fff" : textSecondary,
                   }}
@@ -216,11 +218,11 @@ const CommunityPostsTab = ({ cityName, onCreatePost }) => {
             paddingHorizontal: 14,
             paddingVertical: 8,
             borderRadius: 8,
-            backgroundColor: "#FF9933",
+            backgroundColor: palette.primary,
           }}
         >
           <Icon name="Plus" size={16} color="#fff" />
-          <Text style={{ fontSize: 14, fontWeight: "600", color: "#fff" }}>
+          <Text style={{ fontSize: 14, fontFamily: Fonts.inter.semibold, color: palette.onPrimary }}>
             Create Post
           </Text>
         </Pressable>
@@ -275,10 +277,10 @@ const CommunityPostsTab = ({ cityName, onCreatePost }) => {
                 paddingHorizontal: 20,
                 paddingVertical: 10,
                 borderRadius: 8,
-                backgroundColor: "#FF9933",
+                backgroundColor: palette.primary,
               }}
             >
-              <Text style={{ fontSize: 14, fontWeight: "600", color: "#fff" }}>
+              <Text style={{ fontSize: 14, fontFamily: Fonts.inter.semibold, color: palette.onPrimary }}>
                 Create a Post
               </Text>
             </Pressable>

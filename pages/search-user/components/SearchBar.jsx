@@ -6,6 +6,7 @@ import { useDarkMode } from '../../../context/DarkModeContext';
 
 const SearchBar = ({ onSearch, placeholder = 'Search travelers by name, city, or interests…' }) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [focused, setFocused] = useState(false);
   const { isDarkMode } = useDarkMode();
   const bg = isDarkMode ? Palette.dark.surfaceLowest : Palette.light.surfaceLowest;
   const border = isDarkMode ? Palette.dark.outlineVariant : Palette.light.outlineVariant;
@@ -28,7 +29,9 @@ const SearchBar = ({ onSearch, placeholder = 'Search travelers by name, city, or
         placeholderTextColor={muted}
         returnKeyType="search"
         onSubmitEditing={() => onSearch?.(searchQuery)}
-        style={{ width: '100%', minHeight: 58, paddingLeft: 50, paddingRight: 50, paddingVertical: 16, borderRadius: 16, borderWidth: 1, borderColor: border, backgroundColor: bg, color: text, fontFamily: Fonts.inter.regular, fontSize: 14 }}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={{ width: '100%', minHeight: 56, paddingLeft: 48, paddingRight: 48, paddingVertical: 15, borderRadius: 16, borderWidth: 1, borderColor: focused ? primary : border, backgroundColor: bg, color: text, fontFamily: Fonts.inter.regular, fontSize: 14 }}
       />
       {!!searchQuery && (
         <Pressable onPress={() => setSearchQuery('')} hitSlop={10} style={{ position: 'absolute', right: 18, height: '100%', justifyContent: 'center' }}>

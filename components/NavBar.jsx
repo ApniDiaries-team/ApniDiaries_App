@@ -109,7 +109,7 @@ const NavBar = () => {
         }}
       >
         {/* Logo */}
-        <Pressable onPress={() => router.push("/community-posts")}>
+        <Pressable onPress={() => router.push(isUserLoggedIn ? "/landing" : "/home")}>
           <Image
             source={Logo}
             style={{

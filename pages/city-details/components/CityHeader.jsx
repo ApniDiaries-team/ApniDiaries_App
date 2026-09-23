@@ -1,10 +1,12 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { Image, Pressable, Text, View } from "react-native";
 import Icon from "../../../components/AppIcon";
+import { Fonts, Palette } from "../../../constants/theme";
 import { useDarkMode } from "../../../context/DarkModeContext";
 
 const CityHeader = ({ city, onPlanTrip, onShare }) => {
   const { isDarkMode } = useDarkMode();
+  const palette = isDarkMode ? Palette.dark : Palette.light;
 
   return (
     // matches web: relative w-full h-64 md:h-80 lg:h-96 rounded-xl overflow-hidden border border-[var(--color-border)]
@@ -14,12 +16,13 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
         borderRadius: 12,
         overflow: "hidden",
         borderWidth: 1,
-        borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+        borderColor: palette.outlineVariant,
         marginBottom: 16,
       }}
     >
       <Image
         source={{ uri: city?.image }}
+        accessibilityLabel={city?.imageAlt || city?.name}
         style={{ width: "100%", height: "100%" }}
         resizeMode="cover"
       />
@@ -50,7 +53,7 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
           <Text
             style={{
               fontSize: 24,
-              fontWeight: "700",
+              fontFamily: Fonts.playfair.bold,
               color: "#fff",
               marginBottom: 8,
             }}
@@ -59,7 +62,7 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
           </Text>
           {/* matches web: text-sm md:text-base text-white/90 line-clamp-2 */}
           <Text
-            style={{ fontSize: 14, color: "rgba(255,255,255,0.9)" }}
+            style={{ fontSize: 14, lineHeight: 20, fontFamily: Fonts.inter.regular, color: "rgba(255,255,255,0.9)" }}
             numberOfLines={2}
           >
             {city?.description}
@@ -84,11 +87,11 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
             </View>
             <View>
               {/* matches web: text-xs md:text-sm text-white/70 */}
-              <Text style={{ fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
+              <Text style={{ fontSize: 12, fontFamily: Fonts.inter.regular, color: "rgba(255,255,255,0.7)" }}>
                 Active Members
               </Text>
               {/* matches web: text-sm md:text-base font-semibold text-white */}
-              <Text style={{ fontSize: 14, fontWeight: "600", color: "#fff" }}>
+              <Text style={{ fontSize: 14, fontFamily: Fonts.inter.semibold, color: "#fff" }}>
                 {city?.activeMembers}
               </Text>
             </View>
@@ -109,10 +112,10 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
               <Icon name="MessageCircle" size={16} color="#fff" />
             </View>
             <View>
-              <Text style={{ fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
+              <Text style={{ fontSize: 12, fontFamily: Fonts.inter.regular, color: "rgba(255,255,255,0.7)" }}>
                 Recent Posts
               </Text>
-              <Text style={{ fontSize: 14, fontWeight: "600", color: "#fff" }}>
+              <Text style={{ fontSize: 14, fontFamily: Fonts.inter.semibold, color: "#fff" }}>
                 {city?.recentPosts}
               </Text>
             </View>
@@ -133,10 +136,10 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
               <Icon name="TrendingUp" size={16} color="#fff" />
             </View>
             <View>
-              <Text style={{ fontSize: 12, color: "rgba(255,255,255,0.7)" }}>
+              <Text style={{ fontSize: 12, fontFamily: Fonts.inter.regular, color: "rgba(255,255,255,0.7)" }}>
                 Activity
               </Text>
-              <Text style={{ fontSize: 14, fontWeight: "600", color: "#fff" }}>
+              <Text style={{ fontSize: 14, fontFamily: Fonts.inter.semibold, color: "#fff" }}>
                 {city?.activityLevel}
               </Text>
             </View>
@@ -159,7 +162,7 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
             }}
           >
             <Icon name="Calendar" size={18} color="#fff" />
-            <Text style={{ fontSize: 14, fontWeight: "500", color: "#fff" }}>
+            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.medium, color: "#fff" }}>
               Plan Trip
             </Text>
           </Pressable>
@@ -180,7 +183,7 @@ const CityHeader = ({ city, onPlanTrip, onShare }) => {
             }}
           >
             <Icon name="Share2" size={18} color="#fff" />
-            <Text style={{ fontSize: 14, fontWeight: "500", color: "#fff" }}>
+            <Text style={{ fontSize: 14, fontFamily: Fonts.inter.medium, color: "#fff" }}>
               Share
             </Text>
           </Pressable>

@@ -47,7 +47,7 @@ const SearchUser = () => {
             </View>
           )}
 
-          <SearchBar onSearch={handleSearch} />
+          <SearchBar onSearch={handleSearch} placeholder="Search travelers by name, city, or interests…" />
 
           {!searchQuery.trim() && (
             <View style={{ marginTop: 32 }}>

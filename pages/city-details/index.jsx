@@ -9,6 +9,7 @@ import {
   View,
 } from "react-native";
 import Icon from "../../components/AppIcon";
+import { Fonts, Palette } from "../../constants/theme";
 import { useDarkMode } from "../../context/DarkModeContext";
 import { getCityById } from "../../services/cityDetails.api";
 import { transformCity } from "../../utils/cityTransform";
@@ -31,11 +32,10 @@ const CityDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const bgPrimary = isDarkMode ? "#111827" : "#f9fafb";
-  const bgCard = isDarkMode ? "#1f2937" : "#fff";
-  const border = isDarkMode ? "#374151" : "#e5e7eb";
-  const textPrimary = isDarkMode ? "#f9fafb" : "#111827";
-  const textSecondary = isDarkMode ? "#9ca3af" : "#6b7280";
+  const bgPrimary = isDarkMode ? Palette.dark.surface : Palette.light.surface;
+  const border = isDarkMode ? Palette.dark.outlineVariant : Palette.light.outlineVariant;
+  const textPrimary = isDarkMode ? Palette.dark.text : Palette.light.text;
+  const textSecondary = isDarkMode ? Palette.dark.textVariant : Palette.light.textVariant;
 
   useEffect(() => {
     const fetchCity = async () => {
@@ -125,7 +125,7 @@ const CityDetails = () => {
           onPress={() => router.replace("/cities")}
           style={{ marginTop: 16 }}
         >
-          <Text style={{ color: "#3b82f6" }}>Back to Cities</Text>
+          <Text style={{ color: "#3b82f6", fontFamily: Fonts.inter.medium }}>Back to Cities</Text>
         </Pressable>
       </View>
     );
@@ -150,7 +150,7 @@ const CityDetails = () => {
             width: 36,
             height: 36,
             borderRadius: 18,
-            backgroundColor: isDarkMode ? "#374151" : "#f3f4f6",
+            backgroundColor: isDarkMode ? Palette.dark.surfaceHigh : Palette.light.surfaceLow,
             alignItems: "center",
             justifyContent: "center",
             marginRight: 8,
@@ -161,7 +161,7 @@ const CityDetails = () => {
         <Text
           style={{
             fontSize: 16,
-            fontWeight: "600",
+            fontFamily: Fonts.inter.semibold,
             color: textPrimary,
             flex: 1,
           }}
@@ -219,7 +219,7 @@ const CityDetails = () => {
                   <Text
                     style={{
                       fontSize: 13,
-                      fontWeight: "500",
+                      fontFamily: Fonts.inter.medium,
                       color: activeTab === tab.id ? "#3b82f6" : textSecondary,
                     }}
                   >

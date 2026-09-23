@@ -54,7 +54,7 @@ export default function Login() {
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
 
   const { from } = useLocalSearchParams();
-  const redirectTo = from || "/community-posts";
+  const redirectTo = from || "/landing";
 
   const onSubmitHandler = async () => {
     if (!email || !password) {

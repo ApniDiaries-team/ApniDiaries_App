@@ -24,18 +24,21 @@ const ChatHeader = ({ contact, onMoreOptions, onAudioCall, onVideoCall }) => {
     });
   };
 
-  const iconColor = isDarkMode ? "#FFFFFF" : "#111827";
-  const nameColor = isDarkMode ? "#FFFFFF" : "#001f3f";
+  const surface = isDarkMode ? "#1E242F" : "#FFF8F6";
+  const iconColor = isDarkMode ? "#FFFFFF" : "#261913";
+  const nameColor = isDarkMode ? "#FFFFFF" : "#261913";
   const statusColor = contact?.isOnline
     ? "#22c55e"
     : isDarkMode
       ? "#A0AEC0"
-      : "#6b7280";
+      : "#594137";
 
   return (
     <View
-      className={`border-b ${isDarkMode ? "bg-[#1A1F29] border-[#2D3748]" : "bg-[#F7FAFC] border-black/10"}`}
       style={{
+        backgroundColor: surface,
+        borderBottomWidth: 1,
+        borderBottomColor: isDarkMode ? "#2D3748" : "#E1BFB2",
         paddingTop: insets.top - 10,
         height: 60 + insets.top,
         alignItems: "center",
@@ -63,12 +66,12 @@ const ChatHeader = ({ contact, onMoreOptions, onAudioCall, onVideoCall }) => {
             <Image
               source={{ uri: getProfilePhotoUrl(contact?.avatar) }}
               className="w-11 h-11 rounded-full"
-              style={{ backgroundColor: isDarkMode ? "#2D3748" : "#E2E8F0" }}
+              style={{ backgroundColor: isDarkMode ? "#2D3748" : "#FFF1EC" }}
             />
             {contact?.isOnline && (
               <View
                 className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2"
-                style={{ borderColor: isDarkMode ? "#1A1F29" : "#F7FAFC" }}
+                style={{ borderColor: surface }}
               />
             )}
           </View>

@@ -428,147 +428,66 @@ const CityFriendList = () => {
             maxWidth: 1280,
             width: "100%",
             alignSelf: "center",
-            paddingHorizontal: 16,
-            paddingVertical: 24,
+            paddingHorizontal: isDesktop ? 64 : 20,
+            paddingTop: width >= 768 ? 56 : 40,
+            paddingBottom: width >= 768 ? 56 : 40,
           }}
         >
-          {/* ── Header ── */}
-          <View style={{ marginBottom: 24 }}>
-            <Text
-              style={{
-                fontSize: isDesktop ? 32 : 24,
-                fontFamily: Fonts.playfair.bold,
-                color: colors.textPrimary,
-                marginBottom: 4,
-              }}
-            >
-              Friends
-            </Text>
-            <Text
-              style={{
-                fontSize: isDesktop ? 16 : 14,
-                fontFamily: Fonts.inter.regular,
-                color: colors.textSecondary,
-              }}
-            >
-              Connect with travelers from around the world
-            </Text>
+          {/* Network title and summary match the web page. */}
+          <Text
+            style={{
+              fontSize: width >= 768 ? 48 : 36,
+              lineHeight: width >= 768 ? 56 : 43,
+              fontFamily: Fonts.playfair.bold,
+              color: colors.textPrimary,
+              marginBottom: 32,
+            }}
+          >
+            Network
+          </Text>
+
+          <View style={{ paddingBottom: 32, borderBottomWidth: 1, borderBottomColor: isDarkMode ? "rgba(255,255,255,0.1)" : colors.border }}>
+            <StatsBar stats={stats} onStatClick={handleStatClick} />
           </View>
 
-          {/* ── Main content ── */}
-          <View style={{ gap: 16 }}>
-            <StatsBar stats={stats} onStatClick={handleStatClick} />
+          <View style={{ flexDirection: isDesktop ? "row" : "column", alignItems: "flex-start", columnGap: 48, rowGap: 48, marginTop: 40 }}>
+            {/* Recent Connections */}
+            <View style={{ flex: isDesktop ? 1 : undefined, width: isDesktop ? undefined : "100%" }}>
+              <Text style={{ fontFamily: Fonts.playfair.bold, fontSize: 24, color: colors.textPrimary, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: isDarkMode ? "rgba(255,255,255,0.1)" : colors.border }}>
+                Recent Connections
+              </Text>
 
-            <View
-              style={{
-                flexDirection: isDesktop ? "row" : "column",
-                gap: 16,
-                alignItems: "flex-start",
-              }}
-            >
-              {/* ── Friends list ── */}
-              <View
-                style={{
-                  flex: isDesktop ? 2 : undefined,
-                  width: isDesktop ? undefined : "100%",
-                  gap: 12,
-                }}
-              >
-                {loadingMessages ? (
-                  <View
-                    style={{
-                      backgroundColor: colors.bgCard,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                      borderRadius: 12,
-                      padding: 24,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      paddingVertical: 64,
-                    }}
-                  >
-                    <ActivityIndicator size="large" color={ORANGE} />
-                    <Text
-                      style={{
-                        marginTop: 12,
-                        fontSize: 14,
-                        fontFamily: Fonts.inter.regular,
-                        color: colors.textSecondary,
-                      }}
-                    >
-                      Loading friends...
-                    </Text>
-                  </View>
-                ) : filteredFriends.length > 0 ? (
-                  <View style={{ gap: 12 }}>
-                    {filteredFriends.map((friend) => (
-                      <View
-                        key={friend?.id}
-                        style={{
-                          backgroundColor: colors.bgCard,
-                          borderWidth: 1,
-                          borderColor: colors.border,
-                          borderRadius: 12,
-                          padding: 16,
-                        }}
-                      >
-                        <View
-                          style={{
-                            backgroundColor: colors.bgCard,
-                            borderWidth: 1,
-                            borderColor: colors.border,
-                            borderRadius: 12,
-                            padding: 12,
-                          }}
-                        >
-                          <FriendCard
-                            friend={friend}
-                            onMessage={handleMessage}
-                            onQuickActions={handleQuickActions}
-                            unreadCount={unreadCounts[friend.id] || 0}
-                          />
-                        </View>
-                      </View>
-                    ))}
-                  </View>
-                ) : (
-                  <View
-                    style={{
-                      backgroundColor: colors.bgCard,
-                      borderWidth: 1,
-                      borderColor: colors.border,
-                      borderRadius: 12,
-                      padding: 24,
-                    }}
-                  >
-                    <EmptyState
-                      filterType={activeFilter}
-                      onResetFilters={handleResetFilters}
+              {loadingMessages ? (
+                <View style={{ paddingVertical: 64, alignItems: "center", justifyContent: "center" }}>
+                  <ActivityIndicator size="small" color={ORANGE} />
+                  <Text style={{ marginTop: 12, fontSize: 14, fontFamily: Fonts.inter.regular, color: colors.textSecondary }}>Loading connections…</Text>
+                </View>
+              ) : filteredFriends.length > 0 ? (
+                <View>
+                  {filteredFriends.map((friend, index) => (
+                    <FriendCard
+                      key={friend?.id}
+                      friend={friend}
+                      onMessage={handleMessage}
+                      onQuickActions={handleQuickActions}
+                      unreadCount={unreadCounts[friend.id] || 0}
+                      showDivider={index < filteredFriends.length - 1}
                     />
-                  </View>
-                )}
-              </View>
-
-              {/* ── Suggested friends sidebar ── */}
-              {suggestedFriends.length > 0 && (
-                <View
-                  style={{
-                    flex: isDesktop ? 1 : undefined,
-                    width: isDesktop ? undefined : "100%",
-                    backgroundColor: colors.bgCard,
-                    borderWidth: 1,
-                    borderColor: colors.border,
-                    borderRadius: 12,
-                    padding: 16,
-                  }}
-                >
-                  <SuggestedFriends
-                    suggestions={suggestedFriends}
-                    onAddFriend={handleAddFriend}
-                  />
+                  ))}
+                </View>
+              ) : (
+                <View style={{ paddingTop: 24 }}>
+                  <EmptyState filterType={activeFilter} onResetFilters={handleResetFilters} />
                 </View>
               )}
             </View>
+
+            {/* Suggested sidebar; on phones it naturally flows below connections. */}
+            {suggestedFriends.length > 0 && (
+              <View style={{ width: isDesktop ? 340 : "100%" }}>
+                <SuggestedFriends suggestions={suggestedFriends} onAddFriend={handleAddFriend} />
+              </View>
+            )}
           </View>
         </View>
       </ScrollView>
@@ -596,3 +515,5 @@ const CityFriendList = () => {
 };
 
 export default CityFriendList;
+
+

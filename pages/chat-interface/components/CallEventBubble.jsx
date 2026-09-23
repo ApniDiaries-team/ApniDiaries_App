@@ -33,10 +33,10 @@ const CallEventBubble = ({ call, isOutgoing, onCallAgain }) => {
       }
     : isOutgoing
       ? {
-          bg: "rgba(59,130,246,0.07)",
-          border: "rgba(59,130,246,0.16)",
-          icon: "#3b82f6",
-          iconBg: "rgba(59,130,246,0.1)",
+          bg: "rgba(162,63,0,0.07)",
+          border: "rgba(162,63,0,0.16)",
+          icon: "#A23F00",
+          iconBg: "rgba(162,63,0,0.1)",
         }
       : {
           bg: "rgba(34,197,94,0.07)",
@@ -96,7 +96,7 @@ const CallEventBubble = ({ call, isOutgoing, onCallAgain }) => {
             style={{
               fontSize: 14,
               fontWeight: "600",
-              color: isDarkMode ? "#fff" : "#111827",
+              color: isDarkMode ? "#fff" : "#261913",
             }}
           >
             {label}
@@ -107,7 +107,7 @@ const CallEventBubble = ({ call, isOutgoing, onCallAgain }) => {
               style={{
                 fontSize: 12,
                 marginTop: 2,
-                color: isDarkMode ? "#9CA3AF" : "#6B7280",
+                color: isDarkMode ? "#9CA3AF" : "#594137",
               }}
             >
               {formatDuration(call.duration)}

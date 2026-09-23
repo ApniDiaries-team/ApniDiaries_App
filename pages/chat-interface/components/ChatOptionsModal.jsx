@@ -58,8 +58,8 @@ const ChatOptionsModal = ({ isOpen, onClose, contactName, onAction }) => {
           <Pressable
             className={`w-full rounded-t-[32px] px-6 pt-8 border-t ${
               isDarkMode
-                ? "bg-[#1A1F29] border-white/5"
-                : "bg-[#F8FAFC] border-black/5"
+                ? "bg-[#1A1F29] border-[#2D3748]"
+                : "bg-[#FFF8F6] border-[#E1BFB2]"
             }`}
             style={{ paddingBottom: Platform.OS === "ios" ? 40 : 24 }}
             onPress={(e) => e.stopPropagation()}
@@ -68,7 +68,7 @@ const ChatOptionsModal = ({ isOpen, onClose, contactName, onAction }) => {
             <View className="flex-row items-start justify-between mb-8">
               <View>
                 <Text
-                  className={`text-2xl font-playfair-semibold ${isDarkMode ? "text-white" : "text-[#001f3f]"}`}
+                  className={`text-2xl font-playfair-semibold ${isDarkMode ? "text-white" : "text-[#261913]"}`}
                 >
                   Chat Options
                 </Text>
@@ -85,7 +85,7 @@ const ChatOptionsModal = ({ isOpen, onClose, contactName, onAction }) => {
                 <Icon
                   name="X"
                   size={22}
-                  color={isDarkMode ? "#FFFFFF" : "#111827"}
+                  color={isDarkMode ? "#FFFFFF" : "#261913"}
                 />
               </Pressable>
             </View>
@@ -121,7 +121,7 @@ const ChatOptionsModal = ({ isOpen, onClose, contactName, onAction }) => {
                             ? "#ef4444"
                             : isDarkMode
                               ? "#FFFFFF"
-                              : "#111827"
+                              : "#261913"
                         }
                         strokeWidth={1.5}
                       />

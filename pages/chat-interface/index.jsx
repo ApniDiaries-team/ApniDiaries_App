@@ -961,7 +961,7 @@ const ChatInterface = () => {
       )}
 
       {loadingMessages ? (
-        <ActivityIndicator style={{ flex: 1 }} color="#FF9933" />
+        <ActivityIndicator style={{ flex: 1 }} color={isDarkMode ? "#ED8936" : "#A23F00"} />
       ) : (
         <FlatList
           ref={flatListRef}

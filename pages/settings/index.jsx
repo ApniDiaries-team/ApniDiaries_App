@@ -571,7 +571,7 @@ const SettingsPage = () => {
               Enter your password to permanently remove your ApniDiaries account and its data.
             </Text>
             <Text style={{ color: textPrimary, fontFamily: Fonts.inter.semibold, fontSize: 12, marginBottom: 7 }}>Confirm your password</Text>
-            <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor, backgroundColor: isDarkMode ? '#0B0E14' : '#FFF1EC', borderRadius: 12, paddingHorizontal: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: border, backgroundColor: isDarkMode ? '#0B0E14' : '#FFF1EC', borderRadius: 12, paddingHorizontal: 12 }}>
               <TextInput
                 value={deletePassword}
                 onChangeText={setDeletePassword}
@@ -586,7 +586,7 @@ const SettingsPage = () => {
               </Pressable>
             </View>
             <View style={{ flexDirection: 'row', gap: 10, marginTop: 20 }}>
-              <Pressable onPress={() => setShowDeleteModal(false)} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 44, borderWidth: 1, borderColor, borderRadius: 12 }}>
+              <Pressable onPress={() => setShowDeleteModal(false)} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 44, borderWidth: 1, borderColor: border, borderRadius: 12 }}>
                 <Text style={{ color: textPrimary, fontFamily: Fonts.inter.semibold, fontSize: 13 }}>Cancel</Text>
               </Pressable>
               <Pressable onPress={handleDeleteAccount} disabled={deleteLoading} style={{ flex: 1, alignItems: 'center', justifyContent: 'center', minHeight: 44, backgroundColor: '#BA1A1A', borderRadius: 12, opacity: deleteLoading ? 0.6 : 1 }}>

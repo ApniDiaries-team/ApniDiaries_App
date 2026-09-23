@@ -1,145 +1,31 @@
 import { Pressable, Text, View } from "react-native";
 import Icon from "../../../components/AppIcon";
-import { Fonts } from "../../../constants/theme";
+import { Fonts, Palette } from "../../../constants/theme";
 import { useDarkMode } from "../../../context/DarkModeContext";
 
 const EmptyState = ({ filterType, onResetFilters }) => {
   const { isDarkMode } = useDarkMode();
-
-  const colors = {
-    bgCard: isDarkMode ? "#1E242F" : "#FFFFFF",
-    bgSecondary: isDarkMode ? "#1A1F29" : "#FFF1EC",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#111827",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#6b7280",
-    border: isDarkMode ? "#2D3748" : "#E1BFB2",
-  };
-
-  const getEmptyStateContent = () => {
-    switch (filterType) {
-      case "friends":
-        return {
-          icon: "UserCheck",
-          title: "No friends in this city",
-          description: "Start connecting with travelers to build your network",
-          action: "Explore All Travelers",
-        };
-      case "followers":
-        return {
-          icon: "UserPlus",
-          title: "No followers yet",
-          description: "Share your travel stories to attract followers",
-          action: "View All Travelers",
-        };
-      case "available":
-        return {
-          icon: "Calendar",
-          title: "No travelers available",
-          description: "Check back later or explore other cities",
-          action: "Change City",
-        };
-      default:
-        return {
-          icon: "Users",
-          title: "No travelers found",
-          description: "Try adjusting your filters or explore other cities",
-          action: "Reset Filters",
-        };
-    }
-  };
-
-  const content = getEmptyStateContent();
+  const textPrimary = isDarkMode ? Palette.dark.text : Palette.light.text;
+  const textMuted = isDarkMode ? Palette.dark.textVariant : Palette.light.textVariant;
+  const content = filterType === "friends"
+    ? { title: "No connections in this city", description: "Start connecting with travelers to build your network", action: "Explore All Travelers" }
+    : filterType === "followers"
+      ? { title: "No followers yet", description: "Share your travel stories to attract followers", action: "View All Travelers" }
+      : filterType === "available"
+        ? { title: "No travelers available", description: "Check back later or explore other cities", action: "Change City" }
+        : { title: "No connections found", description: "Try adjusting your filters or explore other cities", action: "Reset Filters" };
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.bgCard,
-        borderRadius: 12,
-        padding: 32,
-        paddingVertical: 48,
-        borderWidth: 1,
-        borderColor: colors.border,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.05,
-        shadowRadius: 2,
-        elevation: 1,
-      }}
-    >
-      <View style={{ maxWidth: 448, width: "100%", alignItems: "center" }}>
-        {/* ── Icon circle — mirrors web's w-16/w-20 rounded-full ── */}
-        <View
-          style={{
-            width: 80,
-            height: 80,
-            borderRadius: 40,
-            backgroundColor: colors.bgSecondary,
-            alignItems: "center",
-            justifyContent: "center",
-            marginBottom: 16,
-          }}
-        >
-          <Icon name={content?.icon} size={32} color={colors.textSecondary} />
-        </View>
-
-        {/* ── Title — mirrors web's text-lg/text-xl font-semibold ── */}
-        <Text
-          style={{
-            fontSize: 20,
-            fontFamily: Fonts.playfair.bold,
-            color: colors.textPrimary,
-            marginBottom: 8,
-            textAlign: "center",
-          }}
-        >
-          {content?.title}
-        </Text>
-
-        {/* ── Description — mirrors web's text-sm/text-base ── */}
-        <Text
-          style={{
-            fontSize: 14,
-            fontFamily: "Inter_400Regular",
-            color: colors.textSecondary,
-            marginBottom: 24,
-            textAlign: "center",
-            lineHeight: 20,
-          }}
-        >
-          {content?.description}
-        </Text>
-
-        {/* ── Button — mirrors web's !bg-[#F97316] shadow-lg ── */}
-        <Pressable
-          onPress={onResetFilters}
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 8,
-            paddingHorizontal: 24,
-            paddingVertical: 12,
-            borderRadius: 8,
-            backgroundColor: "#F97316",
-            shadowColor: "#F97316",
-            shadowOffset: { width: 0, height: 4 },
-            shadowOpacity: 0.3,
-            shadowRadius: 8,
-            elevation: 4,
-            opacity: 1,
-          }}
-        >
-          <Icon name="RefreshCw" size={16} color="#FFFFFF" />
-          <Text
-            style={{
-              color: "#FFFFFF",
-              fontSize: 14,
-              fontFamily: "Inter_600SemiBold",
-            }}
-          >
-            {content?.action}
-          </Text>
-        </Pressable>
+    <View style={{ alignItems: "center", paddingVertical: 64 }}>
+      <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: isDarkMode ? Palette.dark.surfaceLow : Palette.light.surfaceLow, alignItems: "center", justifyContent: "center", marginBottom: 20 }}>
+        <Icon name="Users" size={26} color={textMuted} />
       </View>
+      <Text style={{ fontFamily: Fonts.playfair.semibold, fontSize: 20, color: textPrimary, marginBottom: 8, textAlign: "center" }}>{content.title}</Text>
+      <Text style={{ fontFamily: Fonts.inter.regular, fontSize: 14, lineHeight: 20, color: textMuted, marginBottom: 24, maxWidth: 300, textAlign: "center" }}>{content.description}</Text>
+      <Pressable onPress={onResetFilters} style={{ flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 20, paddingVertical: 10, borderRadius: 999, backgroundColor: isDarkMode ? Palette.dark.primary : Palette.light.primary }}>
+        <Icon name="RefreshCw" size={15} color={isDarkMode ? Palette.dark.onPrimary : Palette.light.onPrimary} />
+        <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 14, color: isDarkMode ? Palette.dark.onPrimary : Palette.light.onPrimary }}>{content.action}</Text>
+      </Pressable>
     </View>
   );
 };

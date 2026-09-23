@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Pressable, ScrollView, Text, TextInput, View } from "react-native";
+import { Pressable, Text, TextInput, View } from "react-native";
 import Icon from "../../../components/AppIcon";
 import { useDarkMode } from "../../../context/DarkModeContext";
 
@@ -55,66 +55,32 @@ const suggestedItineraries = [
 ];
 
 // ── Reusable chip select — RN equivalent of web's Select ──
-const ChipSelect = ({
-  label,
-  options,
-  value,
-  onChange,
-  isDarkMode,
-  colors,
-}) => (
-  <View style={{ marginBottom: 16 }}>
-    <Text
-      style={{
-        fontSize: 14,
-        fontWeight: "500",
-        color: colors.textPrimary,
-        marginBottom: 8,
-      }}
-    >
-      {label}
-    </Text>
-    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-      <View style={{ flexDirection: "row", gap: 8 }}>
-        {options.map((opt) => (
-          <Pressable
-            key={opt.value}
-            onPress={() => onChange(opt.value)}
-            style={{
-              paddingHorizontal: 12,
-              paddingVertical: 6,
-              borderRadius: 999,
-              borderWidth: 1,
-              backgroundColor: value === opt.value ? "#FF9933" : "transparent",
-              borderColor: value === opt.value ? "#FF9933" : colors.border,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 12,
-                fontWeight: "500",
-                color: value === opt.value ? "#fff" : colors.textSecondary,
-              }}
-            >
-              {opt.label}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-    </ScrollView>
-  </View>
-);
-
+const ChipSelect = ({ label, options, value, onChange, colors }) => {
+  const [open, setOpen] = useState(false);
+  const selected = options.find((option) => option.value === value);
+  return (
+    <View style={{ marginBottom: 16, zIndex: open ? 10 : 1 }}>
+      <Text style={{ fontSize: 14, fontWeight: "500", color: colors.textPrimary, marginBottom: 8 }}>{label}</Text>
+      <Pressable onPress={() => setOpen((current) => !current)} style={{ minHeight: 44, flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 12, borderRadius: 8, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.bgInput }}>
+        <Text style={{ fontSize: 14, color: selected ? colors.textPrimary : colors.textSecondary }}>{selected?.label || "Select an option"}</Text>
+        <Icon name={open ? "ChevronUp" : "ChevronDown"} size={16} color={colors.textSecondary} />
+      </Pressable>
+      {open && <View style={{ marginTop: 4, borderWidth: 1, borderColor: colors.border, borderRadius: 8, overflow: "hidden", backgroundColor: colors.bg, elevation: 4 }}>{options.map((option) => <Pressable key={option.value} onPress={() => { onChange(option.value); setOpen(false); }} style={{ paddingHorizontal: 12, paddingVertical: 11, backgroundColor: value === option.value ? colors.selection : "transparent" }}><Text style={{ fontSize: 14, color: value === option.value ? colors.brandPrimary : colors.textPrimary }}>{option.label}</Text></Pressable>)}</View>}
+    </View>
+  );
+};
 const TripPlanningTab = ({ cityName, onCreateTrip }) => {
   const { isDarkMode } = useDarkMode();
 
   const colors = {
-    bg: isDarkMode ? "#1f2937" : "#fff",
-    bgSecondary: isDarkMode ? "#374151" : "#f3f4f6",
-    bgInput: isDarkMode ? "#111827" : "#f9fafb",
-    border: isDarkMode ? "#374151" : "#e5e7eb",
-    textPrimary: isDarkMode ? "#f9fafb" : "#111827",
-    textSecondary: isDarkMode ? "#9ca3af" : "#6b7280",
+    bg: isDarkMode ? "#1E242F" : "#FFF8F6",
+    bgSecondary: isDarkMode ? "#1A1F29" : "#FFF1EC",
+    bgInput: isDarkMode ? "#1A1F29" : "#FFF1EC",
+    border: isDarkMode ? "#2D3748" : "#E1BFB2",
+    textPrimary: isDarkMode ? "#FFFFFF" : "#261913",
+    textSecondary: isDarkMode ? "#A0AEC0" : "#594137",
+    brandPrimary: isDarkMode ? "#ED8936" : "#A23F00",
+    selection: isDarkMode ? "rgba(237,137,54,0.18)" : "#FCE8DC",
   };
 
   const [tripData, setTripData] = useState({
@@ -400,7 +366,7 @@ const TripPlanningTab = ({ cityName, onCreateTrip }) => {
               gap: 8,
               paddingVertical: 12,
               borderRadius: 8,
-              backgroundColor: "#FF9933",
+              backgroundColor: colors.brandPrimary,
             }}
           >
             <Icon name="Calendar" size={18} color="#fff" />
@@ -584,3 +550,6 @@ const TripPlanningTab = ({ cityName, onCreateTrip }) => {
 };
 
 export default TripPlanningTab;
+
+
+

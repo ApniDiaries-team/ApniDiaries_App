@@ -23,12 +23,12 @@ import { ViewField } from "./ViewField";
 //         style={{
 //           fontSize: 14,
 //           fontWeight: "500",
-//           color: isDarkMode ? "#9ca3af" : "#6b7280",
+//           color: isDarkMode ? "#A0AEC0" : "#594137",
 //         }}
 //       >
 //         {label}
 //       </Text>
-//       <Text style={{ fontSize: 16, color: isDarkMode ? "#f9fafb" : "#111827" }}>
+//       <Text style={{ fontSize: 16, color: isDarkMode ? "#FFFFFF" : "#261913" }}>
 //         {value || "—"}
 //       </Text>
 //     </View>
@@ -45,7 +45,7 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
         style={{
           fontSize: 14,
           fontWeight: "500",
-          color: isDarkMode ? "#f9fafb" : "#111827",
+          color: isDarkMode ? "#FFFFFF" : "#261913",
         }}
       >
         Trip Type
@@ -62,8 +62,8 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
           paddingVertical: 12,
           borderRadius: 8,
           borderWidth: 1,
-          borderColor: open ? "#9ca3af" : isDarkMode ? "#374151" : "#e5e7eb",
-          backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+          borderColor: open ? "#A0AEC0" : isDarkMode ? "#2D3748" : "#E1BFB2",
+          backgroundColor: isDarkMode ? "#261913" : "#FFFFFF",
         }}
       >
         <Text
@@ -71,11 +71,11 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
             fontSize: 14,
             color: selected
               ? isDarkMode
-                ? "#f9fafb"
-                : "#111827"
+                ? "#FFFFFF"
+                : "#261913"
               : isDarkMode
-                ? "#6b7280"
-                : "#9ca3af",
+                ? "#594137"
+                : "#A0AEC0",
           }}
         >
           {selected ? selected.label : "Select trip type"}
@@ -83,7 +83,7 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
         <Icon
           name={open ? "ChevronUp" : "ChevronDown"}
           size={16}
-          color={isDarkMode ? "#9ca3af" : "#6b7280"}
+          color={isDarkMode ? "#A0AEC0" : "#594137"}
         />
       </Pressable>
 
@@ -93,8 +93,8 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
           style={{
             borderRadius: 8,
             borderWidth: 1,
-            borderColor: isDarkMode ? "#374151" : "#e5e7eb",
-            backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+            borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
+            backgroundColor: isDarkMode ? "#1E242F" : "#fff",
             overflow: "hidden",
             elevation: 8,
             shadowColor: "#000",
@@ -114,7 +114,7 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
                 paddingHorizontal: 16,
                 paddingVertical: 12,
                 backgroundColor:
-                  value === opt.value ? "#FF9933" : "transparent",
+                  value === opt.value ? (isDarkMode ? "#ED8936" : "#A23F00") : "transparent",
               }}
             >
               <Text
@@ -125,8 +125,8 @@ const TripTypeDropdown = ({ options, value, onChange, isDarkMode }) => {
                     value === opt.value
                       ? "#fff"
                       : isDarkMode
-                        ? "#f9fafb"
-                        : "#111827",
+                        ? "#FFFFFF"
+                        : "#261913",
                 }}
               >
                 {opt.label}
@@ -157,7 +157,7 @@ const InputField = ({
         style={{
           fontSize: 14,
           fontWeight: "500",
-          color: isDarkMode ? "#f9fafb" : "#111827",
+          color: isDarkMode ? "#FFFFFF" : "#261913",
         }}
       >
         {label}
@@ -168,21 +168,21 @@ const InputField = ({
       value={value}
       onChangeText={onChangeText}
       placeholder={placeholder}
-      placeholderTextColor={isDarkMode ? "#6b7280" : "#9ca3af"}
+      placeholderTextColor={isDarkMode ? "#594137" : "#A0AEC0"}
       keyboardType={keyboardType || "default"}
       style={{
         paddingHorizontal: 16,
         paddingVertical: 12,
         borderRadius: 8,
         borderWidth: 1,
-        borderColor: error ? "#ef4444" : isDarkMode ? "#374151" : "#e5e7eb",
-        backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+        borderColor: error ? "#ef4444" : isDarkMode ? "#2D3748" : "#E1BFB2",
+        backgroundColor: isDarkMode ? "#261913" : "#FFFFFF",
         fontSize: 14,
-        color: isDarkMode ? "#f9fafb" : "#111827",
+        color: isDarkMode ? "#FFFFFF" : "#261913",
       }}
     />
     {description && !error && (
-      <Text style={{ fontSize: 12, color: isDarkMode ? "#9ca3af" : "#6b7280" }}>
+      <Text style={{ fontSize: 12, color: isDarkMode ? "#A0AEC0" : "#594137" }}>
         {description}
       </Text>
     )}
@@ -210,7 +210,7 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
           style={{
             fontSize: 14,
             fontWeight: "500",
-            color: isDarkMode ? "#f9fafb" : "#111827",
+            color: isDarkMode ? "#FFFFFF" : "#261913",
           }}
         >
           {label}
@@ -224,8 +224,8 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
           paddingVertical: 12,
           borderRadius: 8,
           borderWidth: 1,
-          borderColor: error ? "#ef4444" : isDarkMode ? "#374151" : "#e5e7eb",
-          backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+          borderColor: error ? "#ef4444" : isDarkMode ? "#2D3748" : "#E1BFB2",
+          backgroundColor: isDarkMode ? "#261913" : "#FFFFFF",
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
@@ -236,11 +236,11 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
             fontSize: 14,
             color: value
               ? isDarkMode
-                ? "#f9fafb"
-                : "#111827"
+                ? "#FFFFFF"
+                : "#261913"
               : isDarkMode
-                ? "#6b7280"
-                : "#9ca3af",
+                ? "#594137"
+                : "#A0AEC0",
           }}
         >
           {value || "Select date"}
@@ -248,7 +248,7 @@ const DateField = ({ label, value, onChange, error, required, isDarkMode }) => {
         <Icon
           name="Calendar"
           size={16}
-          color={isDarkMode ? "#9ca3af" : "#6b7280"}
+          color={isDarkMode ? "#A0AEC0" : "#594137"}
         />
       </Pressable>
       {error && <Text style={{ fontSize: 12, color: "#ef4444" }}>{error}</Text>}
@@ -277,6 +277,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
     description: "",
     tripType: "solo",
     budget: "",
+    visibility: "only_me",
   });
   const [errors, setErrors] = useState({});
 
@@ -295,12 +296,13 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
       setFormData({
         title: tripData.title || "",
         destination: tripData.destination || "",
-        startDate: tripData.start_date?.slice(0, 10),
-        endDate: tripData.end_date?.slice(0, 10),
-        tripType: tripData.trip_type || "",
-        tripStatus: tripData.trip_status || "planned",
+        startDate: (tripData.startDate || tripData.start_date)?.slice(0, 10),
+        endDate: (tripData.endDate || tripData.end_date)?.slice(0, 10),
+        tripType: tripData.tripType || tripData.trip_type || "",
+        tripStatus: tripData.status || tripData.trip_status || "planned",
         budget: tripData.budget || "",
         description: tripData.description || "",
+        visibility: tripData.visibility || "only_me",
       });
     } else {
       setFormData({
@@ -311,6 +313,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
         tripType: "",
         tripStatus: "planned",
         budget: "",
+        visibility: "only_me",
         description: "",
       });
     }
@@ -355,6 +358,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
         description: "",
         tripType: "solo",
         budget: "",
+        visibility: "only_me",
       });
       setErrors({});
     }
@@ -370,6 +374,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
       description: "",
       tripType: "solo",
       budget: "",
+    visibility: "only_me",
     });
     setErrors({});
     onClose();
@@ -412,13 +417,13 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
         {/* matches web: bg-[var(--color-bg-card)] rounded-xl max-w-2xl max-h-[90vh] border */}
         <View
           style={{
-            backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+            backgroundColor: isDarkMode ? "#1E242F" : "#fff",
             borderRadius: 12,
             width: "100%",
             maxWidth: 672, // max-w-2xl
             maxHeight: "90%",
             borderWidth: 1,
-            borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+            borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
             overflow: "hidden",
           }}
         >
@@ -431,8 +436,8 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
               paddingHorizontal: 24,
               paddingVertical: 16,
               borderBottomWidth: 1,
-              borderBottomColor: isDarkMode ? "#374151" : "#e5e7eb",
-              backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+              borderBottomColor: isDarkMode ? "#2D3748" : "#E1BFB2",
+              backgroundColor: isDarkMode ? "#1E242F" : "#fff",
             }}
           >
             {/* matches web: flex items-center gap-3 */}
@@ -447,14 +452,14 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                   backgroundColor: "rgba(59,130,246,0.1)",
                 }}
               >
-                <Icon name="Plus" size={20} color="#3b82f6" />
+                <Icon name="Plus" size={20} color={(isDarkMode ? "#ED8936" : "#A23F00")} />
               </View>
               {/* matches web: text-xl md:text-2xl font-semibold text-[var(--color-text-primary)] */}
               <Text
                 style={{
                   fontSize: 20,
                   fontFamily: Fonts.playfair.bold,
-                  color: isDarkMode ? "#f9fafb" : "#111827",
+                  color: isDarkMode ? "#FFFFFF" : "#261913",
                 }}
               >
                 {action} Trip
@@ -476,7 +481,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
               <Icon
                 name="X"
                 size={20}
-                color={isDarkMode ? "#9ca3af" : "#6b7280"}
+                color={isDarkMode ? "#A0AEC0" : "#594137"}
               />
             </Pressable>
           </View>
@@ -558,6 +563,28 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
               />
             )}
 
+            {/* Security Clearance / trip visibility */}
+            {isView ? (
+              <ViewField label="Visibility" value={{ only_me: "Only Me", private: "Private", public: "Public" }[formData?.visibility] || "Only Me"} />
+            ) : (
+              <View style={{ gap: 10 }}>
+                <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 12, letterSpacing: 0.8, textTransform: "uppercase", color: isDarkMode ? "#A0AEC0" : "#594137" }}>06. Security Clearance</Text>
+                {[
+                  { value: "only_me", label: "Only Me", description: "Just for you — private journal", icon: "Eye" },
+                  { value: "private", label: "Private", description: "Friends can see and join", icon: "Lock" },
+                  { value: "public", label: "Public", description: "Anyone can discover and join", icon: "Globe2" },
+                ].map((option) => {
+                  const active = (formData?.visibility || "only_me") === option.value;
+                  return (
+                    <Pressable key={option.value} onPress={() => handleChange("visibility", option.value)} style={{ flexDirection: "row", alignItems: "center", gap: 12, padding: 14, borderRadius: 12, borderWidth: 1, borderColor: active ? (isDarkMode ? "#ED8936" : "#A23F00") : isDarkMode ? "#2D3748" : "#E1BFB2", backgroundColor: active ? (isDarkMode ? "rgba(237,137,54,0.1)" : "rgba(162,63,0,0.05)") : "transparent" }}>
+                      <Icon name={option.icon} size={18} color={active ? (isDarkMode ? "#ED8936" : "#A23F00") : isDarkMode ? "#A0AEC0" : "#594137"} />
+                      <View style={{ flex: 1 }}><Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 14, color: isDarkMode ? "#FFFFFF" : "#261913" }}>{option.label}</Text><Text style={{ fontFamily: Fonts.inter.regular, fontSize: 12, color: isDarkMode ? "#A0AEC0" : "#594137", marginTop: 3 }}>{option.description}</Text></View>
+                      {active && <Icon name="Check" size={18} color={isDarkMode ? "#ED8936" : "#A23F00"} />}
+                    </Pressable>
+                  );
+                })}
+              </View>
+            )}
             {/* Budget — matches web: description='Estimated budget in ₹ INR' */}
             {isView ? (
               <ViewField label="Budget" value={formData?.budget} />
@@ -583,7 +610,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                   style={{
                     fontSize: 14,
                     fontWeight: "500",
-                    color: isDarkMode ? "#f9fafb" : "#111827",
+                    color: isDarkMode ? "#FFFFFF" : "#261913",
                   }}
                 >
                   Description (Optional)
@@ -593,7 +620,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                   value={formData?.description}
                   onChangeText={(v) => handleChange("description", v)}
                   placeholder="Add trip details, itinerary highlights, or special notes..."
-                  placeholderTextColor={isDarkMode ? "#6b7280" : "#9ca3af"}
+                  placeholderTextColor={isDarkMode ? "#594137" : "#A0AEC0"}
                   multiline
                   numberOfLines={4}
                   textAlignVertical="top"
@@ -602,10 +629,10 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                     paddingVertical: 12,
                     borderRadius: 8,
                     borderWidth: 1,
-                    borderColor: isDarkMode ? "#374151" : "#e5e7eb",
-                    backgroundColor: isDarkMode ? "#111827" : "#f9fafb",
+                    borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
+                    backgroundColor: isDarkMode ? "#261913" : "#FFFFFF",
                     fontSize: 14,
-                    color: isDarkMode ? "#f9fafb" : "#111827",
+                    color: isDarkMode ? "#FFFFFF" : "#261913",
                     minHeight: 100,
                   }}
                 />
@@ -626,11 +653,11 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                     alignItems: "center",
                     justifyContent: "center",
                     borderWidth: 1.5,
-                    borderColor: "#FF9933",
+                    borderColor: (isDarkMode ? "#ED8936" : "#A23F00"),
                     gap: 8,
                     paddingVertical: 13,
                     borderRadius: 20,
-                    backgroundColor: "#FF9933",
+                    backgroundColor: (isDarkMode ? "#ED8936" : "#A23F00"),
                   }}
                 >
                   <Icon name="Plus" size={16} color="#fff" />
@@ -649,7 +676,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                     paddingVertical: 13,
                     borderRadius: 20,
                     borderWidth: 1.5,
-                    borderColor: "#FF9933",
+                    borderColor: (isDarkMode ? "#ED8936" : "#A23F00"),
                     alignItems: "center",
                     backgroundColor: "transparent",
                   }}
@@ -658,7 +685,7 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
                     style={{
                       fontSize: 14,
                       fontWeight: "600",
-                      color: "#FF9933",
+                      color: (isDarkMode ? "#ED8936" : "#A23F00"),
                     }}
                   >
                     Cancel
@@ -674,3 +701,8 @@ const CreateTripModal = ({ isOpen, onClose, onSubmit, tripData, action }) => {
 };
 
 export default CreateTripModal;
+
+
+
+
+

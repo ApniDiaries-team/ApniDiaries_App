@@ -69,27 +69,27 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
             alignItems: "center",
             gap: 8,
             backgroundColor: isSent
-              ? "rgba(0,122,255,0.1)"
+              ? (isDarkMode ? "rgba(237,137,54,0.12)" : "rgba(162,63,0,0.08)")
               : isDarkMode
-                ? "#1A1F29"
-                : "#fff",
+                ? "#1E242F"
+                : "#FFF8F6",
             borderWidth: 1,
             borderStyle: "dashed",
             borderColor: isDarkMode
               ? "rgba(255,255,255,0.1)"
-              : "rgba(0,0,0,0.1)",
+              : "#E1BFB2",
           }}
         >
           <Icon
             name="EyeOff"
             size={14}
-            color={isDarkMode ? "#A0AEC0" : "#6b7280"}
+            color={isDarkMode ? "#A0AEC0" : "#594137"}
           />
           <Text
             style={{
               fontSize: 12,
               fontStyle: "italic",
-              color: isDarkMode ? "#A0AEC0" : "#6b7280",
+              color: isDarkMode ? "#A0AEC0" : "#594137",
             }}
           >
             Opened
@@ -98,7 +98,7 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
             style={{
               fontSize: 10,
               marginLeft: "auto",
-              color: isDarkMode ? "#A0AEC0" : "#6b7280",
+              color: isDarkMode ? "#A0AEC0" : "#594137",
             }}
           >
             {time}
@@ -127,15 +127,15 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
           overflow: "hidden",
           borderWidth: 1.5,
           borderColor: isSent
-            ? "rgba(0,122,255,0.3)"
+            ? (isDarkMode ? "rgba(237,137,54,0.3)" : "rgba(162,63,0,0.24)")
             : isDarkMode
               ? "rgba(255,255,255,0.1)"
-              : "rgba(0,0,0,0.1)",
+              : "#E1BFB2",
           backgroundColor: isSent
-            ? "rgba(0,122,255,0.08)"
+            ? (isDarkMode ? "rgba(237,137,54,0.1)" : "rgba(162,63,0,0.08)")
             : isDarkMode
-              ? "#1A1F29"
-              : "#fff",
+              ? "#1E242F"
+              : "#FFF8F6",
         }}
       >
         <View
@@ -155,27 +155,27 @@ const OnceViewMedia = ({ message, isSent, isDarkMode }) => {
               alignItems: "center",
               justifyContent: "center",
               backgroundColor: isSent
-                ? "rgba(0,122,255,0.15)"
-                : "rgba(255,153,51,0.12)",
+                ? (isDarkMode ? "rgba(237,137,54,0.16)" : "rgba(162,63,0,0.12)")
+                : (isDarkMode ? "rgba(237,137,54,0.12)" : "rgba(162,63,0,0.08)"),
             }}
           >
             <Icon
               name={isSent ? "Lock" : "Eye"}
               size={18}
-              color={isSent ? "#007AFF" : "#FF9933"}
+              color={isDarkMode ? "#ED8936" : "#A23F00"}
             />
           </View>
           <Text
             style={{
               fontSize: 12,
               fontWeight: "600",
-              color: isSent ? "#007AFF" : "#FF9933",
+              color: isDarkMode ? "#ED8936" : "#A23F00",
             }}
           >
             {isSent ? "Once-view sent" : "Tap to view"}
           </Text>
           <Text
-            style={{ fontSize: 10, color: isDarkMode ? "#A0AEC0" : "#6b7280" }}
+            style={{ fontSize: 10, color: isDarkMode ? "#A0AEC0" : "#594137" }}
           >
             {message.mediaType === "video" ? "Video" : "Photo"} · disappears
             after viewing
@@ -332,7 +332,7 @@ const StickerBubble = ({ message, isSent }) => {
             gap: 4,
           }}
         >
-          <Text style={{ fontSize: 10, color: "#6b7280" }}>{time}</Text>
+          <Text style={{ fontSize: 10, color: "#594137" }}>{time}</Text>
           {isSent && <TickIcon status={message?.status} />}
         </View>
       </View>
@@ -362,13 +362,13 @@ const MediaBubble = ({ message, isSent, isDarkMode }) => {
           maxWidth: "70%",
           borderRadius: 16,
           overflow: "hidden",
-          backgroundColor: isSent ? "#007AFF" : isDarkMode ? "#1A1F29" : "#fff",
+          backgroundColor: isSent ? (isDarkMode ? "#ED8936" : "#A23F00") : isDarkMode ? "#1E242F" : "#FFF8F6",
           borderWidth: 1,
           borderColor: isSent
-            ? "#007AFF"
+            ? (isDarkMode ? "#ED8936" : "#A23F00")
             : isDarkMode
               ? "rgba(255,255,255,0.1)"
-              : "rgba(0,0,0,0.1)",
+              : "#E1BFB2",
         }}
       >
         {/* Image / Video */}
@@ -444,16 +444,16 @@ const MediaBubble = ({ message, isSent, isDarkMode }) => {
               paddingHorizontal: 12,
               paddingVertical: 6,
               backgroundColor: isSent
-                ? "#007AFF"
+                ? (isDarkMode ? "#ED8936" : "#A23F00")
                 : isDarkMode
-                  ? "#1A1F29"
-                  : "#fff",
+                  ? "#1E242F"
+                  : "#FFF8F6",
             }}
           >
             <Text
               style={{
                 fontSize: 14,
-                color: isSent ? "white" : isDarkMode ? "white" : "#111827",
+                color: isSent ? "white" : isDarkMode ? "white" : "#261913",
               }}
             >
               {message.text}
@@ -533,28 +533,28 @@ const MessageBubble = ({ message, isSent }) => {
             paddingHorizontal: 12,
             paddingVertical: 8,
             backgroundColor: isSent
-              ? "rgba(0,122,255,0.1)"
+              ? (isDarkMode ? "rgba(237,137,54,0.12)" : "rgba(162,63,0,0.08)")
               : isDarkMode
-                ? "#1A1F29"
-                : "#f9fafb",
+                ? "#1E242F"
+                : "#FFF8F6",
             borderWidth: 1,
             borderStyle: "dashed",
             borderColor: isDarkMode
               ? "rgba(255,255,255,0.1)"
-              : "rgba(0,0,0,0.1)",
+              : "#E1BFB2",
           }}
         >
           <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             <Icon
               name="Lock"
               size={12}
-              color={isDarkMode ? "#A0AEC0" : "#6b7280"}
+              color={isDarkMode ? "#A0AEC0" : "#594137"}
             />
             <Text
               style={{
                 fontSize: 12,
                 fontStyle: "italic",
-                color: isDarkMode ? "#A0AEC0" : "#6b7280",
+                color: isDarkMode ? "#A0AEC0" : "#594137",
               }}
             >
               Encrypted message
@@ -571,7 +571,7 @@ const MessageBubble = ({ message, isSent }) => {
             <Text
               style={{
                 fontSize: 10,
-                color: isDarkMode ? "#A0AEC0" : "#6b7280",
+                color: isDarkMode ? "#A0AEC0" : "#594137",
               }}
             >
               {time}
@@ -602,7 +602,7 @@ const MessageBubble = ({ message, isSent }) => {
             paddingHorizontal: 12,
             paddingTop: 8,
             paddingBottom: 6,
-            backgroundColor: "#007AFF",
+            backgroundColor: (isDarkMode ? "#ED8936" : "#A23F00"),
           }}
         >
           <Text
@@ -652,16 +652,16 @@ const MessageBubble = ({ message, isSent }) => {
           paddingHorizontal: 12,
           paddingTop: 8,
           paddingBottom: 6,
-          backgroundColor: isDarkMode ? "#1A1F29" : "#fff",
+          backgroundColor: isDarkMode ? "#1E242F" : "#FFF8F6",
           borderWidth: 1,
-          borderColor: isDarkMode ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.1)",
+          borderColor: isDarkMode ? "rgba(255,255,255,0.1)" : "#E1BFB2",
         }}
       >
         <Text
           style={{
             fontSize: 15,
             lineHeight: 20,
-            color: isDarkMode ? "#fff" : "#111827",
+            color: isDarkMode ? (isDarkMode ? "#1E242F" : "#FFF8F6") : "#261913",
           }}
         >
           {message?.text}
@@ -674,7 +674,7 @@ const MessageBubble = ({ message, isSent }) => {
           }}
         >
           <Text
-            style={{ fontSize: 10, color: isDarkMode ? "#A0AEC0" : "#6b7280" }}
+            style={{ fontSize: 10, color: isDarkMode ? "#A0AEC0" : "#594137" }}
           >
             {time}
           </Text>

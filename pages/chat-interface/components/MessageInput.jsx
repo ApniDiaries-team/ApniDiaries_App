@@ -19,7 +19,7 @@ import Icon from "../../../components/AppIcon";
 import { useDarkMode } from "../../../context/DarkModeContext";
 
 const GIF_API_KEY = "GlVGYHkr3WSBnllca54iNt0yFbjz7L65";
-const ORANGE = "#FF9933";
+const ORANGE = "#A23F00";
 
 const EMOJI_TABS = [
   {
@@ -329,8 +329,8 @@ const MediaPreview = ({ files, onRemove }) => {
 // ─── EmojiPanel — renders inline above input bar ──────────────────────────────
 const EmojiPanel = ({ onSelect, isDarkMode }) => {
   const [tab, setTab] = useState(0);
-  const bg = isDarkMode ? "#1E242F" : "#ffffff";
-  const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
+  const bg = isDarkMode ? "#1E242F" : "#FFF8F6";
+  const bdr = isDarkMode ? "#2D3748" : "#E1BFB2";
 
   return (
     <View
@@ -391,9 +391,9 @@ const EmojiPanel = ({ onSelect, isDarkMode }) => {
 
 // ─── StickerPanel — renders inline above input bar ────────────────────────────
 const StickerPanel = ({ onSelect, isDarkMode }) => {
-  const bg = isDarkMode ? "#1E242F" : "#ffffff";
-  const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
-  const sub = isDarkMode ? "#A0AEC0" : "#94a3b8";
+  const bg = isDarkMode ? "#1E242F" : "#FFF8F6";
+  const bdr = isDarkMode ? "#2D3748" : "#E1BFB2";
+  const sub = isDarkMode ? "#A0AEC0" : "#8A7164";
 
   return (
     <View
@@ -442,11 +442,11 @@ const GifPanel = ({ onSelect, isDarkMode }) => {
   const [error, setError] = useState(null);
   const debounceRef = useRef(null);
 
-  const bg = isDarkMode ? "#1E242F" : "#ffffff";
-  const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
-  const inputBg = isDarkMode ? "#1A1F29" : "#f1f5f9";
-  const sub = isDarkMode ? "#A0AEC0" : "#94a3b8";
-  const textColor = isDarkMode ? "#ffffff" : "#0f172a";
+  const bg = isDarkMode ? "#1E242F" : "#FFF8F6";
+  const bdr = isDarkMode ? "#2D3748" : "#E1BFB2";
+  const inputBg = isDarkMode ? "#1A1F29" : "#FFF1EC";
+  const sub = isDarkMode ? "#A0AEC0" : "#8A7164";
+  const textColor = isDarkMode ? "#FFF8F6" : "#261913";
 
   const fetchGifs = async (q = "") => {
     setLoading(true);
@@ -526,7 +526,7 @@ const GifPanel = ({ onSelect, isDarkMode }) => {
               borderColor: "rgba(255,153,51,0.4)",
             }}
           >
-            <Text style={{ fontSize: 12, color: "#FF9933" }}>Retry</Text>
+            <Text style={{ fontSize: 12, color: (isDarkMode ? "#ED8936" : "#A23F00") }}>Retry</Text>
           </Pressable>
         </View>
       );
@@ -666,7 +666,7 @@ const GifPanel = ({ onSelect, isDarkMode }) => {
                 borderColor: "rgba(255,153,51,0.4)",
               }}
             >
-              <Text style={{ fontSize: 12, color: "#FF9933" }}>Retry</Text>
+              <Text style={{ fontSize: 12, color: (isDarkMode ? "#ED8936" : "#A23F00") }}>Retry</Text>
             </Pressable>
           </View>
         ) : gifs.length === 0 ? (
@@ -729,10 +729,10 @@ const GifPanel = ({ onSelect, isDarkMode }) => {
 
 // ─── AttachSheet — bottom Modal matching web's AttachSheet ────────────────────
 const AttachSheet = ({ open, onClose, onAttachOption, isDarkMode }) => {
-  const bg = isDarkMode ? "#1E242F" : "#ffffff";
-  const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
-  const sub = isDarkMode ? "#A0AEC0" : "#64748b";
-  const textPrimary = isDarkMode ? "#ffffff" : "#0f172a";
+  const bg = isDarkMode ? "#1E242F" : "#FFF8F6";
+  const bdr = isDarkMode ? "#2D3748" : "#E1BFB2";
+  const sub = isDarkMode ? "#A0AEC0" : "#594137";
+  const textPrimary = isDarkMode ? "#FFF8F6" : "#261913";
 
   return (
     <Modal
@@ -797,7 +797,7 @@ const AttachSheet = ({ open, onClose, onAttachOption, isDarkMode }) => {
                 width: 28,
                 height: 28,
                 borderRadius: 14,
-                backgroundColor: isDarkMode ? "#1A1F29" : "#f3f4f6",
+                backgroundColor: isDarkMode ? "#1A1F29" : "#FFF1EC",
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -874,11 +874,11 @@ const MessageInput = ({
   const typingTimeoutRef = useRef(null);
 
   // ── Colors ────────────────────────────────────────────────────────────────
-  const bgSecondary = isDarkMode ? "#1A1F29" : "#F7FAFC";
-  const bgCard = isDarkMode ? "#1E242F" : "#ffffff";
-  const bdr = isDarkMode ? "#2D3748" : "rgba(0,0,0,0.08)";
-  const sub = isDarkMode ? "#A0AEC0" : "#64748b";
-  const textPrimary = isDarkMode ? "#ffffff" : "#1e293b";
+  const bgSecondary = isDarkMode ? "#1A1F29" : "#FFF8F6";
+  const bgCard = isDarkMode ? "#1E242F" : "#FFF8F6";
+  const bdr = isDarkMode ? "#2D3748" : "#E1BFB2";
+  const sub = isDarkMode ? "#A0AEC0" : "#594137";
+  const textPrimary = isDarkMode ? "#FFF8F6" : "#261913";
 
   const closeAllPickers = () => {
     setShowEmoji(false);

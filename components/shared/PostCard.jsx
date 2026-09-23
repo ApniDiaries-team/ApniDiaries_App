@@ -627,11 +627,44 @@ const LikesModal = ({ visible, onClose, postId, likeCount, myId, isDarkMode }) =
     }).start()
     getUsersByPostLike(postId)
       .then((r) => {
-        const list = r?.data?.users || r?.data || []
+        const payload = r?.data
+        const candidates =
+          payload?.users ??
+          payload?.data?.users ??
+          payload?.likes ??
+          payload?.data?.likes ??
+          payload?.data ??
+          payload
+        const rows = Array.isArray(candidates)
+          ? candidates
+          : Array.isArray(candidates?.users)
+            ? candidates.users
+            : Array.isArray(candidates?.data)
+              ? candidates.data
+              : []
+        const seen = new Set()
+        const list = rows
+          .map((entry) => {
+            const u = entry?.user ?? entry?.liker ?? entry
+            const id = u?.id ?? u?.userId ?? u?.user_id ?? entry?.user_id
+            if (id == null || seen.has(String(id))) return null
+            seen.add(String(id))
+            return {
+              ...u,
+              id,
+              name: u?.name ?? u?.full_name ?? u?.display_name ?? "Traveler",
+              username: u?.username ?? u?.handle,
+              profile_photo:
+                u?.profile_photo ?? u?.profilePhoto ?? u?.avatar ?? u?.photo,
+              followStatus:
+                u?.followStatus ?? u?.follow_status ?? entry?.followStatus ?? entry?.follow_status ?? "not_following",
+            }
+          })
+          .filter(Boolean)
         setUsers(list)
         const s = {}
         list.forEach((u) => {
-          s[u.id] = u.followStatus || u.follow_status || 'not_following'
+          s[u.id] = u.followStatus
         })
         setFollowStatus(s)
         setLoading(false)

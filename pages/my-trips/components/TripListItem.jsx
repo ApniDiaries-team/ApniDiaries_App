@@ -18,15 +18,15 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
         };
       case "completed":
         return {
-          bg: isDarkMode ? "#374151" : "#f3f4f6",
-          text: isDarkMode ? "#9ca3af" : "#6b7280",
-          border: isDarkMode ? "#4b5563" : "#e5e7eb",
+          bg: isDarkMode ? "#2D3748" : "#FFF1EC",
+          text: isDarkMode ? "#A0AEC0" : "#594137",
+          border: isDarkMode ? "#4A5568" : "#E1BFB2",
         };
       default:
         return {
-          bg: "rgba(59,130,246,0.1)",
-          text: "#3b82f6",
-          border: "rgba(59,130,246,0.2)",
+          bg: isDarkMode ? "rgba(237,137,54,0.14)" : "rgba(162,63,0,0.1)",
+          text: isDarkMode ? "#ED8936" : "#A23F00",
+          border: isDarkMode ? "rgba(237,137,54,0.24)" : "rgba(162,63,0,0.2)",
         };
     }
   };
@@ -69,11 +69,11 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
     // matches web: bg-[var(--color-bg-card)] rounded-xl overflow-hidden border border-[var(--color-border)]
     <View
       style={{
-        backgroundColor: isDarkMode ? "#1f2937" : "#fff",
+        backgroundColor: isDarkMode ? "#1E242F" : "#fff",
         borderRadius: 12,
         overflow: "hidden",
         borderWidth: 1,
-        borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+        borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
         flexDirection: "row",
       }}
     >
@@ -91,7 +91,7 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
               width: "100%",
               height: "100%",
               minHeight: 120,
-              backgroundColor: isDarkMode ? "#374151" : "#e5e7eb",
+              backgroundColor: isDarkMode ? "#2D3748" : "#E1BFB2",
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -99,7 +99,7 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
             <Icon
               name="Image"
               size={28}
-              color={isDarkMode ? "#6b7280" : "#9ca3af"}
+              color={isDarkMode ? "#A0AEC0" : "#594137"}
             />
           </View>
         )}
@@ -108,7 +108,7 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
         <LinearGradient
           colors={[
             "transparent",
-            isDarkMode ? "rgba(17,24,39,0.2)" : "rgba(249,250,251,0.2)",
+            isDarkMode ? "rgba(17,24,39,0.2)" : "rgba(255,248,246,0.2)",
           ]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
@@ -169,7 +169,7 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
             style={{
               fontSize: 18,
               fontFamily: Fonts.playfair.bold,
-              color: isDarkMode ? "#f9fafb" : "#111827",
+              color: isDarkMode ? "#FFFFFF" : "#261913",
               marginBottom: 4,
             }}
             numberOfLines={1}
@@ -189,12 +189,12 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
             <Icon
               name="MapPin"
               size={12}
-              color={isDarkMode ? "#9ca3af" : "#6b7280"}
+              color={isDarkMode ? "#A0AEC0" : "#594137"}
             />
             <Text
               style={{
                 fontSize: 13,
-                color: isDarkMode ? "#9ca3af" : "#6b7280",
+                color: isDarkMode ? "#A0AEC0" : "#594137",
                 flex: 1,
               }}
               numberOfLines={1}
@@ -219,13 +219,13 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
               <Icon
                 name="Calendar"
                 size={12}
-                color={isDarkMode ? "#9ca3af" : "#6b7280"}
+                color={isDarkMode ? "#A0AEC0" : "#594137"}
               />
               {/* matches web: short date on mobile (sm:hidden) */}
               <Text
                 style={{
                   fontSize: 12,
-                  color: isDarkMode ? "#9ca3af" : "#6b7280",
+                  color: isDarkMode ? "#A0AEC0" : "#594137",
                 }}
               >
                 {formatDateShort(trip?.startDate)}
@@ -237,13 +237,13 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
               <Icon
                 name="Clock"
                 size={12}
-                color={isDarkMode ? "#9ca3af" : "#6b7280"}
+                color={isDarkMode ? "#A0AEC0" : "#594137"}
               />
               {/* matches web: {trip?.duration} days — full word */}
               <Text
                 style={{
                   fontSize: 12,
-                  color: isDarkMode ? "#9ca3af" : "#6b7280",
+                  color: isDarkMode ? "#A0AEC0" : "#594137",
                 }}
               >
                 {trip?.duration} days
@@ -275,19 +275,19 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
               paddingVertical: 6,
               borderRadius: 6,
               borderWidth: 1,
-              borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+              borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
               backgroundColor: "transparent",
             }}
           >
             <Icon
               name="Eye"
               size={12}
-              color={isDarkMode ? "#f9fafb" : "#374151"}
+              color={isDarkMode ? "#FFFFFF" : "#261913"}
             />
             <Text
               style={{
                 fontSize: 12,
-                color: isDarkMode ? "#f9fafb" : "#374151",
+                color: isDarkMode ? "#FFFFFF" : "#261913",
               }}
             >
               View
@@ -296,8 +296,9 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
 
           {/* Edit — matches web: Button variant='outline' size='sm' iconName='Edit2' */}
           <Pressable
-            onPress={() => onEdit(trip)}
+            onPress={() => onEdit?.(trip)}
             style={{
+              display: onEdit ? "flex" : "none",
               flex: 1,
               flexDirection: "row",
               alignItems: "center",
@@ -307,19 +308,19 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
               paddingVertical: 6,
               borderRadius: 6,
               borderWidth: 1,
-              borderColor: isDarkMode ? "#374151" : "#e5e7eb",
+              borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
               backgroundColor: "transparent",
             }}
           >
             <Icon
               name="Edit2"
               size={12}
-              color={isDarkMode ? "#f9fafb" : "#374151"}
+              color={isDarkMode ? "#FFFFFF" : "#261913"}
             />
             <Text
               style={{
                 fontSize: 12,
-                color: isDarkMode ? "#f9fafb" : "#374151",
+                color: isDarkMode ? "#FFFFFF" : "#261913",
               }}
             >
               Edit
@@ -329,8 +330,9 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
           {/* Delete — matches web: Button variant='destructive' size='sm' iconName='Trash2'
               Mobile label = "Del" matching web: <span className='sm:hidden'>Del</span> */}
           <Pressable
-            onPress={() => onDelete(trip)}
+            onPress={() => onDelete?.(trip)}
             style={{
+              display: onDelete ? "flex" : "none",
               flex: 1,
               flexDirection: "row",
               alignItems: "center",
@@ -339,7 +341,7 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
               paddingHorizontal: 8,
               paddingVertical: 6,
               borderRadius: 6,
-              backgroundColor: "#ef4444",
+              backgroundColor: "#BA1A1A",
             }}
           >
             <Icon name="Trash2" size={12} color="#fff" />
@@ -354,3 +356,9 @@ const TripListItem = ({ trip, onEdit, onDelete, onView }) => {
 };
 
 export default TripListItem;
+
+
+
+
+
+

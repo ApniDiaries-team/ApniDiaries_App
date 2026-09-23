@@ -1,132 +1,32 @@
-import { Pressable, Text, View } from "react-native";
-import Icon from "../../../components/AppIcon";
+import { Pressable, Text, View, useWindowDimensions } from "react-native";
+import { Fonts, Palette } from "../../../constants/theme";
 import { useDarkMode } from "../../../context/DarkModeContext";
-import { Fonts } from "../../../constants/theme";
 
 const StatsBar = ({ stats, onStatClick }) => {
   const { isDarkMode } = useDarkMode();
-
-  const colors = {
-    bgCard: isDarkMode ? "#1E242F" : "#FFF1EC",
-    bgSecondary: isDarkMode ? "#1A1F29" : "#FFF1EC",
-    bgPrimary: isDarkMode ? "#0B0E14" : "#FFFFFF",
-    textPrimary: isDarkMode ? "#FFFFFF" : "#1A202C",
-    textSecondary: isDarkMode ? "#A0AEC0" : "#4A5568",
-    border: isDarkMode ? "#2D3748" : "#E2E8F0",
-    success: "#68D391",
-    warning: "#F6AD55",
-    error: "#EF4444",
-  };
-
-  const getFriendCount = () => {
-    if (!stats) return 0;
-    if (stats.friends !== undefined) return stats.friends;
-    if (stats.friendsCount !== undefined) return stats.friendsCount;
-    if (stats.totalFriends !== undefined) return stats.totalFriends;
-    return 0;
-  };
-
-  const statItems = [
-    {
-      type: "friends",
-      icon: "UserCheck",
-      label: "Friends",
-      value: getFriendCount(),
-      color: colors.success,
-      bgColor: "rgba(104,211,145,0.1)", // ← add this
-      iconColor: colors.success,
-    },
-    {
-      type: "followers",
-      icon: "UserPlus",
-      label: "Followers",
-      value: stats?.followers || 0,
-      color: colors.textSecondary,
-      bgColor: colors.bgSecondary, // ← add this
-      iconColor: colors.textSecondary,
-    },
-    {
-      type: "calls",
-      icon: "Phone",
-      label: "Missed Calls",
-      value: stats?.missedCalls || 0,
-      color: stats?.missedCalls > 0 ? colors.error : colors.textSecondary,
-      bgColor:
-        stats?.missedCalls > 0 ? "rgba(239,68,68,0.1)" : colors.bgSecondary, // ← add this
-      iconColor: stats?.missedCalls > 0 ? colors.error : colors.textSecondary,
-    },
-    {
-      type: "upcomingTrips",
-      icon: "Calendar",
-      label: "Upcoming Trips",
-      value: stats?.upcomingTrips || 0,
-      color: colors.warning,
-      bgColor: "rgba(246,173,85,0.1)", // ← add this
-      iconColor: colors.warning,
-    },
+  const { width } = useWindowDimensions();
+  const text = isDarkMode ? Palette.dark.text : Palette.light.text;
+  const muted = isDarkMode ? Palette.dark.textVariant : Palette.light.textVariant;
+  const primary = isDarkMode ? Palette.dark.primary : Palette.light.primary;
+  const items = [
+    { type: "friends", label: "Connections", value: stats?.friends ?? 0 },
+    { type: "followers", label: "Followers", value: stats?.followers ?? 0 },
+    { type: "calls", label: "Missed Calls", value: stats?.missedCalls ?? 0 },
+    { type: "upcomingTrips", label: "Upcoming Trips", value: stats?.upcomingTrips ?? 0 },
   ];
 
   return (
-    <View
-      style={{
-        backgroundColor: colors.bgCard,
-        borderRadius: 12,
-        padding: 16,
-        borderWidth: 1,
-        borderColor: colors.border,
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.05,
-        shadowRadius: 2,
-        elevation: 1,
-      }}
-    >
-      <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 12 }}>
-        {statItems?.map((item, index) => (
-          <Pressable
-            key={item.type}
-            onPress={() => onStatClick?.(item.type)}
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              gap: 12,
-              padding: 12,
-              borderRadius: 10,
-              backgroundColor: colors.bgSecondary,
-              borderWidth: 1,
-              borderColor: colors.border,
-              flex: 1,
-              minWidth: "45%",
-            }}
-          >
-            <View
-              style={{
-                padding: 8,
-                borderRadius: 8,
-                backgroundColor: item.bgColor,
-                borderWidth: 1,
-                borderColor: `${item.iconColor}20`,
-              }}
-            >
-              <Icon name={item.icon} size={20} color={item.iconColor} />
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontSize: 11, color: colors.textSecondary }}>
-                {item.label}
-              </Text>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontFamily: Fonts.playfair.bold,
-                  color: item.color,
-                }}
-              >
-                {item.value}
-              </Text>
-            </View>
-          </Pressable>
-        ))}
-      </View>
+    <View style={{ flexDirection: "row", flexWrap: "wrap", columnGap: width >= 1024 ? 48 : 20, rowGap: 20 }}>
+      {items.map((item) => (
+        <Pressable key={item.type} onPress={() => onStatClick?.(item.type)} style={{ minWidth: width >= 500 ? 112 : "44%" }}>
+          <Text style={{ fontFamily: Fonts.playfair.bold, fontSize: width >= 768 ? 36 : 30, lineHeight: width >= 768 ? 42 : 36, color: primary }}>
+            {Number(item.value || 0).toLocaleString("en-IN")}
+          </Text>
+          <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 11, letterSpacing: 1.1, textTransform: "uppercase", color: muted, marginTop: 8 }}>
+            {item.label}
+          </Text>
+        </Pressable>
+      ))}
     </View>
   );
 };

@@ -1,128 +1,47 @@
-import React from 'react';
-import { View, Text, Image, Pressable, StyleSheet } from 'react-native';
+import { Image, Pressable, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import Icon from '../../../components/AppIcon';
+import { Fonts, Palette } from '../../../constants/theme';
 import { useDarkMode } from '../../../context/DarkModeContext';
 import { getProfilePhotoUrl } from '../../../helper/DefaultImageUrl';
 
 const SearchUserCard = ({ userList = [], searchQuery }) => {
   const router = useRouter();
   const { isDarkMode } = useDarkMode();
-
-  const colors = {
-    bgCard: isDarkMode ? '#1E242F' : '#FFFFFF',
-    bgSecondary: isDarkMode ? '#1A1F29' : '#F7FAFC',
-    textPrimary: isDarkMode ? '#FFFFFF' : '#1A202C',
-    textSecondary: isDarkMode ? '#A0AEC0' : '#6B7280',
-    border: isDarkMode ? '#2D3748' : '#E2E8F0',
-  };
-
-  if (!searchQuery) return null;
+  const text = isDarkMode ? Palette.dark.text : Palette.light.text;
+  const muted = isDarkMode ? Palette.dark.textVariant : Palette.light.textVariant;
+  const border = isDarkMode ? Palette.dark.outlineVariant : Palette.light.outlineVariant;
+  const surfaceLow = isDarkMode ? Palette.dark.surfaceLow : Palette.light.surfaceLow;
+  if (!searchQuery?.trim()) return null;
 
   if (userList.length === 0) {
     return (
-      <View style={styles.emptyContainer}>
-        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
-          No users found
-        </Text>
+      <View style={{ alignItems: 'center', paddingVertical: 48 }}>
+        <Icon name="Users" size={28} color={muted} style={{ marginBottom: 12, opacity: 0.55 }} />
+        <Text style={{ fontFamily: Fonts.inter.regular, fontSize: 14, color: muted, textAlign: 'center' }}>No travelers found for “{searchQuery}”</Text>
       </View>
     );
   }
 
-  const goToUserProfile = (id, name) => {
-    router.push({
-      pathname: '/other-user-profile',
-      params: { userId: id },
-    });
-  };
-
+  const openProfile = (person) => router.push({ pathname: '/other-user-profile', params: { userId: person.id } });
   return (
-    <View style={[styles.container, { backgroundColor: colors.bgCard, borderColor: colors.border }]}>
-      <Text style={[styles.header, { color: colors.textPrimary }]}>
-        Search Results
-      </Text>
-
-      <View style={styles.list}>
-        {userList.map((user) => (
-          <Pressable
-            key={user.id}
-            onPress={() => goToUserProfile(user.id, user.name)}
-            style={({ pressed }) => [
-              styles.userItem,
-              {
-                backgroundColor: pressed ? colors.bgSecondary : 'transparent',
-              }
-            ]}
-          >
-            <Image
-              source={{ uri: getProfilePhotoUrl(user.profile_photo || user.avatar) }}
-              style={styles.avatar}
-            />
-
-            <View style={styles.userInfo}>
-              <Text style={[styles.userName, { color: colors.textPrimary }]}>
-                {user.name}
-              </Text>
-              <Text style={[styles.userHandle, { color: colors.textSecondary }]}>
-                @{user.username || user.handle || user.name?.toLowerCase().replace(/\s/g, '')}
-              </Text>
+    <View style={{ marginTop: 16 }}>
+      {userList.map((person, index) => (
+        <Pressable key={person.id} onPress={() => openProfile(person)} style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 16, paddingVertical: 20, borderBottomWidth: index < userList.length - 1 ? 1 : 0, borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.1)' : 'rgba(225,191,178,0.5)', opacity: pressed ? 0.75 : 1 })}>
+          <Image source={{ uri: getProfilePhotoUrl(person.profile_photo || person.avatar) }} style={{ width: 56, height: 56, borderRadius: 28, flexShrink: 0, backgroundColor: surfaceLow }} />
+          <View style={{ flex: 1, minWidth: 0 }}>
+            <Text numberOfLines={1} style={{ fontFamily: Fonts.playfair.semibold, fontSize: 18, color: text }}>{person.name}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 2 }}>
+              {(person.city || person.location) ? <><Icon name="MapPin" size={13} color={muted} /><Text numberOfLines={1} style={{ flexShrink: 1, fontFamily: Fonts.inter.regular, fontSize: 14, color: muted }}>{person.city || person.location}</Text></> : <Text numberOfLines={1} style={{ fontFamily: Fonts.inter.regular, fontSize: 14, color: muted }}>@{person.username || person.handle}</Text>}
             </View>
-          </Pressable>
-        ))}
-      </View>
+          </View>
+          <View style={{ width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: border, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="ArrowRight" size={16} color={text} />
+          </View>
+        </Pressable>
+      ))}
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    padding: 16,
-    borderRadius: 12,
-    borderWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  header: {
-    fontSize: 14,
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  list: {
-    gap: 12,
-  },
-  userItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    padding: 12,
-    borderRadius: 8,
-  },
-  avatar: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: '#E2E8F0',
-  },
-  userInfo: {
-    flex: 1,
-  },
-  userName: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  userHandle: {
-    fontSize: 14,
-    marginTop: 2,
-  },
-  emptyContainer: {
-    marginTop: 24,
-    alignItems: 'center',
-  },
-  emptyText: {
-    fontSize: 14,
-  },
-});
 
 export default SearchUserCard;

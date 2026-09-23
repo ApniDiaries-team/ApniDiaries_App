@@ -27,16 +27,15 @@ const DateDivider = ({ date }) => {
   return (
     <View className="flex-row items-center justify-center my-4 md:my-6 px-4">
       <View
-        className={`px-3 py-1.5 md:px-4 md:py-2 rounded-full border ${
-          isDarkMode
-            ? "bg-[#1A1F29] border-[#2D3748]"
-            : "bg-[#F7FAFC] border-black/5"
-        }`}
+        className="px-3 py-1.5 md:px-4 md:py-2 rounded-full border"
+        style={{
+          backgroundColor: isDarkMode ? "#1A1F29" : "#FFF1EC",
+          borderColor: isDarkMode ? "#2D3748" : "#E1BFB2",
+        }}
       >
         <Text
-          className={`text-[12px] md:text-[14px] font-medium ${
-            isDarkMode ? "text-gray-400" : "text-gray-500"
-          }`}
+          className="text-[12px] md:text-[14px] font-medium"
+          style={{ color: isDarkMode ? "#A0AEC0" : "#594137" }}
         >
           {formatDate(date)}
         </Text>

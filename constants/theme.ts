@@ -3,10 +3,10 @@
  * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
  */
 
-import { Platform } from 'react-native';
+import { Platform } from 'react-native'
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const tintColorLight = '#0a7ea4'
+const tintColorDark = '#fff'
 
 export const Colors = {
   light: {
@@ -25,22 +25,53 @@ export const Colors = {
     tabIconDefault: '#9BA1A6',
     tabIconSelected: tintColorDark,
   },
-};
+}
+
+// New brand palette — matches the web app's design tokens exactly
+// (see web src/index.css :root and .dark). Use these instead of the old
+// hardcoded #ea580c / #f97316 values in components.
+export const Palette = {
+  light: {
+    primary: '#a23f00',
+    onPrimary: '#ffffff',
+    primaryContainer: '#ff7020',
+    onPrimaryContainer: '#5c2000',
+    surface: '#fff8f6',
+    surfaceContainerLowest: '#ffffff',
+    surfaceContainerLow: '#fff1ec',
+    surfaceContainer: '#ffe9e1',
+    onSurface: '#261913',
+    onSurfaceVariant: '#594137',
+    outlineVariant: '#e1bfb2',
+    error: '#ba1a1a',
+  },
+  dark: {
+    primary: '#ED8936',
+    onPrimary: '#1A0F00',
+    background: '#0B0E14',
+    surface: '#1E242F',
+    surfaceContainerLow: '#1A1F29',
+    onSurface: '#FFFFFF',
+    onSurfaceVariant: '#A0AEC0',
+    outlineVariant: '#2D3748',
+    error: '#ef4444',
+  },
+}
 
 export const Fonts = {
   playfair: {
-    black: "PlayfairDisplay_800ExtraBold",
-    bold: "PlayfairDisplay_700Bold",
-    semibold: "PlayfairDisplay_600SemiBold",
-    medium: "PlayfairDisplay_500Medium",
-    regular: "PlayfairDisplay_400Regular",
+    black: 'PlayfairDisplay_800ExtraBold',
+    bold: 'PlayfairDisplay_700Bold',
+    semibold: 'PlayfairDisplay_600SemiBold',
+    medium: 'PlayfairDisplay_500Medium',
+    regular: 'PlayfairDisplay_400Regular',
   },
   inter: {
-    extrabold: "Inter_800ExtraBold",
-    bold: "Inter_700Bold",
-    semibold: "Inter_600SemiBold",
-    medium: "Inter_500Medium",
-    regular: "Inter_400Regular",
+    extrabold: 'Inter_800ExtraBold',
+    bold: 'Inter_700Bold',
+    semibold: 'Inter_600SemiBold',
+    medium: 'Inter_500Medium',
+    regular: 'Inter_400Regular',
   },
   system: Platform.select({
     ios: {
@@ -62,4 +93,4 @@ export const Fonts = {
       mono: "SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace",
     },
   }),
-};
+}

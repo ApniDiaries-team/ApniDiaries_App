@@ -2,6 +2,7 @@ import { useVideoPlayer, VideoView } from "expo-video";
 import { useState } from "react";
 import { Image, Modal, Pressable, Text, View } from "react-native";
 import Icon from "../../../components/AppIcon";
+import { Fonts, Palette } from "../../../constants/theme";
 import { useDarkMode } from "../../../context/DarkModeContext";
 
 // ─── Tick Icon ────────────────────────────────────────────────────────────────
@@ -485,7 +486,9 @@ const MediaBubble = ({ message, isSent, isDarkMode }) => {
 // ─── Main MessageBubble ───────────────────────────────────────────────────────
 const MessageBubble = ({ message, isSent }) => {
   const { isDarkMode } = useDarkMode();
+  const palette = isDarkMode ? Palette.dark : Palette.light;
   const time = fmt(message?.timestamp);
+  const displayText = typeof message?.text === "string" && message.text.trim() ? message.text : "Message unavailable";
 
   // Once-view
   if (message?.onceView && message?.mediaUrl) {
@@ -591,29 +594,30 @@ const MessageBubble = ({ message, isSent }) => {
           flexDirection: "row",
           justifyContent: "flex-end",
           marginBottom: 4,
-          paddingHorizontal: 12,
+          paddingHorizontal: 14,
         }}
       >
         <View
           style={{
-            maxWidth: "72%",
-            borderRadius: 16,
-            borderBottomRightRadius: 4,
-            paddingHorizontal: 12,
-            paddingTop: 8,
-            paddingBottom: 6,
+            maxWidth: "78%",
+            borderRadius: 20,
+            borderBottomRightRadius: 6,
+            paddingHorizontal: 14,
+            paddingTop: 10,
+            paddingBottom: 8,
             backgroundColor: (isDarkMode ? "#ED8936" : "#A23F00"),
           }}
         >
           <Text
             style={{
               fontSize: 15,
-              lineHeight: 20,
+              lineHeight: 22,
+              fontFamily: Fonts.inter.regular,
               color: "white",
               flexShrink: 1,
             }}
           >
-            {message?.text}
+            {displayText}
           </Text>
           <View
             style={{
@@ -641,30 +645,31 @@ const MessageBubble = ({ message, isSent }) => {
         flexDirection: "row",
         justifyContent: "flex-start",
         marginBottom: 4,
-        paddingHorizontal: 12,
+        paddingHorizontal: 14,
       }}
     >
       <View
         style={{
-          maxWidth: "72%",
-          borderRadius: 16,
-          borderBottomLeftRadius: 4,
-          paddingHorizontal: 12,
-          paddingTop: 8,
-          paddingBottom: 6,
-          backgroundColor: isDarkMode ? "#1E242F" : "#FFF8F6",
+          maxWidth: "78%",
+          borderRadius: 20,
+          borderBottomLeftRadius: 6,
+          paddingHorizontal: 14,
+          paddingTop: 10,
+          paddingBottom: 8,
+          backgroundColor: isDarkMode ? palette.surfaceLow : palette.surfaceLowest,
           borderWidth: 1,
-          borderColor: isDarkMode ? "rgba(255,255,255,0.1)" : "#E1BFB2",
+          borderColor: palette.outlineVariant,
         }}
       >
         <Text
           style={{
             fontSize: 15,
-            lineHeight: 20,
-            color: isDarkMode ? (isDarkMode ? "#1E242F" : "#FFF8F6") : "#261913",
+            lineHeight: 22,
+            fontFamily: Fonts.inter.regular,
+            color: palette.text,
           }}
         >
-          {message?.text}
+          {displayText}
         </Text>
         <View
           style={{

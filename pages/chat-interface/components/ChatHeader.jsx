@@ -1,8 +1,9 @@
 import { useRouter } from "expo-router";
 import { useContext } from "react";
-import { Image, Platform, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "../../../components/AppIcon";
+import { Fonts, Palette } from "../../../constants/theme";
 import { AppContext } from "../../../context/AppContext";
 import { useDarkMode } from "../../../context/DarkModeContext";
 import { getProfilePhotoUrl } from "../../../helper/DefaultImageUrl";
@@ -12,8 +13,6 @@ const ChatHeader = ({ contact, onMoreOptions, onAudioCall, onVideoCall }) => {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { isDarkMode } = useDarkMode();
-  const { user } = useContext(AppContext);
-  const myId = user?.id;
 
   const handleBackPress = () => router.back();
 
@@ -24,9 +23,10 @@ const ChatHeader = ({ contact, onMoreOptions, onAudioCall, onVideoCall }) => {
     });
   };
 
-  const surface = isDarkMode ? "#1E242F" : "#FFF8F6";
-  const iconColor = isDarkMode ? "#FFFFFF" : "#261913";
-  const nameColor = isDarkMode ? "#FFFFFF" : "#261913";
+  const palette = isDarkMode ? Palette.dark : Palette.light;
+  const surface = isDarkMode ? palette.surfaceContainer : palette.surfaceLowest;
+  const iconColor = palette.text;
+  const nameColor = palette.text;
   const statusColor = contact?.isOnline
     ? "#22c55e"
     : isDarkMode
@@ -38,7 +38,7 @@ const ChatHeader = ({ contact, onMoreOptions, onAudioCall, onVideoCall }) => {
       style={{
         backgroundColor: surface,
         borderBottomWidth: 1,
-        borderBottomColor: isDarkMode ? "#2D3748" : "#E1BFB2",
+        borderBottomColor: palette.outlineVariant,
         paddingTop: insets.top - 10,
         height: 60 + insets.top,
         alignItems: "center",
@@ -82,10 +82,7 @@ const ChatHeader = ({ contact, onMoreOptions, onAudioCall, onVideoCall }) => {
               className="text-[17px] "
               style={{
                 color: nameColor,
-                fontFamily:
-                  Platform.OS === "ios"
-                    ? "Georgia"
-                    : "PlayfairDisplay_600SemiBold",
+                fontFamily: Fonts.playfair.semibold,
               }}
             >
               {contact?.name || "User"}
@@ -93,7 +90,7 @@ const ChatHeader = ({ contact, onMoreOptions, onAudioCall, onVideoCall }) => {
             <Text
               numberOfLines={1}
               className="text-[13px]"
-              style={{ color: statusColor }}
+              style={{ color: statusColor, fontFamily: Fonts.inter.regular, fontSize: 12 }}
             >
               {contact?.isOnline
                 ? "Online"
@@ -106,13 +103,13 @@ const ChatHeader = ({ contact, onMoreOptions, onAudioCall, onVideoCall }) => {
 
         {/* Action Buttons */}
         <View className="flex-row items-center">
-          <Pressable onPress={onAudioCall} className="p-2">
+          <Pressable onPress={onAudioCall} style={{ width: 38, height: 38, borderRadius: 14, alignItems: "center", justifyContent: "center", marginLeft: 2, backgroundColor: isDarkMode ? "#1A1F29" : "#FFF1EC" }}>
             <Icon name="Phone" size={22} color={iconColor} strokeWidth={1.5} />
           </Pressable>
-          <Pressable onPress={onVideoCall} className="p-2">
+          <Pressable onPress={onVideoCall} style={{ width: 38, height: 38, borderRadius: 14, alignItems: "center", justifyContent: "center", marginLeft: 2, backgroundColor: isDarkMode ? "#1A1F29" : "#FFF1EC" }}>
             <Icon name="Video" size={22} color={iconColor} strokeWidth={1.5} />
           </Pressable>
-          <Pressable onPress={onMoreOptions} className="p-2">
+          <Pressable onPress={onMoreOptions} style={{ width: 38, height: 38, borderRadius: 14, alignItems: "center", justifyContent: "center", marginLeft: 2, backgroundColor: isDarkMode ? "#1A1F29" : "#FFF1EC" }}>
             <Icon
               name="MoreVertical"
               size={22}

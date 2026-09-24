@@ -1,8 +1,9 @@
 import { useScroll } from "@/context/ScrollContext";
 import { Feather } from "@expo/vector-icons";
+import * as Haptics from "expo-haptics";
 import { usePathname, useRouter } from "expo-router";
-import { useContext } from "react";
-import { Pressable, Text, View } from "react-native";
+import React, { useContext } from "react";
+import { Animated, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Fonts, Palette } from "../constants/theme";
 import { AppContext } from "../context/AppContext";
@@ -24,6 +25,76 @@ const BOTTOM_TABS = [
   },
   { id: "profile", label: "Profile", path: "/personal-profile", icon: "user" },
 ];
+
+const BottomTab = ({ tab, active, color, isDarkMode, onPress }) => {
+  const progress = React.useRef(new Animated.Value(active ? 1 : 0)).current;
+
+  React.useEffect(() => {
+    Animated.timing(progress, {
+      toValue: active ? 1 : 0,
+      duration: 180,
+      useNativeDriver: true,
+    }).start();
+  }, [active, progress]);
+
+  const indicatorStyle = {
+    opacity: progress,
+    transform: [{ scale: progress.interpolate({ inputRange: [0, 1], outputRange: [0.82, 1] }) }],
+  };
+  const iconStyle = {
+    transform: [
+      { translateY: progress.interpolate({ inputRange: [0, 1], outputRange: [0, -1] }) },
+      { scale: progress.interpolate({ inputRange: [0, 1], outputRange: [1, 1.04] }) },
+    ],
+  };
+
+  return (
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="tab"
+      accessibilityState={{ selected: active }}
+      accessibilityLabel={tab.label}
+      hitSlop={4}
+      style={({ pressed }) => ({
+        flex: 1,
+        minWidth: 0,
+        height: 58,
+        alignItems: "center",
+        justifyContent: "center",
+        opacity: pressed ? 0.78 : 1,
+      })}
+    >
+      <View style={{ width: "100%", height: 58, alignItems: "center", justifyContent: "center" }}>
+        <View style={{ width: 52, height: 32, alignItems: "center", justifyContent: "center", marginBottom: 1 }}>
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              { position: "absolute", width: 48, height: 30, borderRadius: 15, backgroundColor: isDarkMode ? "rgba(237,137,54,0.14)" : "#FFF1EC" },
+              indicatorStyle,
+            ]}
+          />
+          <Animated.View style={iconStyle}>
+            <Feather name={tab.icon} size={22} color={color} />
+          </Animated.View>
+        </View>
+        <Text
+          numberOfLines={1}
+          style={{
+            width: "100%",
+            textAlign: "center",
+            includeFontPadding: false,
+            fontSize: 11,
+            lineHeight: 14,
+            fontFamily: active ? Fonts.inter.bold : Fonts.inter.medium,
+            color,
+          }}
+        >
+          {tab.label}
+        </Text>
+      </View>
+    </Pressable>
+  );
+};
 
 const BottomNavBar = () => {
   const router = useRouter();
@@ -65,50 +136,36 @@ const BottomNavBar = () => {
           style={{
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "space-around",
+            justifyContent: "space-between",
             width: "100%",
-            height: 58,
-            paddingHorizontal: 4,
-            paddingVertical: 5,
+            height: 62,
+            paddingHorizontal: 8,
+            paddingTop: 2,
           }}
         >
           {BOTTOM_TABS.map((tab) => {
-            const isActive = pathname === tab.path;
+            const isActive = pathname === tab.path || pathname.startsWith(`${tab.path}/`) ||
+              (tab.id === "messages" && pathname.startsWith("/chat-interface")) ||
+              (tab.id === "community" && pathname.startsWith("/create-post")) ||
+              (tab.id === "profile" && ["/other-user-profile", "/followers", "/following", "/edit-personal-details"].some((route) => pathname.startsWith(route)));
             const tabColor = isActive
               ? (isDarkMode ? Palette.dark.primary : Palette.light.primary)
               : isDarkMode
                 ? Palette.dark.textVariant
                 : Palette.light.textVariant;
             return (
-              <Pressable
+              <BottomTab
                 key={tab.id}
-                onPress={() => router.push(tab.path)}
-                style={{
-                  flex: 1,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: "100%",
-                  opacity: 1,
+                tab={tab}
+                active={isActive}
+                color={tabColor}
+                isDarkMode={isDarkMode}
+                onPress={() => {
+                  if (isActive) return;
+                  Haptics.selectionAsync().catch(() => {});
+                  router.navigate(tab.path);
                 }}
-              >
-                <Feather
-                  name={tab.icon}
-                  size={24}
-                  color={tabColor}
-                  style={{ marginBottom: 4 }}
-                />
-                <Text
-                  style={{
-                    fontSize: 11,
-                    fontFamily: isActive
-                      ? Fonts.inter.bold
-                      : Fonts.inter.semibold,
-                    color: tabColor,
-                  }}
-                >
-                  {tab.label}
-                </Text>
-              </Pressable>
+              />
             );
           })}
         </View>

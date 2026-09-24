@@ -1,4 +1,4 @@
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -23,6 +23,7 @@ import { getTrips } from "../../services/trips.api";
 import {
   blockUser,
   followUser,
+  getPersonalDetails,
   getSuggestedFriendsList,
   removeFriend,
   sendFriendRequest,
@@ -69,6 +70,7 @@ const CityFriendList = () => {
   const [upcomingTrips, setUpcomingTrips] = useState(0);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [missedCalls, setMissedCalls] = useState(0);
+  const [followerCount, setFollowerCount] = useState(0);
   const [isPrivateModalOpen, setIsPrivateModalOpen] = useState(false);
   const [unreadCounts, setUnreadCounts] = useState({});
   const [activeMessageUserId, setActiveMessageUserId] = useState(null);
@@ -202,6 +204,22 @@ const CityFriendList = () => {
     }
   };
 
+  const fetchFollowerCount = useCallback(async () => {
+    try {
+      const res = await getPersonalDetails();
+      const data = res?.data?.data;
+      const count = data?.stats?.followers ?? data?.stats?.followerCount ?? data?.user?.followers_count;
+      if (Number.isFinite(Number(count))) setFollowerCount(Number(count));
+    } catch (error) {
+      console.log("Error fetching follower count", error);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchFollowerCount();
+    }, [fetchFollowerCount]),
+  );
   // ── Socket ────────────────────────────────────────────────────────────────
   useEffect(() => {
     if (!socket.connected) socket.connect();
@@ -275,7 +293,7 @@ const CityFriendList = () => {
   // ── Stats ─────────────────────────────────────────────────────────────────
   const stats = {
     friends: friends.filter((f) => f.isFriend).length,
-    followers: friends.filter((f) => f.isFollower && !f.isFriend).length,
+    followers: followerCount,
     missedCalls,
     upcomingTrips,
   };
@@ -315,7 +333,7 @@ const CityFriendList = () => {
       case "friends":
         break;
       case "followers":
-        Alert.alert("Coming Soon", "Followers page coming soon.");
+        router.push({ pathname: "/followers", params: { userId: user?.id, tab: "followers" } });
         break;
       case "calls":
         markAllMissedCallsSeen().catch(() => {});

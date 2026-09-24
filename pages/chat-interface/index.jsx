@@ -177,21 +177,28 @@ const ChatInterface = () => {
 
   // ─── Decryption Helpers ───────────────────────────────────────────────────
   const decryptRawMessage = (m, key) => {
-    const plain = key ? decryptMessage(m.ciphertext, m.nonce, key) : null;
+    const ciphertext = m?.ciphertext ?? m?.encrypted_content ?? m?.encrypted_message ?? m?.encryptedMessage;
+    const nonce = m?.nonce ?? m?.message_nonce;
+    const plainValue = m?.text ?? m?.message_text ?? m?.body ?? m?.content ?? m?.message;
+    const plain = key && ciphertext && nonce
+      ? decryptMessage(ciphertext, nonce, key)
+      : typeof plainValue === "string"
+        ? plainValue
+        : null;
     return {
       id: m.id,
       text: plain ?? null,
-      isEncrypted: plain === null,
-      _raw: plain === null ? m : undefined,
+      isEncrypted: plain === null && Boolean(ciphertext),
+      _raw: plain === null && ciphertext ? m : undefined,
       timestamp: new Date(m.created_at || m.timestamp || Date.now()),
-      isSent: String(m.sender_id) === String(user?.id),
+      isSent: String(m.sender_id ?? m.senderId) === String(user?.id),
       status: m.status || "delivered",
-      mediaUrl: m.media_url || null,
-      mediaType: m.media_type || null,
+      mediaUrl: m.media_url || m.mediaUrl || null,
+      mediaType: m.media_type || m.mediaType || null,
       onceView: m.once_view || false,
       onceViewOpened: m.once_view_opened || false,
-      type: m.message_type || "text",
-      gifUrl: m.media_url && m.media_type === "gif" ? m.media_url : null,
+      type: m.message_type || m.messageType || "text",
+      gifUrl: (m.media_url || m.mediaUrl) && (m.media_type || m.mediaType) === "gif" ? (m.media_url || m.mediaUrl) : null,
     };
   };
 
@@ -350,40 +357,9 @@ const ChatInterface = () => {
         return;
       }
 
-      const plain = key ? decryptMessage(msg.ciphertext, msg.nonce, key) : null;
-      const isMine = String(msg.sender_id) === String(user?.id);
-
-      const incoming = {
-        id: msg.id,
-        text: plain ?? null,
-        isEncrypted: plain === null,
-        _raw:
-          plain === null
-            ? {
-                id: msg.id,
-                ciphertext: msg.ciphertext,
-                nonce: msg.nonce,
-                created_at: msg.created_at,
-                sender_id: msg.sender_id,
-                status: msg.status,
-                media_url: msg.media_url,
-                media_type: msg.media_type,
-                once_view: msg.once_view,
-                once_view_opened: msg.once_view_opened,
-                message_type: msg.message_type,
-              }
-            : undefined,
-        timestamp: new Date(msg.created_at),
-        isSent: isMine,
-        status: "delivered",
-        mediaUrl: msg.media_url || null,
-        mediaType: msg.media_type || null,
-        onceView: msg.once_view || false,
-        onceViewOpened: msg.once_view_opened || false,
-        type: msg.message_type || "text",
-        gifUrl:
-          msg.media_url && msg.media_type === "gif" ? msg.media_url : null,
-      };
+      const incoming = decryptRawMessage(msg, key);
+      incoming.status = msg.status || "delivered";
+      const isMine = incoming.isSent;
 
       setMessages((prev) => {
         if (prev.some((m) => m.id === msg.id)) return prev;
@@ -936,9 +912,9 @@ const ChatInterface = () => {
       )}
 
       {/* E2E badge */}
-      <View style={styles.encryptionBadge}>
-        <Lock size={10} color="#666" />
-        <Text style={styles.encryptionText}>End-to-end encrypted</Text>
+      <View style={[styles.encryptionBadge, { backgroundColor: isDarkMode ? "rgba(255,255,255,0.04)" : "#FFF1EC", borderRadius: 999, alignSelf: "center", paddingHorizontal: 12, marginVertical: 8 }]}>
+        <Lock size={11} color={theme.textSecondary} />
+        <Text style={[styles.encryptionText, { color: theme.textSecondary, fontFamily: "Inter_500Medium" }]}>End-to-end encrypted</Text>
       </View>
 
       {/* Block banners */}
@@ -970,8 +946,8 @@ const ChatInterface = () => {
           keyExtractor={(item) => item.id}
           renderItem={renderItem}
           contentContainerStyle={{
-            paddingHorizontal: 12,
-            paddingVertical: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 14,
             backgroundColor: theme.bgPrimary,
           }}
         />

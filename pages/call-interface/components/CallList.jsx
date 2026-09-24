@@ -21,6 +21,7 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Fonts, Palette } from "../../../constants/theme";
 import { useDarkMode } from "../../../context/DarkModeContext";
 import { getProfilePhotoUrl } from "../../../helper/DefaultImageUrl";
 
@@ -88,12 +89,10 @@ const CallRow = memo(({
       : PhoneOutgoing;
 
   const statusColor = isMissed
-    ? "#ef4444"
+    ? theme.error
     : isIncoming
       ? "#22c55e"
-      : isDarkMode
-        ? "#9ca3af"
-        : "#6b7280";
+      : theme.textVariant;
 
   const statusLabel = isMissed
     ? "Missed"
@@ -132,8 +131,8 @@ const CallRow = memo(({
       style={[
         styles.rowCard,
         {
-          backgroundColor: isDarkMode ? "#1e2433" : "#ffffff",
-          borderColor: isDarkMode ? "#2d3748" : "#e5e7eb",
+          backgroundColor: theme.surfaceLowest,
+          borderColor: theme.outlineVariant,
           opacity,
           transform: [{ translateY }],
         },
@@ -144,7 +143,7 @@ const CallRow = memo(({
         {photoUrl ? (
           <Image source={{ uri: photoUrl }} style={styles.avatar} />
         ) : (
-          <View style={styles.avatarFallback}>
+          <View style={[styles.avatarFallback, { backgroundColor: theme.primary }]}>
             <Text style={styles.avatarInitials}>
               {getInitials(call.contact?.name)}
             </Text>
@@ -154,7 +153,7 @@ const CallRow = memo(({
         <View
           style={[
             styles.typeBadge,
-            { backgroundColor: isDarkMode ? "#111827" : "#fff" },
+            { backgroundColor: theme.surface, borderColor: theme.outlineVariant },
           ]}
         >
           {isVideo ? (
@@ -171,7 +170,7 @@ const CallRow = memo(({
           style={[
             styles.contactName,
             {
-              color: isMissed ? "#ef4444" : isDarkMode ? "#f9fafb" : "#111827",
+              color: isMissed ? theme.error : theme.text,
             },
           ]}
           numberOfLines={1}
@@ -183,7 +182,7 @@ const CallRow = memo(({
           <Text
             style={[
               styles.metaText,
-              { color: isDarkMode ? "#9ca3af" : "#6b7280" },
+              { color: theme.textVariant },
             ]}
           >
             {statusLabel}
@@ -193,20 +192,20 @@ const CallRow = memo(({
               <Text
                 style={[
                   styles.metaDot,
-                  { color: isDarkMode ? "#9ca3af" : "#6b7280" },
+                  { color: theme.textVariant },
                 ]}
               >
                 ·
               </Text>
               <Clock
                 size={10}
-                color={isDarkMode ? "#9ca3af" : "#6b7280"}
+                color={theme.textVariant}
                 strokeWidth={2}
               />
               <Text
                 style={[
                   styles.metaText,
-                  { color: isDarkMode ? "#9ca3af" : "#6b7280" },
+                  { color: theme.textVariant },
                 ]}
               >
                 {durationLabel}
@@ -214,33 +213,26 @@ const CallRow = memo(({
             </>
           ) : null}
         </View>
+        <Text style={[styles.timestamp, { color: theme.textVariant }]} numberOfLines={1}>
+          {formatTimestamp(call.timestamp)}
+        </Text>
       </View>
-
-      {/* Timestamp */}
-      <Text
-        style={[
-          styles.timestamp,
-          { color: isDarkMode ? "#9ca3af" : "#6b7280" },
-        ]}
-      >
-        {formatTimestamp(call.timestamp)}
-      </Text>
 
       {/* Call-again action buttons */}
       <View style={styles.actionBtns}>
         <TouchableOpacity
           onPress={() => onAudioCall(call)}
           activeOpacity={0.7}
-          style={[styles.callBtn, styles.audioCallBtn]}
+          style={[styles.callBtn, { backgroundColor: isDarkMode ? "rgba(237,137,54,0.14)" : "#FFF1EC", borderColor: theme.outlineVariant }]}
         >
-          <Phone size={16} color="#FF9933" strokeWidth={2} />
+          <Phone size={16} color={theme.primary} strokeWidth={2} />
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => onVideoCall(call)}
           activeOpacity={0.7}
-          style={[styles.callBtn, styles.videoCallBtn]}
+          style={[styles.callBtn, { backgroundColor: isDarkMode ? "rgba(237,137,54,0.14)" : "#FFF1EC", borderColor: theme.outlineVariant }]}
         >
-          <Video size={16} color="#667eea" strokeWidth={2} />
+          <Video size={16} color={theme.primary} strokeWidth={2} />
         </TouchableOpacity>
       </View>
     </Animated.View>
@@ -261,7 +253,8 @@ const SectionLabel = ({ label, isDarkMode }) => (
 
 const CallList = ({ callHistory = [], onAudioCall, onVideoCall, onBack }) => {
   const insets = useSafeAreaInsets();
-  const { isDarkMode, theme } = useDarkMode();
+  const { isDarkMode } = useDarkMode();
+  const theme = isDarkMode ? Palette.dark : Palette.light;
   const [search, setSearch] = useState("");
 
   const filtered = useMemo(() => {
@@ -338,11 +331,11 @@ const CallList = ({ callHistory = [], onAudioCall, onVideoCall, onBack }) => {
     [isDarkMode, onAudioCall, onVideoCall],
   );
 
-  const bgColor = isDarkMode ? "#111827" : "#f9fafb";
-  const borderColor = isDarkMode ? "#2d3748" : "#e5e7eb";
-  const textPrimary = isDarkMode ? "#f9fafb" : "#111827";
-  const textSecondary = isDarkMode ? "#9ca3af" : "#6b7280";
-  const cardBg = isDarkMode ? "#1a2236" : "#ffffff";
+  const bgColor = theme.surface;
+  const borderColor = theme.outlineVariant;
+  const textPrimary = theme.text;
+  const textSecondary = theme.textVariant;
+  const cardBg = theme.surfaceLowest;
 
   return (
     <View style={[styles.container, { backgroundColor: bgColor }]}>
@@ -364,7 +357,7 @@ const CallList = ({ callHistory = [], onAudioCall, onVideoCall, onBack }) => {
             activeOpacity={0.7}
             style={[styles.backBtn, { backgroundColor: cardBg, borderColor }]}
           >
-            <ArrowLeft size={16} color={textPrimary} strokeWidth={2} />
+            <ArrowLeft size={18} color={textPrimary} strokeWidth={2} />
           </TouchableOpacity>
           <View>
             <Text style={[styles.pageTitle, { color: textPrimary }]}>
@@ -395,8 +388,8 @@ const CallList = ({ callHistory = [], onAudioCall, onVideoCall, onBack }) => {
       {/* ── Empty state ── */}
       {filtered.length === 0 && (
         <View style={styles.emptyState}>
-          <View style={[styles.emptyIconWrap, { backgroundColor: cardBg }]}>
-            <PhoneCall size={28} color={textSecondary} strokeWidth={1.5} />
+          <View style={[styles.emptyIconWrap, { backgroundColor: theme.surfaceLow }]}>
+            <PhoneCall size={26} color={theme.primary} strokeWidth={1.5} />
           </View>
           <Text style={[styles.emptyTitle, { color: textPrimary }]}>
             {search ? "No results" : "No calls yet"}
@@ -435,72 +428,75 @@ const styles = StyleSheet.create({
   },
   // ── Header ───────────────────────────────────────────────────────────────
   header: {
-    paddingHorizontal: 16,
-    paddingBottom: 12,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
     borderBottomWidth: 1,
     zIndex: 10,
   },
   titleRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 12,
-    marginBottom: 12,
+    gap: 14,
+    marginBottom: 16,
   },
   backBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 42,
+    height: 42,
+    borderRadius: 15,
     borderWidth: 1,
     alignItems: "center",
     justifyContent: "center",
   },
   pageTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    lineHeight: 24,
+    fontSize: 25,
+    fontFamily: Fonts.playfair.bold,
+    lineHeight: 31,
   },
   pageSubtitle: {
     fontSize: 12,
-    marginTop: 1,
+    fontFamily: Fonts.inter.regular,
+    marginTop: 2,
   },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 12,
-    borderWidth: 1,
+    paddingHorizontal: 15,
+    minHeight: 50,
+    paddingVertical: 7,
+    borderRadius: 18,
+    borderWidth: 0.8,
   },
   searchInput: {
     flex: 1,
     fontSize: 14,
+    fontFamily: Fonts.inter.regular,
     paddingVertical: 0,
   },
   // ── Section label ─────────────────────────────────────────────────────────
   sectionLabel: {
-    fontSize: 11,
-    fontWeight: "600",
-    letterSpacing: 1.5,
+    fontSize: 10,
+    fontFamily: Fonts.inter.bold,
+    letterSpacing: 1.2,
     paddingHorizontal: 4,
-    paddingTop: 16,
-    paddingBottom: 6,
+    paddingTop: 20,
+    paddingBottom: 9,
   },
   // ── List ─────────────────────────────────────────────────────────────────
   listContent: {
-    paddingHorizontal: 16,
+    paddingHorizontal: 18,
     paddingTop: 8,
   },
   // ── Call row ──────────────────────────────────────────────────────────────
   rowCard: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 16,
+    gap: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 13,
+    borderRadius: 18,
     borderWidth: 1,
-    marginBottom: 8,
+    marginBottom: 10,
   },
   avatarWrap: {
     position: "relative",
@@ -542,7 +538,7 @@ const styles = StyleSheet.create({
   },
   contactName: {
     fontSize: 14,
-    fontWeight: "600",
+    fontFamily: Fonts.inter.semibold,
   },
   metaRow: {
     flexDirection: "row",
@@ -551,15 +547,16 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   metaText: {
-    fontSize: 12,
+    fontSize: 11,
+    fontFamily: Fonts.inter.regular,
   },
   metaDot: {
     fontSize: 12,
   },
   timestamp: {
-    fontSize: 11,
-    flexShrink: 0,
-    marginRight: 4,
+    fontSize: 10,
+    fontFamily: Fonts.inter.regular,
+    marginTop: 5,
   },
   actionBtns: {
     flexDirection: "row",
@@ -567,20 +564,20 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   callBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    width: 34,
+    height: 34,
+    borderRadius: 17,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
   },
   audioCallBtn: {
-    backgroundColor: "rgba(255,153,51,0.1)",
-    borderColor: "rgba(255,153,51,0.2)",
+    backgroundColor: "#FFF1EC",
+    borderColor: "#E1BFB2",
   },
   videoCallBtn: {
-    backgroundColor: "rgba(102,126,234,0.1)",
-    borderColor: "rgba(102,126,234,0.2)",
+    backgroundColor: "#FFF1EC",
+    borderColor: "#E1BFB2",
   },
   // ── Empty state ───────────────────────────────────────────────────────────
   emptyState: {

@@ -24,6 +24,8 @@ import IncomingVideoCall from "./components/IncomingVideoCall";
 
 // Hooks & Context
 import { AppContext } from "../../context/AppContext";
+import { Fonts, Palette } from "../../constants/theme";
+import { useDarkMode } from "../../context/DarkModeContext";
 import useCall from "../../hooks/useCall";
 import { socket } from "../../lib/sockets";
 import {
@@ -245,6 +247,8 @@ const CameraPreview = ({ localStreamURL }) => {
 const CallContainer = () => {
   const router = useRouter();
   const { user } = useContext(AppContext);
+  const { isDarkMode } = useDarkMode();
+  const pagePalette = isDarkMode ? Palette.dark : Palette.light;
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const remoteAudioRef = useRef(null);
@@ -536,22 +540,19 @@ const CallContainer = () => {
 
   if (loading) {
     return (
-      <LinearGradient
-        colors={["#0f0c29", "#1a1a3e"]}
-        style={[styles.fullScreen, styles.center]}
-      >
+      <View style={[styles.fullScreen, styles.center, { backgroundColor: pagePalette.surface }]}>
         <View style={styles.loadingInner}>
-          <ActivityIndicator size="large" color="rgba(255,255,255,0.6)" />
-          <Text style={styles.loadingText}>Loading calls…</Text>
+          <ActivityIndicator size="small" color={pagePalette.primary} />
+          <Text style={[styles.loadingText, { color: pagePalette.textVariant, fontFamily: Fonts.inter.medium }]}>Loading calls…</Text>
         </View>
-      </LinearGradient>
+      </View>
     );
   }
 
   if (error) {
     return (
-      <View style={[styles.fullScreen, styles.center]}>
-        <Text style={styles.errorText}>{error}</Text>
+      <View style={[styles.fullScreen, styles.center, { backgroundColor: pagePalette.surface }]}>
+        <Text style={[styles.errorText, { color: pagePalette.error, fontFamily: Fonts.inter.medium }]}>{error}</Text>
       </View>
     );
   }

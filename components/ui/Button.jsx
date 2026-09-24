@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Pressable, Text } from "react-native";
+import { ActivityIndicator, Animated, Pressable, Text } from "react-native";
 import Icon from "../AppIcon";
 
 const VARIANT_STYLES = {
@@ -33,6 +33,7 @@ const SIZE_STYLES = {
 };
 
 const ICON_SIZE_MAP = { xs: 12, sm: 14, default: 16, lg: 18, xl: 20, icon: 16 };
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 const Button = React.forwardRef(
   (
@@ -47,6 +48,8 @@ const Button = React.forwardRef(
       fullWidth = false,
       disabled = false,
       onPress,
+      onPressIn,
+      onPressOut,
       style,
       ...props
     },
@@ -56,6 +59,17 @@ const Button = React.forwardRef(
     const ss = SIZE_STYLES[size] || SIZE_STYLES.default;
     const calcIconSize = iconSize || ICON_SIZE_MAP[size] || 16;
     const isDisabled = disabled || loading;
+    const pressScale = React.useRef(new Animated.Value(1)).current;
+
+    const animatePress = (toValue) => {
+      Animated.spring(pressScale, {
+        toValue,
+        stiffness: 420,
+        damping: 26,
+        mass: 0.55,
+        useNativeDriver: true,
+      }).start();
+    };
 
     const buttonStyle = {
       height: ss.height,
@@ -72,11 +86,21 @@ const Button = React.forwardRef(
     };
 
     return (
-      <Pressable
+      <AnimatedPressable
         ref={ref}
         onPress={!isDisabled ? onPress : undefined}
+        onPressIn={(event) => {
+          if (!isDisabled) animatePress(0.98);
+          onPressIn?.(event);
+        }}
+        onPressOut={(event) => {
+          animatePress(1);
+          onPressOut?.(event);
+        }}
+        accessibilityState={{ disabled: isDisabled, busy: loading }}
         style={[
           buttonStyle,
+          { transform: [{ scale: pressScale }] },
           style,
         ]}
         {...props}
@@ -113,7 +137,7 @@ const Button = React.forwardRef(
             style={children ? { marginLeft: 8 } : undefined}
           />
         )}
-      </Pressable>
+      </AnimatedPressable>
     );
   },
 );

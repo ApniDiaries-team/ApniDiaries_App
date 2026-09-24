@@ -51,6 +51,9 @@ export default function RootLayout() {
                     screenOptions={{
                       headerShown: !shouldHideNav,
                       header: () => <NavBar />,
+                      animation: "slide_from_right",
+                      animationDuration: 220,
+                      gestureEnabled: true,
                     }}
                   >
                     <Stack.Screen

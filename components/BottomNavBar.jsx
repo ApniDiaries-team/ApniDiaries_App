@@ -4,7 +4,8 @@ import * as Haptics from "expo-haptics";
 import { usePathname, useRouter } from "expo-router";
 import React, { useContext } from "react";
 import { Animated, Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Platform } from "react-native";
 import { Fonts, Palette } from "../constants/theme";
 import { AppContext } from "../context/AppContext";
 import { useDarkMode } from "../context/DarkModeContext";
@@ -99,6 +100,7 @@ const BottomTab = ({ tab, active, color, isDarkMode, onPress }) => {
 const BottomNavBar = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const insets = useSafeAreaInsets();
   const { user, isBootstrapped } = useContext(AppContext) || {
     user: null,
     isBootstrapped: false,
@@ -107,6 +109,8 @@ const BottomNavBar = () => {
   const { isScrolling } = useScroll();
   if (!isBootstrapped || !user) return null;
   if (AUTH_ROUTES.includes(pathname)) return null;
+  const bottomPadding =
+    Platform.OS === "ios" ? Math.max(insets.bottom - 14, 0) : insets.bottom;
   return (
     <View
       style={{
@@ -115,6 +119,7 @@ const BottomNavBar = () => {
         right: 0,
         zIndex: 100,
         backgroundColor: isDarkMode ? Palette.dark.surface : Palette.light.surfaceLowest,
+        paddingBottom: bottomPadding,
         borderTopWidth: 0.2,
         borderTopColor: isDarkMode ? Palette.dark.outlineVariant : Palette.light.outlineVariant,
         ...(isScrolling
@@ -128,10 +133,6 @@ const BottomNavBar = () => {
           : undefined),
       }}
     >
-      <SafeAreaView
-        edges={["bottom"]}
-        style={{ width: "100%", backgroundColor: isDarkMode ? Palette.dark.surface : Palette.light.surfaceLowest }}
-      >
         <View
           style={{
             flexDirection: "row",
@@ -169,7 +170,6 @@ const BottomNavBar = () => {
             );
           })}
         </View>
-      </SafeAreaView>
     </View>
   );
 };

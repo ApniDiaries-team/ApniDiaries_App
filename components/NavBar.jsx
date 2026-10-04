@@ -186,12 +186,15 @@ const NavBar = () => {
         <Pressable onPress={() => router.push(isUserLoggedIn ? "/landing" : "/home")}>
           <Image
             source={Logo}
-            style={{
-              height: 45,
-              width: 90,
-              marginLeft: -10,
-              tintColor: isDarkMode && isUserLoggedIn ? "#FFF8F6" : null,
-            }}
+            style={[
+              {
+                height: 45,
+                width: 90,
+                marginLeft: -10,
+              },
+              // Only apply tintColor if it's explicitly needed
+              isDarkMode && isUserLoggedIn && { tintColor: "#FFF8F6" }
+            ]}
             resizeMode="contain"
           />
         </Pressable>

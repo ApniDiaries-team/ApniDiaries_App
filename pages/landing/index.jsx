@@ -39,11 +39,31 @@ const journeys = [
 ];
 
 const JourneyCard = ({ item, onPress }) => (
-  <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`${item.action}: ${item.title}`} style={({ pressed }) => ({ opacity: pressed ? 0.92 : 1, transform: [{ scale: pressed ? 0.99 : 1 }] })}>
-    <LinearGradient colors={item.colors} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={{ minHeight: 184, borderRadius: 22, overflow: 'hidden', flexDirection: 'row', alignItems: 'center', paddingLeft: 22, paddingRight: 8, paddingVertical: 20 }}>
+  <Pressable 
+    onPress={onPress} 
+    accessibilityRole="button" 
+    accessibilityLabel={`${item.action}: ${item.title}`} 
+    style={({ pressed }) => ({ opacity: pressed ? 0.92 : 1, transform: [{ scale: pressed ? 0.99 : 1 }] })}
+  >
+    <LinearGradient 
+      colors={item.colors} 
+      start={{ x: 0, y: 0 }} 
+      end={{ x: 1, y: 1 }} 
+      style={{ 
+        minHeight: 184, 
+        borderRadius: 22, 
+        overflow: 'hidden', 
+        flexDirection: 'row', 
+        paddingLeft: 22, 
+        paddingRight: 8 
+        // 1. Removed paddingVertical and alignItems here so columns stretch to full height
+      }}
+    >
       <View style={{ position: 'absolute', width: 150, height: 150, borderRadius: 75, right: -26, top: -66, backgroundColor: 'rgba(255,255,255,0.08)' }} />
       <View style={{ position: 'absolute', width: 120, height: 120, borderRadius: 60, right: 64, bottom: -88, backgroundColor: 'rgba(255,255,255,0.07)' }} />
-      <View style={{ flex: 1, alignItems: 'flex-start', zIndex: 1 }}>
+      
+      {/* 2. Added paddingVertical and justifyContent: 'center' to the text column so it stays centered */}
+      <View style={{ flex: 1, alignItems: 'flex-start', justifyContent: 'center', paddingVertical: 20, zIndex: 1 }}>
         <Text style={{ fontFamily: Fonts.playfair.bold, fontSize: 22, lineHeight: 28, color: '#FFFFFF' }}>{item.title}</Text>
         <Text style={{ fontFamily: Fonts.inter.regular, fontSize: 13, color: 'rgba(255,255,255,0.82)', marginTop: 5 }}>{item.subtitle}</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 18, paddingHorizontal: 16, paddingVertical: 10, borderRadius: 12, backgroundColor: '#FFF8F6' }}>
@@ -51,9 +71,16 @@ const JourneyCard = ({ item, onPress }) => (
           <Feather name="arrow-right" size={15} color={item.colors[1]} />
         </View>
       </View>
-      <View style={{ width: 132, height: 132, alignItems: 'center', justifyContent: 'center', marginLeft: 4 }}>
-        <View style={{ position: 'absolute', width: 112, height: 112, borderRadius: 56, backgroundColor: 'rgba(255,255,255,0.13)' }} />
-        <Image source={item.image} resizeMode="contain" style={{ width: 132, height: 132, borderRadius: 16 }} />
+
+      {/* 3. Set justifyContent: 'flex-end' to push the image flush to the bottom */}
+      <View style={{ width: 132, justifyContent: 'flex-end', alignItems: 'center', marginLeft: 4 }}>
+        {/* Lifted the background circle slightly so it stays centered behind the image */}
+        <View style={{ position: 'absolute', width: 112, height: 112, borderRadius: 56, backgroundColor: 'rgba(255,255,255,0.13)', bottom: 15 }} />
+        <Image 
+          source={item.image} 
+          resizeMode="contain" 
+          style={{ width: 132, height: 140 }} 
+        />
       </View>
     </LinearGradient>
   </Pressable>

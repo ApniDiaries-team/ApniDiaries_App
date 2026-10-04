@@ -110,8 +110,7 @@ const BottomNavBar = () => {
   const { isScrolling } = useScroll();
   if (!isBootstrapped || !user) return null;
   if (AUTH_ROUTES.includes(pathname)) return null;
-  const bottomPadding =
-    Platform.OS === "ios" ? Math.max(insets.bottom - 24, 4) : insets.bottom;
+  const bottomPadding = Platform.OS === "ios" ? Math.max(insets.bottom - 12, 16) : Math.max(insets.bottom, 12);
   return (
     <View
       style={{

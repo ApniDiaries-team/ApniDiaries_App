@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { usePathname, useRouter } from "expo-router";
 import React, { useContext, useEffect, useState } from "react";
-import { Image, Modal, Pressable, ScrollView, Text, View } from "react-native";
+import { Image, Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import api from "../api/axios";
 import Logo from "../assets/Apni diaries logo 1.png";
@@ -158,11 +158,6 @@ const NavBar = () => {
       <View
         style={{
           paddingTop: insets.top,
-          height: 45 + insets.top,
-          paddingHorizontal: 16,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
           backgroundColor: isDarkMode ? "#0B0E14" : "#FFF8F6",
           zIndex: 20,
           borderBottomWidth: 0.2,
@@ -178,6 +173,15 @@ const NavBar = () => {
             : undefined),
         }}
       >
+        <View
+          style={{
+            height: 45,
+            paddingHorizontal: 16,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
         {/* Logo */}
         <Pressable onPress={() => router.push(isUserLoggedIn ? "/landing" : "/home")}>
           <Image
@@ -186,7 +190,7 @@ const NavBar = () => {
               height: 45,
               width: 90,
               marginLeft: -10,
-              tintColor: isDarkMode && isUserLoggedIn ? "#FFF8F6" : undefined,
+              tintColor: isDarkMode && isUserLoggedIn ? "#FFF8F6" : null,
             }}
             resizeMode="contain"
           />
@@ -226,6 +230,7 @@ const NavBar = () => {
           <Pressable hitSlop={{top:10,bottom:10,left:10,right:10}} onPress={() => setMenuOpen((open)=>!open)} accessibilityRole="button" accessibilityLabel={menuOpen?'Close menu':'Open menu'}>
             <Feather name={menuOpen?'x':'menu'} size={25} color={iconColor(isDarkMode,isUserLoggedIn)} />
           </Pressable>
+        </View>
         </View>
       </View>
 

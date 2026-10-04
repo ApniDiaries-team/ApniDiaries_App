@@ -15,7 +15,7 @@ import DarkModeToggle from "./common/DarkModeToggle";
 
 const AUTH_ROUTES = ["/login", "/signup", "/forgotPassword"];
 
-const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onLogout }) => {
+const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onLogout ,insets }) => {
   const background = isDarkMode ? "#0B0E14" : "#FFF8F6";
   const foreground = isDarkMode ? "#FFF8F6" : "#261913";
   const muted = isDarkMode ? "#A0AEC0" : "#594137";
@@ -31,9 +31,16 @@ const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onL
     { id: "contact-us", label: "Contact Us", path: "/contact-us" },
   ];
 
+  const Container = Platform.OS === "ios" ? View : SafeAreaView;
+
+  const containerProps =
+  Platform.OS === "ios"
+    ? { style: { flex: 1, backgroundColor: background, paddingTop: insets.top, paddingBottom: insets.bottom } }
+    : { edges: ["top", "bottom"], style: { flex: 1, backgroundColor: background } };
+
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose} statusBarTranslucent={false}>
-      <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1, backgroundColor: background }}>
+      <Container {...containerProps}>
         <View style={{ minHeight: 60, paddingHorizontal: 20, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: isDarkMode ? "#2D3748" : "#E1BFB2" }}>
           <Image source={Logo} style={{ width: 100, height: 54, tintColor: isDarkMode ? "#FFF8F6" : undefined }} resizeMode="contain" />
           <Pressable onPress={onClose} hitSlop={12} accessibilityRole="button" accessibilityLabel="Close menu">
@@ -44,9 +51,6 @@ const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onL
         <ScrollView
           style={{ flex: 1 }}
           contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 16, paddingBottom: 28 }}
-          contentInsetAdjustmentBehavior="never"
-          automaticallyAdjustContentInsets={false}
-          automaticallyAdjustsScrollIndicatorInsets={false}
           showsVerticalScrollIndicator
           nestedScrollEnabled
           keyboardShouldPersistTaps="handled"
@@ -75,7 +79,7 @@ const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onL
             <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 15, color: "#BA1A1A" }}>Logout</Text>
           </Pressable>
         </ScrollView>
-      </SafeAreaView>
+      </Container>
     </Modal>
   );
 };
@@ -97,6 +101,17 @@ const NavBar = () => {
   const [showModal, setShowModal] = useState(false);
   const { isScrolling } = useScroll();
   const isUserLoggedIn = Boolean(user);
+
+    useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (isScrolling) {
+      setMenuOpen(false);
+    }
+  }, [isScrolling]);
+
   if (!isBootstrapped) return null;
 
   if (AUTH_ROUTES.includes(pathname)) return null;
@@ -137,15 +152,7 @@ const NavBar = () => {
     setMenuOpen(false);
     router.push(path);
   };
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [pathname]);
 
-  useEffect(() => {
-    if (isScrolling) {
-      setMenuOpen(false);
-    }
-  }, [isScrolling]);
   return (
     <>
       <View
@@ -454,6 +461,7 @@ const NavBar = () => {
         isDarkMode={isDarkMode}
         onNavigate={navigateTo}
         onLogout={onLogout}
+        insets={insets}
       />
 
       <ComingSoonModal isOpen={showModal} onClose={() => setShowModal(false)} />

@@ -80,6 +80,7 @@ const BottomTab = ({ tab, active, color, isDarkMode, onPress }) => {
         </View>
         <Text
           numberOfLines={1}
+          allowFontScaling={false}
           style={{
             width: "100%",
             textAlign: "center",
@@ -110,7 +111,7 @@ const BottomNavBar = () => {
   if (!isBootstrapped || !user) return null;
   if (AUTH_ROUTES.includes(pathname)) return null;
   const bottomPadding =
-    Platform.OS === "ios" ? Math.max(insets.bottom - 14, 0) : insets.bottom;
+    Platform.OS === "ios" ? Math.max(insets.bottom - 24, 4) : insets.bottom;
   return (
     <View
       style={{
@@ -139,9 +140,8 @@ const BottomNavBar = () => {
             alignItems: "center",
             justifyContent: "space-between",
             width: "100%",
-            height: 62,
+            height: 58,
             paddingHorizontal: 8,
-            paddingTop: 2,
           }}
         >
           {BOTTOM_TABS.map((tab) => {

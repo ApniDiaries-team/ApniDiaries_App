@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Image, Modal, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import api from "../api/axios";
-import Logo from "../assets/Apni diaries logo 1.png";
+import Logo from "../assets/Apni-diaries-logo-1.png";
 import { Fonts } from "../constants/theme";
 import { AppContext } from "../context/AppContext";
 import { useDarkMode } from "../context/DarkModeContext";

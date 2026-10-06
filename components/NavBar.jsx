@@ -8,7 +8,7 @@ import {
   useSafeAreaInsets,
 } from "react-native-safe-area-context";
 import api from "../api/axios";
-import Logo from "../assets/Apni-diaries-logo-1.png";
+import Logo from "../assets/Apni diaries logo 1.png";
 import { Fonts } from "../constants/theme";
 import { AppContext } from "../context/AppContext";
 import { useDarkMode } from "../context/DarkModeContext";
@@ -45,7 +45,7 @@ const BrandLogo = ({ isDarkMode, size = 46 }) => (
   </View>
 );
 
-const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onLogout }) => {
+const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onLogout, topInset = 0, bottomInset = 0 }) => {
   const background = isDarkMode ? "#0B0E14" : "#FFF8F6";
   const foreground = isDarkMode ? "#FFF8F6" : "#261913";
   const muted = isDarkMode ? "#A0AEC0" : "#594137";
@@ -63,7 +63,8 @@ const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onL
 
   return (
     <Modal visible={visible} animationType="slide" onRequestClose={onClose} statusBarTranslucent={false}>
-      <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1, backgroundColor: background }}>
+      {/* A Modal is its own native root, so SafeAreaView can't see the insets here on iOS; apply them manually. */}
+      <View style={{ flex: 1, backgroundColor: background, paddingTop: topInset, paddingBottom: bottomInset }}>
         <View style={{ minHeight: 60, paddingHorizontal: 20, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: isDarkMode ? "#2D3748" : "#E1BFB2" }}>
           <BrandLogo isDarkMode={isDarkMode} size={50} />
           <Pressable onPress={onClose} hitSlop={12} accessibilityRole="button" accessibilityLabel="Close menu">
@@ -102,7 +103,7 @@ const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onL
             <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 15, color: "#BA1A1A" }}>Logout</Text>
           </Pressable>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     </Modal>
   );
 };
@@ -485,6 +486,8 @@ const NavBar = () => {
         isDarkMode={isDarkMode}
         onNavigate={navigateTo}
         onLogout={onLogout}
+        topInset={topInset}
+        bottomInset={insets.bottom}
       />
 
       <ComingSoonModal isOpen={showModal} onClose={() => setShowModal(false)} />

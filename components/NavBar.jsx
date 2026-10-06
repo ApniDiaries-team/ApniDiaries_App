@@ -1,8 +1,12 @@
 import { Feather } from "@expo/vector-icons";
 import { usePathname, useRouter } from "expo-router";
 import React, { useContext, useEffect, useState } from "react";
-import { Image, Modal, Pressable, ScrollView, Text, View } from "react-native";
-import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import { Image, Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
+import {
+  SafeAreaView,
+  initialWindowMetrics,
+  useSafeAreaInsets,
+} from "react-native-safe-area-context";
 import api from "../api/axios";
 import Logo from "../assets/Apni-diaries-logo-1.png";
 import { Fonts } from "../constants/theme";
@@ -14,6 +18,32 @@ import ComingSoonModal from "./common/ComingSoonModal";
 import DarkModeToggle from "./common/DarkModeToggle";
 
 const AUTH_ROUTES = ["/login", "/signup", "/forgotPassword"];
+
+// The logo PNG is transparent with black artwork, so on a dark header it
+// disappears. Instead of tinting (which flattens it and is unreliable on iOS),
+// we sit it on a light rounded chip in dark mode and show it as-is in light mode.
+const BrandLogo = ({ isDarkMode, size = 46 }) => (
+  <View
+    collapsable={false}
+    style={{
+      width: size,
+      height: size,
+      borderRadius: isDarkMode ? 12 : 0,
+      padding: isDarkMode ? 3 : 0,
+      backgroundColor: isDarkMode ? "#FFF8F6" : "transparent",
+      alignItems: "center",
+      justifyContent: "center",
+      overflow: "hidden",
+    }}
+  >
+    <Image
+      source={Logo}
+      style={{ width: "100%", height: "100%" }}
+      resizeMode="contain"
+      accessibilityLabel="Apni Diaries logo"
+    />
+  </View>
+);
 
 const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onLogout }) => {
   const background = isDarkMode ? "#0B0E14" : "#FFF8F6";
@@ -35,7 +65,7 @@ const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onL
     <Modal visible={visible} animationType="slide" onRequestClose={onClose} statusBarTranslucent={false}>
       <SafeAreaView edges={["top", "bottom"]} style={{ flex: 1, backgroundColor: background }}>
         <View style={{ minHeight: 60, paddingHorizontal: 20, flexDirection: "row", alignItems: "center", justifyContent: "space-between", borderBottomWidth: 1, borderBottomColor: isDarkMode ? "#2D3748" : "#E1BFB2" }}>
-          <Image source={Logo} style={{ width: 100, height: 54, tintColor: isDarkMode ? "#FFF8F6" : undefined }} resizeMode="contain" />
+          <BrandLogo isDarkMode={isDarkMode} size={50} />
           <Pressable onPress={onClose} hitSlop={12} accessibilityRole="button" accessibilityLabel="Close menu">
             <Feather name="x" size={26} color={isDarkMode ? "#FFF8F6" : "#A23F00"} />
           </Pressable>
@@ -87,6 +117,13 @@ const NavBar = () => {
     isBootstrapped: false,
   };
   const insets = useSafeAreaInsets();
+  // On iOS the insets read inside a custom stack header can come back as 0,
+  // which pushes the header (and the logo) under the status bar / Dynamic Island.
+  // Fall back to the window's initial insets so the header always clears it.
+  const topInset =
+    Platform.OS === "ios"
+      ? Math.max(insets.top, initialWindowMetrics?.insets?.top ?? 0)
+      : insets.top;
   const { isDarkMode, setDarkMode } = useDarkMode();
   const { unreadCount } = useNotifications();
 
@@ -147,8 +184,8 @@ const NavBar = () => {
     <>
       <View
         style={{
-          paddingTop: insets.top,
-          height: 45 + insets.top,
+          paddingTop: topInset,
+          height: 54 + topInset,
           paddingHorizontal: 16,
           flexDirection: "row",
           justifyContent: "space-between",
@@ -169,17 +206,14 @@ const NavBar = () => {
         }}
       >
         {/* Logo */}
-        <Pressable onPress={() => router.push(isUserLoggedIn ? "/landing" : "/home")}>
-          <Image
-            source={Logo}
-            style={{
-              height: 45,
-              width: 90,
-              marginLeft: -10,
-              tintColor: isDarkMode && isUserLoggedIn ? "#FFF8F6" : undefined,
-            }}
-            resizeMode="contain"
-          />
+        <Pressable
+          onPress={() => router.push(isUserLoggedIn ? "/landing" : "/home")}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Go to home"
+          style={{ height: 46, justifyContent: "center" }}
+        >
+          <BrandLogo isDarkMode={isDarkMode} size={46} />
         </Pressable>
 
         {/* Right actions */}

@@ -3,8 +3,8 @@ import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { usePathname, useRouter } from "expo-router";
 import React, { useContext } from "react";
-import { Animated, Pressable, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Animated, Platform, Pressable, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Fonts, Palette } from "../constants/theme";
 import { AppContext } from "../context/AppContext";
 import { useDarkMode } from "../context/DarkModeContext";
@@ -58,14 +58,14 @@ const BottomTab = ({ tab, active, color, isDarkMode, onPress }) => {
       style={({ pressed }) => ({
         flex: 1,
         minWidth: 0,
-        height: 58,
+        minHeight: 52,
         alignItems: "center",
         justifyContent: "center",
         opacity: pressed ? 0.78 : 1,
       })}
     >
-      <View style={{ width: "100%", height: 58, alignItems: "center", justifyContent: "center" }}>
-        <View style={{ width: 52, height: 32, alignItems: "center", justifyContent: "center", marginBottom: 1 }}>
+      <View style={{ width: "100%", minHeight: 52, paddingVertical: 2, alignItems: "center", justifyContent: "center" }}>
+        <View style={{ width: 52, height: 32, alignItems: "center", justifyContent: "center", marginBottom: 2 }}>
           <Animated.View
             pointerEvents="none"
             style={[
@@ -79,12 +79,19 @@ const BottomTab = ({ tab, active, color, isDarkMode, onPress }) => {
         </View>
         <Text
           numberOfLines={1}
+          // iOS Dynamic Type + a tight lineHeight is what clips the glyphs, so
+          // pin the scale, give the line real room and let it shrink if needed.
+          allowFontScaling={false}
+          adjustsFontSizeToFit
+          minimumFontScale={0.85}
           style={{
-            width: "100%",
+            alignSelf: "stretch",
             textAlign: "center",
             includeFontPadding: false,
             fontSize: 11,
-            lineHeight: 14,
+            lineHeight: 18,
+            paddingHorizontal: 2,
+            paddingBottom: Platform.OS === "ios" ? 1 : 0,
             fontFamily: active ? Fonts.inter.bold : Fonts.inter.medium,
             color,
           }}
@@ -105,6 +112,7 @@ const BottomNavBar = () => {
   };
   const { isDarkMode } = useDarkMode();
   const { isScrolling } = useScroll();
+  const insets = useSafeAreaInsets();
   if (!isBootstrapped || !user) return null;
   if (AUTH_ROUTES.includes(pathname)) return null;
   return (
@@ -128,9 +136,12 @@ const BottomNavBar = () => {
           : undefined),
       }}
     >
-      <SafeAreaView
-        edges={["bottom"]}
-        style={{ width: "100%", backgroundColor: isDarkMode ? Palette.dark.surface : Palette.light.surfaceLowest }}
+      <View
+        style={{
+          width: "100%",
+          paddingBottom: Platform.OS === "ios" ? Math.max(insets.bottom - 16, 0) : insets.bottom,
+          backgroundColor: isDarkMode ? Palette.dark.surface : Palette.light.surfaceLowest,
+        }}
       >
         <View
           style={{
@@ -138,8 +149,8 @@ const BottomNavBar = () => {
             alignItems: "center",
             justifyContent: "space-between",
             width: "100%",
-            height: 62,
-            paddingHorizontal: 8,
+            minHeight: 54,
+            paddingHorizontal: 12,
             paddingTop: 2,
           }}
         >
@@ -169,7 +180,7 @@ const BottomNavBar = () => {
             );
           })}
         </View>
-      </SafeAreaView>
+      </View>
     </View>
   );
 };

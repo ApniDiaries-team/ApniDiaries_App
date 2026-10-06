@@ -27,6 +27,9 @@ const BrandLogo = ({ isDarkMode, isLoggedIn = true, size = 46 }) => (
   >
     <Image
       source={Logo}
+      // Newer React Native versions read the `tintColor` prop; older ones read
+      // style.tintColor. Setting both makes the tint apply on every version.
+      tintColor={isDarkMode && isLoggedIn ? "#FFF8F6" : undefined}
       style={{
         width: "100%",
         height: "100%",

@@ -19,27 +19,28 @@ import DarkModeToggle from "./common/DarkModeToggle";
 
 const AUTH_ROUTES = ["/login", "/signup", "/forgotPassword"];
 
-// Original behaviour: in dark mode the logo is tinted to the light header colour.
-const BrandLogo = ({ isDarkMode, isLoggedIn = true, size = 46 }) => (
-  <View
-    collapsable={false}
-    style={{ width: size, height: size, alignItems: "center", justifyContent: "center" }}
-  >
-    <Image
-      source={Logo}
-      // Newer React Native versions read the `tintColor` prop; older ones read
-      // style.tintColor. Setting both makes the tint apply on every version.
-      tintColor={isDarkMode && isLoggedIn ? "#FFF8F6" : undefined}
-      style={{
-        width: "100%",
-        height: "100%",
-        tintColor: isDarkMode && isLoggedIn ? "#FFF8F6" : undefined,
-      }}
-      resizeMode="contain"
-      accessibilityLabel="Apni Diaries logo"
-    />
-  </View>
-);
+// Dark mode: logo tinted to the light header colour. Light mode: original logo, no tint.
+// The Image is remounted (key) and the tint props are only passed in dark mode, so iOS
+// can never keep a stale tint when switching back to light mode.
+const BrandLogo = ({ isDarkMode, isLoggedIn = true, size = 46 }) => {
+  const tinted = Boolean(isDarkMode && isLoggedIn);
+  const tintProps = tinted ? { tintColor: "#FFF8F6" } : {};
+  return (
+    <View
+      collapsable={false}
+      style={{ width: size, height: size, alignItems: "center", justifyContent: "center" }}
+    >
+      <Image
+        key={tinted ? "logo-dark" : "logo-light"}
+        source={Logo}
+        {...tintProps}
+        style={[{ width: "100%", height: "100%" }, tinted ? tintProps : null]}
+        resizeMode="contain"
+        accessibilityLabel="Apni Diaries logo"
+      />
+    </View>
+  );
+};
 
 const LoggedInMenuModal = ({ visible, onClose, user, isDarkMode, onNavigate, onLogout, topInset = 0, bottomInset = 0 }) => {
   const background = isDarkMode ? "#0B0E14" : "#FFF8F6";

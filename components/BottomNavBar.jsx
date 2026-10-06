@@ -3,9 +3,8 @@ import { Feather } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { usePathname, useRouter } from "expo-router";
 import React, { useContext } from "react";
-import { Animated, Pressable, Text, View } from "react-native";
+import { Animated, Platform, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Platform } from "react-native";
 import { Fonts, Palette } from "../constants/theme";
 import { AppContext } from "../context/AppContext";
 import { useDarkMode } from "../context/DarkModeContext";
@@ -59,14 +58,14 @@ const BottomTab = ({ tab, active, color, isDarkMode, onPress }) => {
       style={({ pressed }) => ({
         flex: 1,
         minWidth: 0,
-        height: 58,
+        minHeight: 60,
         alignItems: "center",
         justifyContent: "center",
         opacity: pressed ? 0.78 : 1,
       })}
     >
-      <View style={{ width: "100%", height: 58, alignItems: "center", justifyContent: "center" }}>
-        <View style={{ width: 52, height: 32, alignItems: "center", justifyContent: "center", marginBottom: 1 }}>
+      <View style={{ width: "100%", minHeight: 60, paddingVertical: 4, alignItems: "center", justifyContent: "center" }}>
+        <View style={{ width: 52, height: 32, alignItems: "center", justifyContent: "center", marginBottom: 2 }}>
           <Animated.View
             pointerEvents="none"
             style={[
@@ -80,13 +79,19 @@ const BottomTab = ({ tab, active, color, isDarkMode, onPress }) => {
         </View>
         <Text
           numberOfLines={1}
+          // iOS Dynamic Type + a tight lineHeight is what clips the glyphs, so
+          // pin the scale, give the line real room and let it shrink if needed.
           allowFontScaling={false}
+          adjustsFontSizeToFit
+          minimumFontScale={0.85}
           style={{
-            width: "100%",
+            alignSelf: "stretch",
             textAlign: "center",
             includeFontPadding: false,
             fontSize: 11,
-            lineHeight: 14,
+            lineHeight: 18,
+            paddingHorizontal: 2,
+            paddingBottom: Platform.OS === "ios" ? 1 : 0,
             fontFamily: active ? Fonts.inter.bold : Fonts.inter.medium,
             color,
           }}
@@ -101,16 +106,15 @@ const BottomTab = ({ tab, active, color, isDarkMode, onPress }) => {
 const BottomNavBar = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const insets = useSafeAreaInsets();
   const { user, isBootstrapped } = useContext(AppContext) || {
     user: null,
     isBootstrapped: false,
   };
   const { isDarkMode } = useDarkMode();
   const { isScrolling } = useScroll();
+  const insets = useSafeAreaInsets();
   if (!isBootstrapped || !user) return null;
   if (AUTH_ROUTES.includes(pathname)) return null;
-  const bottomPadding = Platform.OS === "ios" ? Math.max(insets.bottom - 12, 16) : Math.max(insets.bottom, 12);
   return (
     <View
       style={{
@@ -119,7 +123,6 @@ const BottomNavBar = () => {
         right: 0,
         zIndex: 100,
         backgroundColor: isDarkMode ? Palette.dark.surface : Palette.light.surfaceLowest,
-        paddingBottom: bottomPadding,
         borderTopWidth: 0.2,
         borderTopColor: isDarkMode ? Palette.dark.outlineVariant : Palette.light.outlineVariant,
         ...(isScrolling
@@ -133,14 +136,22 @@ const BottomNavBar = () => {
           : undefined),
       }}
     >
+      <View
+        style={{
+          width: "100%",
+          paddingBottom: Platform.OS === "ios" ? Math.max(insets.bottom, 8) : insets.bottom,
+          backgroundColor: isDarkMode ? Palette.dark.surface : Palette.light.surfaceLowest,
+        }}
+      >
         <View
           style={{
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
             width: "100%",
-            height: 58,
-            paddingHorizontal: 8,
+            minHeight: 64,
+            paddingHorizontal: 12,
+            paddingTop: 4,
           }}
         >
           {BOTTOM_TABS.map((tab) => {
@@ -169,6 +180,7 @@ const BottomNavBar = () => {
             );
           })}
         </View>
+      </View>
     </View>
   );
 };

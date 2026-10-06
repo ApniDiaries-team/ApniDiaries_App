@@ -19,26 +19,19 @@ import DarkModeToggle from "./common/DarkModeToggle";
 
 const AUTH_ROUTES = ["/login", "/signup", "/forgotPassword"];
 
-// The logo PNG is transparent with black artwork, so on a dark header it
-// disappears. Instead of tinting (which flattens it and is unreliable on iOS),
-// we sit it on a light rounded chip in dark mode and show it as-is in light mode.
-const BrandLogo = ({ isDarkMode, size = 46 }) => (
+// Original behaviour: in dark mode the logo is tinted to the light header colour.
+const BrandLogo = ({ isDarkMode, isLoggedIn = true, size = 46 }) => (
   <View
     collapsable={false}
-    style={{
-      width: size,
-      height: size,
-      borderRadius: isDarkMode ? 12 : 0,
-      padding: isDarkMode ? 3 : 0,
-      backgroundColor: isDarkMode ? "#FFF8F6" : "transparent",
-      alignItems: "center",
-      justifyContent: "center",
-      overflow: "hidden",
-    }}
+    style={{ width: size, height: size, alignItems: "center", justifyContent: "center" }}
   >
     <Image
       source={Logo}
-      style={{ width: "100%", height: "100%" }}
+      style={{
+        width: "100%",
+        height: "100%",
+        tintColor: isDarkMode && isLoggedIn ? "#FFF8F6" : undefined,
+      }}
       resizeMode="contain"
       accessibilityLabel="Apni Diaries logo"
     />
@@ -214,7 +207,7 @@ const NavBar = () => {
           accessibilityLabel="Go to home"
           style={{ height: 46, justifyContent: "center" }}
         >
-          <BrandLogo isDarkMode={isDarkMode} size={46} />
+          <BrandLogo isDarkMode={isDarkMode} isLoggedIn={isUserLoggedIn} size={46} />
         </Pressable>
 
         {/* Right actions */}

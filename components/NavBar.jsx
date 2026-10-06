@@ -4,7 +4,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Image, Modal, Platform, Pressable, ScrollView, Text, View } from "react-native";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 import api from "../api/axios";
-import Logo from "../assets/Apni diaries logo 1.png";
+import Logo from "../assets/Apni-diaries-logo-1.png";
 import { Fonts } from "../constants/theme";
 import { AppContext } from "../context/AppContext";
 import { useDarkMode } from "../context/DarkModeContext";
@@ -102,6 +102,8 @@ const NavBar = () => {
   const { isScrolling } = useScroll();
   const isUserLoggedIn = Boolean(user);
 
+  console.log("LOGO source:", Image.resolveAssetSource(Logo)); //for debugging
+
     useEffect(() => {
     setMenuOpen(false);
   }, [pathname]);
@@ -158,13 +160,13 @@ const NavBar = () => {
       <View
         style={{
           paddingTop: insets.top,
-          backgroundColor: isDarkMode ? "#0B0E14" : "#FFF8F6",
+          backgroundColor: isDarkMode ? '#0B0E14' : '#FFF8F6',
           zIndex: 20,
           borderBottomWidth: 0.2,
-          borderBottomColor: isDarkMode ? "#2D3748" : "rgba(0,0,0,0.05)",
+          borderBottomColor: isDarkMode ? '#2D3748' : 'rgba(0,0,0,0.05)',
           ...(isScrolling
             ? {
-                shadowColor: "#000",
+                shadowColor: '#000',
                 shadowOffset: { width: 0, height: 2 },
                 shadowOpacity: 0.1,
                 shadowRadius: 4,
@@ -177,31 +179,25 @@ const NavBar = () => {
           style={{
             height: 45,
             paddingHorizontal: 16,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
           }}
         >
-        {/* Logo */}
-        <Pressable onPress={() => router.push(isUserLoggedIn ? "/landing" : "/home")}>
-          <Image
-            source={Logo}
-            style={[
-              {
-                height: 45,
-                width: 90,
-                marginLeft: -10,
-              },
-              // Only apply tintColor if it's explicitly needed
-              isDarkMode && isUserLoggedIn && { tintColor: "#FFF8F6" }
-            ]}
-            resizeMode="contain"
-          />
-        </Pressable>
+          {/* Logo */}
+          <Pressable onPress={() => router.push(isUserLoggedIn ? '/landing' : '/home')}>
+            <Image
+              source={Logo}
+              style={{ height: 45, width: 90, marginLeft: -10, backgroundColor: 'red' }}
+              resizeMode='contain'
+              onLoad={() => console.log('LOGO loaded')}
+              onError={(e) => console.log('LOGO error:', e.nativeEvent)}
+            />
+          </Pressable>
 
-        {/* Right actions */}
-        <View className="flex-row items-center gap-5">
-          {/* {isUserLoggedIn && (
+          {/* Right actions */}
+          <View className='flex-row items-center gap-5'>
+            {/* {isUserLoggedIn && (
             <>
               <Pressable onPress={() => router.push("/cities")}>
                 <Feather
@@ -222,18 +218,40 @@ const NavBar = () => {
             </>
           )} */}
 
-          <Pressable onPress={() => router.push('/notifications')} accessibilityRole="button" accessibilityLabel="Notifications">
-            <View style={{ width:28,height:28,alignItems:'center',justifyContent:'center' }}>
-              <Feather name="bell" size={23} color={iconColor(isDarkMode,isUserLoggedIn)} />
-              {unreadCount>0 && <View style={{ position:'absolute',top:-3,right:-4,backgroundColor:'#BA1A1A',borderRadius:10,minWidth:16,height:16,paddingHorizontal:4,alignItems:'center',justifyContent:'center',borderWidth:1.5,borderColor:isDarkMode?'#0B0E14':'#FFF8F6' }}>
-                <Text style={{ color:'#fff',fontSize:8,fontWeight:'700' }}>{unreadCount>9?'9+':unreadCount}</Text>
-              </View>}
-            </View>
-          </Pressable>
-          <Pressable hitSlop={{top:10,bottom:10,left:10,right:10}} onPress={() => setMenuOpen((open)=>!open)} accessibilityRole="button" accessibilityLabel={menuOpen?'Close menu':'Open menu'}>
-            <Feather name={menuOpen?'x':'menu'} size={25} color={iconColor(isDarkMode,isUserLoggedIn)} />
-          </Pressable>
-        </View>
+            <Pressable onPress={() => router.push('/notifications')} accessibilityRole='button' accessibilityLabel='Notifications'>
+              <View style={{ width: 28, height: 28, alignItems: 'center', justifyContent: 'center' }}>
+                <Feather name='bell' size={23} color={iconColor(isDarkMode, isUserLoggedIn)} />
+                {unreadCount > 0 && (
+                  <View
+                    style={{
+                      position: 'absolute',
+                      top: -3,
+                      right: -4,
+                      backgroundColor: '#BA1A1A',
+                      borderRadius: 10,
+                      minWidth: 16,
+                      height: 16,
+                      paddingHorizontal: 4,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      borderWidth: 1.5,
+                      borderColor: isDarkMode ? '#0B0E14' : '#FFF8F6',
+                    }}
+                  >
+                    <Text style={{ color: '#fff', fontSize: 8, fontWeight: '700' }}>{unreadCount > 9 ? '9+' : unreadCount}</Text>
+                  </View>
+                )}
+              </View>
+            </Pressable>
+            <Pressable
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+              onPress={() => setMenuOpen((open) => !open)}
+              accessibilityRole='button'
+              accessibilityLabel={menuOpen ? 'Close menu' : 'Open menu'}
+            >
+              <Feather name={menuOpen ? 'x' : 'menu'} size={25} color={iconColor(isDarkMode, isUserLoggedIn)} />
+            </Pressable>
+          </View>
         </View>
       </View>
 
@@ -242,7 +260,7 @@ const NavBar = () => {
         <>
           <Pressable
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
@@ -255,21 +273,18 @@ const NavBar = () => {
             /* Fullscreen Menu for Logged-in Users */
             <>
               <View
-                className="absolute top-0 left-0 right-0 z-[100]"
+                className='absolute top-0 left-0 right-0 z-[100]'
                 style={{
                   flex: 1,
-                  backgroundColor: isDarkMode ? "#0B0E14" : "#ffffff",
+                  backgroundColor: isDarkMode ? '#0B0E14' : '#ffffff',
                 }}
               >
                 {/* Internal Header */}
-                <View
-                  className="flex-row justify-between items-center px-5"
-                  style={{ height: 70 + insets.top, paddingTop: insets.top }}
-                >
+                <View className='flex-row justify-between items-center px-5' style={{ height: 70 + insets.top, paddingTop: insets.top }}>
                   <Pressable
                     onPress={() => {
-                      setMenuOpen(false);
-                      router.push("/home");
+                      setMenuOpen(false)
+                      router.push('/home')
                     }}
                   >
                     <Image
@@ -278,18 +293,14 @@ const NavBar = () => {
                         height: 70,
                         width: 110,
                         left: -15,
-                        tintColor: isDarkMode ? "#fff" : undefined,
+                        tintColor: isDarkMode ? '#fff' : undefined,
                       }}
-                      resizeMode="contain"
+                      resizeMode='contain'
                     />
                   </Pressable>
 
                   <Pressable onPress={() => setMenuOpen(false)}>
-                    <Feather
-                      name="x"
-                      size={28}
-                      color={isDarkMode ? "#fff" : "#A23F00"}
-                    />
+                    <Feather name='x' size={28} color={isDarkMode ? '#fff' : '#A23F00'} />
                   </Pressable>
                 </View>
 
@@ -298,19 +309,17 @@ const NavBar = () => {
                   style={{ maxHeight: Math.max(160, height - 70 - insets.top - 58 - insets.bottom) }}
                   contentContainerStyle={{ paddingHorizontal: 20, paddingTop: 16, paddingBottom: 28 }}
                   showsVerticalScrollIndicator
-                  keyboardShouldPersistTaps="handled"
+                  keyboardShouldPersistTaps='handled'
                 >
                   {/* User Info Header */}
                   <View
                     style={{
-                      backgroundColor: isDarkMode
-                        ? "rgba(31, 41, 55, 0.5)"
-                        : "#FFF1EC",
+                      backgroundColor: isDarkMode ? 'rgba(31, 41, 55, 0.5)' : '#FFF1EC',
                       borderRadius: 16,
                       padding: 16,
                       marginBottom: 24,
-                      flexDirection: "row",
-                      alignItems: "center",
+                      flexDirection: 'row',
+                      alignItems: 'center',
                       gap: 16,
                     }}
                   >
@@ -319,20 +328,16 @@ const NavBar = () => {
                         height: 56,
                         width: 56,
                         borderRadius: 28,
-                        overflow: "hidden",
-                        backgroundColor: "#A23F00",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        overflow: 'hidden',
+                        backgroundColor: '#A23F00',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                       }}
                     >
                       {user?.avatar ? (
-                        <Image
-                          source={{ uri: user.avatar }}
-                          style={{ height: "100%", width: "100%" }}
-                          resizeMode="cover"
-                        />
+                        <Image source={{ uri: user.avatar }} style={{ height: '100%', width: '100%' }} resizeMode='cover' />
                       ) : (
-                        <Feather name="user" size={28} color="#fff" />
+                        <Feather name='user' size={28} color='#fff' />
                       )}
                     </View>
                     <View>
@@ -340,7 +345,7 @@ const NavBar = () => {
                         style={{
                           fontFamily: Fonts.playfair.bold,
                           fontSize: 20,
-                          color: isDarkMode ? "#fff" : "#111827",
+                          color: isDarkMode ? '#fff' : '#111827',
                         }}
                       >
                         {user?.name}
@@ -348,7 +353,7 @@ const NavBar = () => {
                       <Text
                         style={{
                           fontSize: 14,
-                          color: isDarkMode ? "#d1d5db" : "#4b5563",
+                          color: isDarkMode ? '#d1d5db' : '#4b5563',
                         }}
                       >
                         {user?.email}
@@ -358,33 +363,33 @@ const NavBar = () => {
 
                   {/* Menu Items */}
                   {[
-                    { id: "home", label: "Home", path: "/" },
-                    { id: "trips", label: "Trips", path: "/trips" },
-                    { id: "cities", label: "Cities", path: "/cities" },
-                    { id: "packages", label: "Packages", path: "/packages" },
-                    { id: "bikes", label: "Bikes", path: "/bike-rentals" },
-                    { id: "hostels", label: "Hostels", path: "/hostels" },
-                    { id: "notifications", label: "Notifications", path: "/notifications" },
-                    { id: "settings", label: "Settings", path: "/settings" },
+                    { id: 'home', label: 'Home', path: '/' },
+                    { id: 'trips', label: 'Trips', path: '/trips' },
+                    { id: 'cities', label: 'Cities', path: '/cities' },
+                    { id: 'packages', label: 'Packages', path: '/packages' },
+                    { id: 'bikes', label: 'Bikes', path: '/bike-rentals' },
+                    { id: 'hostels', label: 'Hostels', path: '/hostels' },
+                    { id: 'notifications', label: 'Notifications', path: '/notifications' },
+                    { id: 'settings', label: 'Settings', path: '/settings' },
                     {
-                      id: "contact-us",
-                      label: "Contact Us",
-                      path: "/contact-us",
+                      id: 'contact-us',
+                      label: 'Contact Us',
+                      path: '/contact-us',
                     },
                   ].map((item) => (
                     <Pressable
                       key={item.id}
                       onPress={() => {
-                        navigateTo(item.path);
-                        setMenuOpen(false);
+                        navigateTo(item.path)
+                        setMenuOpen(false)
                       }}
-                      className="py-4"
+                      className='py-4'
                     >
                       <Text
                         style={{
                           fontSize: 18,
-                          fontWeight: "500",
-                          color: isDarkMode ? "#e5e7eb" : "#374151",
+                          fontWeight: '500',
+                          color: isDarkMode ? '#e5e7eb' : '#374151',
                         }}
                       >
                         {item.label}
@@ -394,19 +399,19 @@ const NavBar = () => {
 
                   {/* Divider Line */}
                   <View
-                    className="my-2 h-[1px]"
+                    className='my-2 h-[1px]'
                     style={{
-                      backgroundColor: isDarkMode ? "#374151" : "#f3f4f6",
+                      backgroundColor: isDarkMode ? '#374151' : '#f3f4f6',
                     }}
                   />
 
                   {/* Dark Mode Row */}
-                  <View className="flex-row justify-between items-center py-4">
+                  <View className='flex-row justify-between items-center py-4'>
                     <Text
                       style={{
-                        fontWeight: "500",
+                        fontWeight: '500',
                         fontSize: 16,
-                        color: isDarkMode ? "#e5e7eb" : "#374151",
+                        color: isDarkMode ? '#e5e7eb' : '#374151',
                       }}
                     >
                       Dark Mode
@@ -415,12 +420,12 @@ const NavBar = () => {
                   </View>
 
                   {/* Logout Button */}
-                  <Pressable onPress={onLogout} className="py-4 items-center">
+                  <Pressable onPress={onLogout} className='py-4 items-center'>
                     <Text
                       style={{
-                        fontWeight: "600",
+                        fontWeight: '600',
                         fontSize: 16,
-                        color: "#ef4444",
+                        color: '#ef4444',
                       }}
                     >
                       Logout
@@ -433,27 +438,14 @@ const NavBar = () => {
             /* Guest Menu Overlay (Slide in below navbar) */
             <>
               {/* Overlay BELOW navbar */}
-              <Pressable
-                className="absolute top-[79px] left-0 right-0 bottom-0 z-10"
-                onPress={() => setMenuOpen(false)}
-              />
+              <Pressable className='absolute top-[79px] left-0 right-0 bottom-0 z-10' onPress={() => setMenuOpen(false)} />
               {/* Floating menu card */}
-              <View className="absolute top-[80px] left-0 right-0 items-center z-[11]">
-                <View
-                  className={`w-[100%] bg-white p-5 shadow-xl ${isDarkMode ? "bg-dark-card" : ""}`}
-                >
-                  <MenuItem
-                    label="Log In"
-                    onPress={() => navigateTo("/login")}
-                  />
+              <View className='absolute top-[80px] left-0 right-0 items-center z-[11]'>
+                <View className={`w-[100%] bg-white p-5 shadow-xl ${isDarkMode ? 'bg-dark-card' : ''}`}>
+                  <MenuItem label='Log In' onPress={() => navigateTo('/login')} />
 
-                  <Pressable
-                    className="mt-4 bg-brand-600 py-[14px] rounded-xl items-center"
-                    onPress={() => navigateTo("/signup")}
-                  >
-                    <Text className="text-white text-base font-semibold">
-                      Join Now!
-                    </Text>
+                  <Pressable className='mt-4 bg-brand-600 py-[14px] rounded-xl items-center' onPress={() => navigateTo('/signup')}>
+                    <Text className='text-white text-base font-semibold'>Join Now!</Text>
                   </Pressable>
                 </View>
               </View>
@@ -474,7 +466,7 @@ const NavBar = () => {
 
       <ComingSoonModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </>
-  );
+  )
 };
 
 export default NavBar;

@@ -32,7 +32,9 @@
       "versionCode": 2,
       "enableProguardInReleaseBuilds": true,
       "enableShrinkResourcesInReleaseBuilds": true,
-      "abiFilters": ["arm64-v8a"],
+      "abiFilters": [
+        "arm64-v8a"
+      ],
       "googleServicesFile": "./google-services.json",
       "permissions": [
         "android.permission.ACCESS_NETWORK_STATE",
@@ -70,6 +72,23 @@
             "enableSceneSupport": true
           }
         }
+      ],
+      [
+        "react-native-fbsdk-next",
+        {
+          "appID": "YOUR_APP_ID",
+          "clientToken": "YOUR_CLIENT_TOKEN",
+          "displayName": "Your App Name",
+          "scheme": "fbYOUR_APP_ID",
+          "isAutoInitEnabled": true,
+          "autoLogAppEventsEnabled": true,
+          "advertiserIDCollectionEnabled": true,
+          "iosUserTrackingPermission": "We use this to show you more relevant ads."
+        }
+      ],
+      [
+        "expo-tracking-transparency",
+        { "userTrackingPermission": "We use this to show you more relevant ads." }
       ]
     ],
     "experiments": {

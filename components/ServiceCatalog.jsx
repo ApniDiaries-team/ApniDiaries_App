@@ -6,12 +6,14 @@ import { ActivityIndicator,Image,ImageBackground,Pressable,ScrollView,Text,TextI
 import api from '../api/axios';
 import { Fonts,Palette } from '../constants/theme';
 import { useDarkMode } from '../context/DarkModeContext';
+import { trackSearch } from '@/lib/analytics';
 
 const DATA={
   bikes:{url:'api/bike-rentals',title:'Rent Your Freedom',sub:'Premium motorcycles for unforgettable journeys across the most breathtaking terrains.',hero:'https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?w=1600',heading:'Curated Fleet',copy:'Maintained to perfection. Ready for your next adventure.',placeholder:'Where to?'},
   hostels:{url:'api/hostels',title:'A Home for Every Journey',sub:'Discover handpicked boutique hostels designed for comfort, community, and the modern traveler.',hero:'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600',heading:'Handpicked Stays',copy:'Curated spaces for rest and connection.',placeholder:'Where to?'},
   packages:{url:'api/packages',title:'Escape to Extraordinary',sub:'Hand-picked experiences that prioritize connection, sustainability, and the soul of the destination.',hero:'https://images.unsplash.com/photo-1502786129293-79981df4e689?w=1600',heading:'Curated Journeys',copy:'Find the right trip for your next adventure.',placeholder:'Where to next?'}
 };
+const KIND = { bikes: 'bike', hostels: 'room', packages: 'package' };
 const tabs=[['packages','Packages','compass'],['bikes','Bikes','wind'],['hostels','Hostels','home']];
 const imageOf=x=>x?.thumbnail_url||x?.image_url||x?.cover_image||x?.photos?.[0]?.image_url||x?.images?.[0]?.image_url;
 const titleOf=(x,type)=>x?.name||x?.title||(type==='bikes'?[x?.brand,x?.model].filter(Boolean).join(' '):'')||'Untitled';
@@ -23,7 +25,12 @@ export default function ServiceCatalog({type}){
  const load=async q=>{setLoading(true);setFailed(false);try{const r=await api.get(conf.url,{params:q?{search:q}:{}});setItems(Array.isArray(r?.data?.data)?r.data.data:[])}catch(e){setItems([]);setFailed(true)}finally{setLoading(false)}};
  useEffect(()=>{load('')},[type]);
  const shown=useMemo(()=>{const featured=items.filter(x=>x.is_featured||(type==='bikes'&&x.is_popular));let list=featured.length?[...featured,...items.filter(x=>!featured.includes(x))]:items;if(type==='bikes'&&category!=='All types')list=list.filter(x=>String(x.category||x.type||'').toLowerCase()===category.toLowerCase());return showAll||type==='packages'?list:list.slice(0,3)},[items,type,category,showAll]);
- const submit=()=>{setQuery(search.trim());load(search.trim())};
+ const submit = () => {
+   const q = search.trim()
+   setQuery(q)
+   load(q)
+   if (q) trackSearch({ query: q, kind: KIND[type] })
+ }
  return <View style={{flex:1,backgroundColor:c.surface}}>
   <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{paddingBottom:112}}>
    <ImageBackground source={{uri:conf.hero}} resizeMode="cover" style={{height:type==='packages'?370:340,justifyContent:'center'}}>

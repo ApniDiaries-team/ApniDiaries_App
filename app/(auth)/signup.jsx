@@ -22,6 +22,7 @@ import {
   saveUserKeysLocally,
 } from "../../utils/encryption.js";
 import AuthLayout from "./AuthLayout";
+import { trackRegistration } from "@/lib/analytics";
 
 // ---------------------------------------------------------------------------
 // AsyncStorage keys (mirrors web STORAGE_KEYS exactly)
@@ -575,6 +576,16 @@ export default function Signup() {
     await clearAllSignupStorage();
     await setupE2EE(userId, form.password, verificationToken); // move here
     await checkAuth(form.password);
+
+    //  adding meta registration here , need to verify later
+    // ---------------*****---------
+    try {
+      trackRegistration('email')
+    } catch (e) {
+      console.warn('analytics failed', e)
+    }
+    //------------****-----------
+
     Toast.show({ type: "success", text1: "Signup successful!" });
     router.replace("/landing");
   };

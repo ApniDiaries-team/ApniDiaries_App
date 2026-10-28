@@ -27,6 +27,14 @@ import PostCard, { AudioManager } from "./components/PostCard"; // ← ADD: impo
 
 const S = "#A23F00";
 
+const chipText = {
+  fontSize: 12,
+  lineHeight: 16,
+  fontFamily: Fonts.inter.bold,
+  includeFontPadding: false,
+  textAlignVertical: 'center',
+}
+
 const MOODS = [
   { id: "all", label: "For You" },
   { id: "new", label: "Recent" },
@@ -301,8 +309,7 @@ const CommunityPosts = () => {
           >
             <Text
               style={{
-                fontSize: 12,
-                fontFamily: Fonts.inter.bold,
+                ...chipText,
                 color:
                   selectedCity === "all"
                     ? "#fff"
@@ -335,7 +342,7 @@ const CommunityPosts = () => {
                 }}
               >
                 <MapPin
-                  size={9}
+                  size={11}
                   strokeWidth={2.5}
                   color={
                     active
@@ -347,8 +354,7 @@ const CommunityPosts = () => {
                 />
                 <Text
                   style={{
-                    fontSize: 12,
-                    fontFamily: Fonts.inter.bold,
+                    ...chipText,
                     color: active
                       ? "#fff"
                       : dk
@@ -360,8 +366,7 @@ const CommunityPosts = () => {
                 </Text>
                 <Text
                   style={{
-                    fontSize: 12,
-                    fontFamily: Fonts.inter.bold,
+                    ...chipText,
                     color: active
                       ? "rgba(255,255,255,0.7)"
                       : dk

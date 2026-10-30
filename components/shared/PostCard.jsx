@@ -1711,51 +1711,30 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                 </View>
                 {musicName && !musicMuted ? (
                   <MusicPill name={musicName} playing={musicPlaying} muted={musicMuted} onToggle={handleMusicMuteToggle} />
-                ) : (
-                  <View
+                ) : city ? (
+                  <Pressable
+                    onPress={goCity}
+                    hitSlop={4}
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
-                      gap: 4,
+                      alignSelf: 'flex-start',
+                      gap: 2,
                       marginTop: 2,
                     }}
                   >
+                    <MapPin size={8} color={ORANGE} strokeWidth={2.5} />
                     <Text
                       style={{
                         fontSize: 11,
-                        fontFamily: Fonts.inter.regular,
-                        color: subColor,
+                        fontFamily: Fonts.inter.bold,
+                        color: ORANGE,
                       }}
                     >
-                      {formatLastActive(post?.createdAt ?? post?.created_at)}
+                      {city}
                     </Text>
-                    {city && (
-                      <>
-                        <Text style={{ color: subColor, fontSize: 8 }}>·</Text>
-                        <Pressable
-                          onPress={goCity}
-                          hitSlop={4}
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            gap: 2,
-                          }}
-                        >
-                          <MapPin size={8} color={ORANGE} strokeWidth={2.5} />
-                          <Text
-                            style={{
-                              fontSize: 11,
-                              fontFamily: Fonts.inter.bold,
-                              color: ORANGE,
-                            }}
-                          >
-                            {city}
-                          </Text>
-                        </Pressable>
-                      </>
-                    )}
-                  </View>
-                )}
+                  </Pressable>
+                ) : null}
               </View>
 
               <View style={{ position: 'relative' }}>
@@ -1913,59 +1892,43 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
                 </View>
               </Pressable>
               <View style={{ flex: 1 }}>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    gap: 6,
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  <Pressable onPress={goProfile} hitSlop={4}>
+                <Pressable onPress={goProfile} hitSlop={4} style={{ alignSelf: 'flex-start' }}>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontFamily: Fonts.playfair.bold,
+                      color: textPrimary,
+                    }}
+                  >
+                    {post?.user?.name}
+                  </Text>
+                </Pressable>
+                {musicName && !musicMuted ? (
+                  <MusicPill name={musicName} playing={musicPlaying} muted={musicMuted} onToggle={handleMusicMuteToggle} />
+                ) : city ? (
+                  <Pressable
+                    onPress={goCity}
+                    hitSlop={4}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      alignSelf: 'flex-start',
+                      gap: 2,
+                      marginTop: 2,
+                    }}
+                  >
+                    <MapPin size={8} color={ORANGE} strokeWidth={2.5} />
                     <Text
                       style={{
-                        fontSize: 15,
-                        fontFamily: Fonts.playfair.bold,
-                        color: textPrimary,
+                        fontSize: 11,
+                        fontFamily: Fonts.inter.bold,
+                        color: ORANGE,
                       }}
                     >
-                      {post?.user?.name}
+                      {city}
                     </Text>
                   </Pressable>
-                  {city && (
-                    <Pressable
-                      onPress={goCity}
-                      hitSlop={4}
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        gap: 2,
-                      }}
-                    >
-                      <MapPin size={8} color={ORANGE} strokeWidth={2.5} />
-                      <Text
-                        style={{
-                          fontSize: 11,
-                          fontFamily: Fonts.inter.bold,
-                          color: ORANGE,
-                        }}
-                      >
-                        {city}
-                      </Text>
-                    </Pressable>
-                  )}
-                </View>
-                <Text
-                  style={{
-                    fontSize: 11,
-                    fontFamily: Fonts.inter.regular,
-                    color: subColor,
-                    marginTop: 1,
-                  }}
-                >
-                  {formatLastActive(post?.createdAt ?? post?.created_at)}
-                </Text>
-                {musicName && <MusicPill name={musicName} playing={musicPlaying} muted={musicMuted} onToggle={handleMusicMuteToggle} />}
+                ) : null}
               </View>
               <View style={{ position: 'relative' }}>
                 <Pressable
@@ -2021,6 +1984,19 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
               }}
             />
             <ActionBar compact />
+            <Text
+              style={{
+                fontSize: 10,
+                fontFamily: Fonts.inter.regular,
+                color: subColor,
+                opacity: 0.55,
+                marginTop: 4,
+                textTransform: 'uppercase',
+                letterSpacing: 0.5,
+              }}
+            >
+              {formatLastActive(post?.createdAt ?? post?.created_at)}
+            </Text>
           </View>
         )}
 

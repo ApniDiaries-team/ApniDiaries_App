@@ -22,6 +22,7 @@ import {
   saveUserKeysLocally,
 } from "../../utils/encryption.js";
 import AuthLayout from "./AuthLayout";
+import FormField from "../../components/common/FormField";
 
 // ---------------------------------------------------------------------------
 // AsyncStorage keys (mirrors web STORAGE_KEYS exactly)
@@ -481,6 +482,24 @@ export default function Signup() {
     }
   };
 
+  const clearError = (key) => setErrors((prev) => ({ ...prev, [key]: null }))
+
+  const applyServerErrors = (data) => {
+    const list = data?.errors?.length ? data.errors : data?.field ? [{ field: data.field, message: data.message }] : []
+    if (!list.length) return false
+
+    const next = {}
+    list.forEach(({ field, message }) => {
+      const key = field.split('.')[0]
+      if (key === 'terms') setTermsError(message)
+      else if (!next[key]) next[key] = message
+    })
+
+    setErrors((prev) => ({ ...prev, ...next }))
+    Toast.show({ type: 'error', text1: list[0].message })
+    return true
+  }
+
   // ── Send OTP (mirrors web handleSendOtp exactly) ─────────────────────────
   const handleSendOtp = async () => {
     const emailV = validateEmail(form.email);
@@ -555,15 +574,12 @@ export default function Signup() {
       }
     } catch (error) {
       console.error("error in signing", error);
-      console.error(
-        "Backend response:",
-        JSON.stringify(error.response?.data, null, 2),
-      );
-      const finalError =
-        error.response?.data?.errors?.[0]?.message ||
-        error.response?.data?.message ||
-        "Failed to send OTP";
-      Toast.show({ type: "error", text1: finalError });
+        if (!applyServerErrors(error.response?.data)) {
+        Toast.show({
+          type: "error",
+          text1: error.response?.data?.message || "Failed to send OTP",
+        });
+      }
     } finally {
       setIsSendingOtp(false);
     }
@@ -641,175 +657,142 @@ export default function Signup() {
   return (
     <AuthLayout>
       {/* Title */}
-      <View className="items-center mb-7">
-        <Text className="font-[PlayfairDisplay_700Bold] text-[27px] text-[#3A2A1F] mb-[6px]">
-          Sign Up
-        </Text>
-        <Text className="text-[13px] text-[#6B5A4A]">
-          Let's get you ready for your next trip
-        </Text>
+      <View className='items-center mb-7'>
+        <Text className='font-[PlayfairDisplay_700Bold] text-[27px] text-[#3A2A1F] mb-[6px]'>Sign Up</Text>
+        <Text className='text-[13px] text-[#6B5A4A]'>Let's get you ready for your next trip</Text>
       </View>
 
       {/* Form */}
-      <View className="gap-3">
+      <View className='gap-3'>
         {/* Full name */}
-        <View className="gap-1">
+        <FormField label='Full name' error={errors.name}>
           <View
-            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.name && touched.name
-              ? "border-red-500"
-              : "border-[#E9DED3]"
-              }`}
+            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.name ? 'border-red-500' : 'border-[#E9DED3]'}`}
           >
-            <Text className="text-[15px] mr-[10px] opacity-50">👤</Text>
+            <Text className='text-[15px] mr-[10px] opacity-50'>👤</Text>
             <TextInput
-              placeholder="Full name"
+              placeholder='Full name'
               value={form.name}
-              onChangeText={(v) => setForm({ ...form, name: v })}
-              onBlur={() => handleBlur("name")}
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 text-[14px] text-[#1F2937] py-[13px]"
+              onChangeText={(v) => {
+                setForm({ ...form, name: v })
+                clearError('name')
+              }}
+              placeholderTextColor='#9CA3AF'
+              className='flex-1 text-[14px] text-[#1F2937] py-[13px]'
             />
           </View>
-          {errors.name && touched.name && (
-            <Text className="text-red-500 text-xs">{errors.name}</Text>
-          )}
-        </View>
+        </FormField>
 
         {/* Username */}
-        <View className="gap-1">
+        <FormField label='Username' error={errors.username}>
           <View
-            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.username && touched.username
-              ? "border-red-500"
-              : "border-[#E9DED3]"
-              }`}
+            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${
+              errors.username ? 'border-red-500' : 'border-[#E9DED3]'
+            }`}
           >
-            <Text className="text-[15px] mr-[10px] opacity-50">🪪</Text>
+            <Text className='text-[15px] mr-[10px] opacity-50'>🪪</Text>
             <TextInput
-              placeholder="Username"
+              placeholder='Username'
               value={form.username}
-              onChangeText={(v) => setForm({ ...form, username: v })}
-              onBlur={() => handleBlur("username")}
-              autoCapitalize="none"
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 text-[14px] text-[#1F2937] py-[13px]"
+              onChangeText={(v) => {
+                setForm({ ...form, username: v })
+                clearError('username')
+              }}
+              autoCapitalize='none'
+              placeholderTextColor='#9CA3AF'
+              className='flex-1 text-[14px] text-[#1F2937] py-[13px]'
             />
           </View>
-          {errors.username && touched.username && (
-            <Text className="text-red-500 text-xs">{errors.username}</Text>
-          )}
-        </View>
+        </FormField>
 
         {/* Email */}
-        <View className="gap-1">
+        <FormField label='Email' error={errors.email}>
           <View
-            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.email && touched.email
-              ? "border-red-500"
-              : "border-[#E9DED3]"
-              }`}
+            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${
+              errors.email ? 'border-red-500' : 'border-[#E9DED3]'
+            }`}
           >
-            <Text className="text-[15px] mr-[10px] opacity-50">✉️</Text>
+            <Text className='text-[15px] mr-[10px] opacity-50'>✉️</Text>
             <TextInput
-              placeholder="Email address"
+              placeholder='Email address'
               value={form.email}
               onChangeText={handleEmailChange}
-              onBlur={() => handleBlur("email")}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              placeholderTextColor="#9CA3AF"
-              className="flex-1 text-[14px] text-[#1F2937] py-[13px]"
+              keyboardType='email-address'
+              autoCapitalize='none'
+              placeholderTextColor='#9CA3AF'
+              className='flex-1 text-[14px] text-[#1F2937] py-[13px]'
             />
           </View>
-          {errors.email && touched.email && (
-            <Text className="text-red-500 text-xs">{errors.email}</Text>
-          )}
-        </View>
+        </FormField>
 
         {/* Password */}
-        <View className="gap-1">
+        <FormField label='Password' error={errors.password}>
           <View
-            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${errors.password && touched.password
-              ? "border-red-500"
-              : "border-[#E9DED3]"
-              }`}
+            className={`flex-row items-center border-[1.5px] rounded-xl px-[14px] bg-white/60 ${
+              errors.password ? 'border-red-500' : 'border-[#E9DED3]'
+            }`}
           >
-            <Text className="text-[15px] mr-[10px] opacity-50">🔒</Text>
+            <Text className='text-[15px] mr-[10px] opacity-50'>🔒</Text>
             <TextInput
-              placeholder="Password"
+              placeholder='Password'
               value={form.password}
-              onChangeText={(v) => setForm({ ...form, password: v })}
-              onBlur={() => handleBlur("password")}
+              onChangeText={(v) => {
+                setForm({ ...form, password: v })
+                clearError('password')
+              }}
               secureTextEntry={!showPassword}
-              placeholderTextColor="#9CA3AF"
+              placeholderTextColor='#9CA3AF'
               editable={!isSendingOtp}
-              className="flex-1 text-[14px] text-[#1F2937] py-[13px]"
+              className='flex-1 text-[14px] text-[#1F2937] py-[13px]'
             />
-            <Pressable
-              onPress={() => setShowPassword((v) => !v)}
-              disabled={isSendingOtp}
-            >
-              <Text className="text-[#9CA3AF] text-[13px]">
-                {showPassword ? "Hide" : "Show"}
-              </Text>
+            <Pressable onPress={() => setShowPassword((v) => !v)} disabled={isSendingOtp}>
+              <Text className='text-[#9CA3AF] text-[13px]'>{showPassword ? 'Hide' : 'Show'}</Text>
             </Pressable>
           </View>
-          {errors.password && touched.password && (
-            <Text className="text-red-500 text-xs">{errors.password}</Text>
-          )}
-        </View>
+        </FormField>
 
         {/* Sex */}
-        <View className="gap-1">
+        <FormField label='Sex' error={errors.sex}>
           <NativeSelect
             value={form.sex}
-            placeholder="Sex"
+            placeholder='Select'
             onSelect={(v) => {
-              setForm({ ...form, sex: v });
-              handleBlur("sex");
+              setForm({ ...form, sex: v })
+              clearError('sex')
             }}
-            isOpen={openDropdownId === "sex"}
-            onToggle={() => toggleDropdown("sex")}
-            hasError={!!(errors.sex && touched.sex)}
+            isOpen={openDropdownId === 'sex'}
+            onToggle={() => toggleDropdown('sex')}
+            hasError={!!errors.sex}
             options={[
-              { label: "Male", value: "Male" },
-              { label: "Female", value: "Female" },
-              { label: "Other", value: "Other" },
+              { label: 'Male', value: 'Male' },
+              { label: 'Female', value: 'Female' },
+              { label: 'Other', value: 'Other' },
             ]}
           />
-          {errors.sex && touched.sex && (
-            <Text className="text-red-500 text-xs">{errors.sex}</Text>
-          )}
-        </View>
+        </FormField>
 
         {/* Date of Birth */}
-        <View className="gap-1">
-          <Text className="text-[13px] text-[#3A2A1F] font-medium mb-2">
-            Date of Birth (Must be 18+)
-          </Text>
-          <View className="flex-row gap-2 items-start">
+        <FormField label='Date of Birth (Must be 18+)' error={errors.dob}>
+          <View className='flex-row gap-2 items-start'>
             <TextInput
-              placeholder="DD"
+              placeholder='DD'
               value={dob.day}
               onChangeText={handleDayChange}
-              onBlur={() => handleBlur("dob")}
-              keyboardType="numeric"
-              placeholderTextColor="#9CA3AF"
-              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${errors.dob && touched.dob
-                ? "border-red-500"
-                : "border-[#E9DED3]"
-                }`}
+              keyboardType='numeric'
+              placeholderTextColor='#9CA3AF'
+              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${
+                errors.dob ? 'border-red-500' : 'border-[#E9DED3]'
+              }`}
             />
-            <View className="flex-[2]">
+            <View className='flex-[2]'>
               <NativeSelect
                 value={dob.month}
-                placeholder="MM"
-                onSelect={(v) => {
-                  handleMonthChange(v);
-                  handleBlur("dob");
-                }}
-                isOpen={openDropdownId === "month"}
-                onToggle={() => toggleDropdown("month")}
+                placeholder='MM'
+                onSelect={(v) => handleMonthChange(v)}
+                isOpen={openDropdownId === 'month'}
+                onToggle={() => toggleDropdown('month')}
                 openUp
-                hasError={!!(errors.dob && touched.dob)}
+                hasError={!!errors.dob}
                 options={[...Array(12)].map((_, i) => ({
                   label: String(i + 1),
                   value: String(i + 1),
@@ -817,85 +800,63 @@ export default function Signup() {
               />
             </View>
             <TextInput
-              placeholder="YYYY"
+              placeholder='YYYY'
               value={dob.year}
               onChangeText={handleYearChange}
-              onBlur={() => handleBlur("dob")}
-              keyboardType="numeric"
-              placeholderTextColor="#9CA3AF"
-              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${errors.dob && touched.dob
-                ? "border-red-500"
-                : "border-[#E9DED3]"
-                }`}
+              keyboardType='numeric'
+              placeholderTextColor='#9CA3AF'
+              className={`flex-[2] border-[1.5px] rounded-xl px-[14px] py-3 bg-white/60 text-[14px] text-[#1F2937] text-center ${
+                errors.dob ? 'border-red-500' : 'border-[#E9DED3]'
+              }`}
             />
           </View>
-          {errors.dob && touched.dob && (
-            <Text className="text-red-500 text-xs">{errors.dob}</Text>
-          )}
-        </View>
+        </FormField>
 
         {/* Interests */}
-        <View className="gap-1">
-          <Text className="text-[13px] text-[#3A2A1F] font-medium mb-2">
-            Area of interest (Select at least one)
-          </Text>
-          <View className="flex-row flex-wrap gap-2">
-            {["Trekking", "Culture", "Beach", "Wildlife"].map((item) => (
+        <FormField label='Area of interest (Select at least one)' error={errors.interests}>
+          <View className='flex-row flex-wrap gap-2'>
+            {['Trekking', 'Culture', 'Beach', 'Wildlife'].map((item) => (
               <CheckboxItem
                 key={item}
                 label={item}
                 checked={form.interests.includes(item)}
-                onPress={() => toggleInterest(item)}
+                onPress={() => {
+                  toggleInterest(item)
+                  clearError('interests')
+                }}
               />
             ))}
           </View>
-          {errors.interests && touched.interests && (
-            <Text className="text-red-500 text-xs">{errors.interests}</Text>
-          )}
-        </View>
+        </FormField>
 
         {/* Terms & Conditions */}
-        <View className="gap-1">
-          <View className="flex-row items-start gap-2">
+        <View className='gap-1'>
+          <View className='flex-row items-start gap-2'>
             <Pressable
               onPress={() => {
-                setTermsAccepted((v) => !v);
-                setTermsError("");
+                setTermsAccepted((v) => !v)
+                setTermsError('')
               }}
-              className={`w-5 h-5 mt-[2px] rounded border-[1.5px] items-center justify-center ${termsAccepted
-                ? "bg-[#E87722] border-[#E87722]"
-                : "border-[#9CA3AF] bg-white"
-                }`}
+              className={`w-5 h-5 mt-[2px] rounded border-[1.5px] items-center justify-center ${
+                termsAccepted ? 'bg-[#E87722] border-[#E87722]' : 'border-[#9CA3AF] bg-white'
+              }`}
             >
-              {termsAccepted && (
-                <Text className="text-white text-[10px] font-extrabold">✓</Text>
-              )}
+              {termsAccepted && <Text className='text-white text-[10px] font-extrabold'>✓</Text>}
             </Pressable>
-            <Text className="flex-1 text-[13px] text-[#3A2A1F]">
-              I have read and agree to the{" "}
-              <Text
-                className="text-[#E87722] font-medium"
-                onPress={openTermsUrl}
-              >
+            <Text className='flex-1 text-[13px] text-[#3A2A1F]'>
+              I have read and agree to the{' '}
+              <Text className='text-[#E87722] font-medium' onPress={openTermsUrl}>
                 Terms & Conditions
               </Text>
             </Text>
           </View>
-          {termsError ? (
-            <Text className="text-red-500 text-xs">{termsError}</Text>
-          ) : null}
+          {termsError ? <Text className='text-red-500 text-xs'>{termsError}</Text> : null}
 
           {/* Digital signature badge — mirrors web's green confirmation box */}
           {digitalSignature ? (
-            <View className="bg-green-50 border border-green-200 rounded-xl p-3 mt-1">
-              <Text className="text-xs text-green-700 font-medium">
-                ✓ Digital Signature Recorded
-              </Text>
-              <Text
-                className="text-xs font-mono text-gray-600 mt-1"
-                numberOfLines={1}
-                ellipsizeMode="tail"
-              >
+            <View className='bg-green-50 border border-green-200 rounded-xl p-3 mt-1'>
+              <Text className='text-xs text-green-700 font-medium'>✓ Digital Signature Recorded</Text>
+              <Text className='text-xs font-mono text-gray-600 mt-1' numberOfLines={1} ellipsizeMode='tail'>
                 Signature: {digitalSignature}
               </Text>
             </View>
@@ -906,43 +867,32 @@ export default function Signup() {
         <Pressable
           onPress={handleSubmit}
           disabled={!termsAccepted || isSendingOtp}
-          className={`flex-row items-center justify-center gap-2 rounded-xl py-[15px] bg-[#E87722] mt-1 ${!termsAccepted || isSendingOtp ? "opacity-50" : ""
-            }`}
+          className={`flex-row items-center justify-center gap-2 rounded-xl py-[15px] bg-[#E87722] mt-1 ${
+            !termsAccepted || isSendingOtp ? 'opacity-50' : ''
+          }`}
           style={{
-            shadowColor: "#E87722",
+            shadowColor: '#E87722',
             shadowOffset: { width: 0, height: 4 },
             shadowOpacity: 0.3,
             shadowRadius: 10,
             elevation: 6,
           }}
         >
-          {isSendingOtp ? <ActivityIndicator color="#fff" /> : null}
-          <Text className="text-white text-[15px] font-semibold tracking-[0.3px]">
-            {isSendingOtp ? "Sending OTP…" : "Sign Up & Verify Email"}
-          </Text>
+          {isSendingOtp ? <ActivityIndicator color='#fff' /> : null}
+          <Text className='text-white text-[15px] font-semibold tracking-[0.3px]'>{isSendingOtp ? 'Sending OTP…' : 'Sign Up & Verify Email'}</Text>
         </Pressable>
       </View>
 
       {/* Footer */}
-      <View className="mt-6 flex-row items-center justify-center">
-        <Text className="text-[13px] text-[#6B5A4A]">
-          Already have an account?{" "}
-        </Text>
-        <Text
-          className="text-[13px] text-[#E87722] font-semibold"
-          onPress={() => router.push("/login")}
-        >
+      <View className='mt-6 flex-row items-center justify-center'>
+        <Text className='text-[13px] text-[#6B5A4A]'>Already have an account? </Text>
+        <Text className='text-[13px] text-[#E87722] font-semibold' onPress={() => router.push('/login')}>
           Log In
         </Text>
       </View>
 
       {/* TermsModal — same component as web */}
-      <TermsModal
-        isOpen={showTermsModal}
-        onClose={() => setShowTermsModal(false)}
-        onAccept={handleTermsAccept}
-        termsVersion={TERMS_VERSION}
-      />
+      <TermsModal isOpen={showTermsModal} onClose={() => setShowTermsModal(false)} onAccept={handleTermsAccept} termsVersion={TERMS_VERSION} />
 
       {/* VerifyOtpModal — same component as web */}
       {isOtpModalOpen && (
@@ -953,16 +903,16 @@ export default function Signup() {
           onVerified={handleVerifyOtp}
           onExpired={() => {
             // Mirrors web: clear modal, reset userId, show error
-            setIsOtpModalOpen(false);
-            setUserId(null);
-            AsyncStorage.removeItem(STORAGE_KEYS.USER_ID);
+            setIsOtpModalOpen(false)
+            setUserId(null)
+            AsyncStorage.removeItem(STORAGE_KEYS.USER_ID)
             Toast.show({
               type: 'error',
               text1: 'OTP expired. Please sign up again.',
-            });
+            })
           }}
         />
       )}
     </AuthLayout>
-  );
+  )
 }

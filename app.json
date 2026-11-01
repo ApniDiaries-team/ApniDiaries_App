@@ -3,7 +3,7 @@
     "name": "ApniDiaries",
     "slug": "native-app",
     "version": "2.0.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/AD.png",
     "scheme": "nativeapp",
     "userInterfaceStyle": "automatic",
@@ -26,7 +26,6 @@
         "backgroundColor": "#ffffff",
         "foregroundImage": "./assets/AD-adaptive.png"
       },
-      "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
       "package": "com.apnidiaries.app",
       "versionCode": 2,

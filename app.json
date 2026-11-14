@@ -70,7 +70,12 @@
             "enableSceneSupport": true
           }
         }
-      ]
+      ],
+      ["expo-notifications"],
+      ["@config-plugins/react-native-webrtc", {
+      "cameraPermission": "Allow Apnidiaries to access your camera for video calls",
+      "microphonePermission": "Allow Apnidiaries to access your microphone for calls"
+    }]
     ],
     "experiments": {
       "typedRoutes": true

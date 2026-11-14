@@ -81,7 +81,7 @@ export async function initPushNotifications() {
     // 5. Register with backend
     await api
       .post("/api/push/subscribe", { token, platform: Platform.OS })
-      .catch(() => {});
+      .catch((e) => console.warn("[Push] subscribe failed:", e.response?.status, e.message));
     console.info("[Push] Subscribed successfully:", token);
   } catch (err) {
     console.warn("[Push] Setup failed:", err.message);

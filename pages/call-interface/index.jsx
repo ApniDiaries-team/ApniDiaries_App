@@ -265,7 +265,7 @@ const CallContainer = () => {
   } = useCallContext();
 
   const callType = call?.callType;
-  const isCaller = call?.callerId === user?.id;
+  const isCaller = String(call?.callerId) === String(user?.id);
 
   const {
     startCall,

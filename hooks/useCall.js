@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { PermissionsAndroid, Platform } from "react-native";
 import InCallManager from "react-native-incall-manager";
+import Toast from "react-native-toast-message";
 import {
   RTCIceCandidate,
   RTCPeerConnection,
@@ -11,26 +12,26 @@ import { AppContext } from "../context/AppContext";
 import { socket } from "../lib/sockets";
 import { useCall as useCallContext } from "../pages/call-interface/context/CallContext";
 
+// TODO: replace the shared openrelay TURN with YOUR OWN TURN credentials
+// (Metered / Twilio / Xirsys / coturn). Put them in .env as EXPO_PUBLIC_TURN_*.
+const TURN_URL = process.env.EXPO_PUBLIC_TURN_URL;
+const TURN_USER = process.env.EXPO_PUBLIC_TURN_USERNAME;
+const TURN_PASS = process.env.EXPO_PUBLIC_TURN_CREDENTIAL;
+
 const configuration = {
   iceServers: [
     { urls: "stun:stun.l.google.com:19302" },
     { urls: "stun:stun1.l.google.com:19302" },
-    {
-      // Free TURN server — necessary for calls through mobile NAT/firewall
-      urls: "turn:openrelay.metered.ca:80",
-      username: "openrelayproject",
-      credential: "openrelayproject",
-    },
-    {
-      urls: "turn:openrelay.metered.ca:443",
-      username: "openrelayproject",
-      credential: "openrelayproject",
-    },
-    {
-      urls: "turn:openrelay.metered.ca:443?transport=tcp",
-      username: "openrelayproject",
-      credential: "openrelayproject",
-    },
+    ...(TURN_URL
+      ? [
+          { urls: TURN_URL, username: TURN_USER, credential: TURN_PASS },
+        ]
+      : [
+          // Fallback: shared public TURN (unreliable, for testing only)
+          { urls: "turn:openrelay.metered.ca:80", username: "openrelayproject", credential: "openrelayproject" },
+          { urls: "turn:openrelay.metered.ca:443", username: "openrelayproject", credential: "openrelayproject" },
+          { urls: "turn:openrelay.metered.ca:443?transport=tcp", username: "openrelayproject", credential: "openrelayproject" },
+        ]),
   ],
   iceCandidatePoolSize: 10,
 };
@@ -42,18 +43,15 @@ export default function useCall() {
   const candidatesQueue = useRef([]);
   const isFrontCamera = useRef(true);
   const inCallManagerStarted = useRef(false);
-  // Mutex refs — prevent concurrent getUserMedia / RTCPeerConnection creation
+  const connectTimer = useRef(null);
   const mediaSetupPromise = useRef(null);
   const pcSetupPromise = useRef(null);
 
   const [hasLocalStream, setHasLocalStream] = useState(false);
   const [hasRemoteStream, setHasRemoteStream] = useState(false);
-  // ✅ FIX 2+3: Track stream URLs in state, NOT by reading ref.current at render time.
-  // Refs don't trigger re-renders. When ontrack fires, remoteStream.current is set
-  // but CallContainer's render still reads the old null value from the stale closure.
-  // Storing the URL string in state guarantees the component re-renders with the real URL.
   const [localStreamURL, setLocalStreamURL] = useState("");
   const [remoteStreamURL, setRemoteStreamURL] = useState("");
+  const [isConnected, setIsConnected] = useState(false);
 
   const { call, callStatus, endCall: contextEndCall } = useCallContext();
   const { user } = useContext(AppContext);
@@ -67,6 +65,7 @@ export default function useCall() {
   }, [call, currentUserId]);
 
   const cleanup = useCallback(() => {
+    clearTimeout(connectTimer.current);
     if (localStream.current) {
       localStream.current.getTracks().forEach((t) => {
         t.stop();
@@ -83,9 +82,9 @@ export default function useCall() {
     isFrontCamera.current = true;
     setHasLocalStream(false);
     setHasRemoteStream(false);
-    // ✅ Clear URLs on cleanup
     setLocalStreamURL("");
     setRemoteStreamURL("");
+    setIsConnected(false);
 
     if (inCallManagerStarted.current) {
       try {
@@ -97,10 +96,21 @@ export default function useCall() {
     }
   }, []);
 
+  // Ends the call with a visible message instead of failing silently
+  const failCall = useCallback(
+    (msg) => {
+      console.warn("[Call] failCall:", msg);
+      Toast.show({ type: "error", text1: msg });
+      cleanup();
+      contextEndCall();
+    },
+    [cleanup, contextEndCall],
+  );
+
   useEffect(() => {
     const inactiveStatuses = ["ended", "rejected", "busy", "offline", "missed", null];
     if (inactiveStatuses.includes(callStatus)) {
-      if (localStream.current) cleanup();
+      if (localStream.current || pc.current) cleanup();
     }
   }, [callStatus, cleanup]);
 
@@ -108,18 +118,16 @@ export default function useCall() {
     return () => cleanup();
   }, [cleanup]);
 
-  // ✅ FIX 2b (audio timing): Start InCallManager when call goes ACTIVE,
-  // not during setupMedia/ringing. At ringing time WebRTC isn't established yet,
-  // so the audio session isn't properly configured — especially on iOS.
+  // Start the audio session when the call becomes active
   useEffect(() => {
     if (callStatus === "active" && !inCallManagerStarted.current) {
       inCallManagerStarted.current = true;
       const isVideo = call?.callType === "video";
       try {
         InCallManager.start({ media: isVideo ? "video" : "audio" });
-        // Always force speaker on — without this, audio goes to earpiece and is inaudible
-        InCallManager.setForceSpeakerphoneOn(true);
-        console.log("[InCallManager] Started for", isVideo ? "video" : "audio", "call. Speaker forced ON.");
+        // video calls -> speaker, audio calls -> earpiece (user can toggle)
+        InCallManager.setForceSpeakerphoneOn(isVideo);
+        console.log("[InCallManager] started:", isVideo ? "video" : "audio");
       } catch (e) {
         console.warn("[InCallManager] start error:", e.message);
       }
@@ -128,64 +136,77 @@ export default function useCall() {
 
   const createPeerConnection = useCallback(async () => {
     if (pc.current) return pc.current;
-    // If creation in progress, wait for it
     if (pcSetupPromise.current) {
       console.log("[WebRTC] Waiting for in-progress createPeerConnection...");
       return pcSetupPromise.current;
     }
     pcSetupPromise.current = (async () => {
-    pc.current = new RTCPeerConnection(configuration);
+      pc.current = new RTCPeerConnection(configuration);
 
-    pc.current.onicecandidate = (event) => {
-      if (event.candidate) {
-        const targetId = otherUserId();
-        if (targetId) {
-          socket.emit("call:signal", {
-            callId: call?.id,
-            payload: { candidate: event.candidate },
-          });
+      // If media does not connect within 25s, end the call with a message
+      clearTimeout(connectTimer.current);
+      connectTimer.current = setTimeout(() => {
+        const s = pc.current?.iceConnectionState;
+        if (pc.current && s !== "connected" && s !== "completed") {
+          console.warn("[WebRTC] connect timeout, state:", s);
+          failCall("Couldn't connect the call");
         }
-      }
-    };
+      }, 25000);
 
-    pc.current.oniceconnectionstatechange = () => {
-      const state = pc.current?.iceConnectionState;
-      console.log("[WebRTC] ICE state:", state);
-      if (state === "failed") {
-        console.warn("[WebRTC] ICE failed — ending call.");
-        cleanup();
-        contextEndCall();
-      }
-    };
+      pc.current.onicecandidate = (event) => {
+        if (event.candidate) {
+          const c = event.candidate.candidate || "";
+          console.log(
+            "[WebRTC] local candidate:",
+            c.includes("typ relay") ? "RELAY" : c.includes("typ srflx") ? "srflx" : "host",
+          );
+          if (otherUserId()) {
+            socket.emit("call:signal", {
+              callId: call?.id,
+              payload: { candidate: event.candidate },
+            });
+          }
+        }
+      };
 
-    pc.current.onconnectionstatechange = () => {
-      const state = pc.current?.connectionState;
-      console.log("[WebRTC] Connection state:", state);
-      if (state === "failed" || state === "closed") {
-        console.warn("[WebRTC] Connection failed/closed — ending call.");
-        cleanup();
-        contextEndCall();
-      }
-    };
+      pc.current.oniceconnectionstatechange = () => {
+        const state = pc.current?.iceConnectionState;
+        console.log("[WebRTC] ICE state:", state);
+        if (state === "connected" || state === "completed") {
+          clearTimeout(connectTimer.current);
+          setIsConnected(true);
+        }
+        if (state === "failed") {
+          failCall("Call failed to connect");
+        }
+      };
 
-    pc.current.ontrack = (event) => {
-      const stream = event.streams?.[0];
-      if (!stream) return;
-      console.log("[WebRTC] ontrack fired! Stream tracks:", stream.getTracks().length);
-      remoteStream.current = stream;
-      setRemoteStreamURL(stream.toURL());
-      setHasRemoteStream(true);
-    };
+      pc.current.onconnectionstatechange = () => {
+        const state = pc.current?.connectionState;
+        console.log("[WebRTC] Connection state:", state);
+        if (state === "failed") {
+          failCall("Call connection failed");
+        }
+      };
 
-    // Fallback: react-native-webrtc sometimes only fires onaddstream
-    pc.current.onaddstream = (event) => {
-      const stream = event.stream;
-      if (!stream) return;
-      console.log("[WebRTC] onaddstream fired! Stream tracks:", stream.getTracks().length);
-      remoteStream.current = stream;
-      setRemoteStreamURL(stream.toURL());
-      setHasRemoteStream(true);
-    };
+      pc.current.ontrack = (event) => {
+        const stream = event.streams?.[0];
+        if (!stream) return;
+        console.log("[WebRTC] ontrack, tracks:", stream.getTracks().length);
+        remoteStream.current = stream;
+        setRemoteStreamURL(stream.toURL());
+        setHasRemoteStream(true);
+      };
+
+      // Fallback: react-native-webrtc sometimes only fires onaddstream
+      pc.current.onaddstream = (event) => {
+        const stream = event.stream;
+        if (!stream) return;
+        console.log("[WebRTC] onaddstream, tracks:", stream.getTracks().length);
+        remoteStream.current = stream;
+        setRemoteStreamURL(stream.toURL());
+        setHasRemoteStream(true);
+      };
 
       return pc.current;
     })();
@@ -194,51 +215,24 @@ export default function useCall() {
     } finally {
       pcSetupPromise.current = null;
     }
-  }, [call?.id, otherUserId, cleanup, contextEndCall]);
+  }, [call?.id, otherUserId, failCall]);
 
   const setupMedia = useCallback(async () => {
-    // If stream already acquired, return immediately
     if (localStream.current) return localStream.current;
-    // If acquisition already in progress, wait for it instead of spawning a 2nd getUserMedia
     if (mediaSetupPromise.current) {
       console.log("[Media] Waiting for in-progress getUserMedia...");
       return mediaSetupPromise.current;
     }
-    // Start acquisition and store the promise so concurrent callers share it
     mediaSetupPromise.current = (async () => {
       const isVideo = call?.callType === "video";
 
       if (Platform.OS === "android") {
-        try {
-          console.log("[Media] Requesting Android Permissions...");
-          const granted = await PermissionsAndroid.requestMultiple([
-            PermissionsAndroid.PERMISSIONS.CAMERA,
-            PermissionsAndroid.PERMISSIONS.RECORD_AUDIO,
-          ]);
-          console.log("[Media] Permission Result:", granted);
-          if (
-            granted[PermissionsAndroid.PERMISSIONS.CAMERA] !==
-              PermissionsAndroid.RESULTS.GRANTED ||
-            granted[PermissionsAndroid.PERMISSIONS.RECORD_AUDIO] !==
-              PermissionsAndroid.RESULTS.GRANTED
-          ) {
-            console.warn("[Media] Permissions not granted by user.");
-            // return null;  // <--- TEMPORARILY DISABLED early return to let basic constraints try!
-          }
-        } catch (err) {
-          console.warn("[Media] Error requesting permissions on Android:", err);
-        }
-      }
-
-      const sourceInfos = await mediaDevices.enumerateDevices();
-      let videoSourceId;
-      for (let i = 0; i < sourceInfos.length; i++) {
-        const sourceInfo = sourceInfos[i];
-        if (
-          sourceInfo.kind === "videoinput" &&
-          sourceInfo.facing === (isFrontCamera.current ? "front" : "environment")
-        ) {
-          videoSourceId = sourceInfo.deviceId;
+        const perms = [PermissionsAndroid.PERMISSIONS.RECORD_AUDIO];
+        if (isVideo) perms.push(PermissionsAndroid.PERMISSIONS.CAMERA);
+        const granted = await PermissionsAndroid.requestMultiple(perms);
+        console.log("[Media] Permission result:", granted);
+        if (perms.some((p) => granted[p] !== PermissionsAndroid.RESULTS.GRANTED)) {
+          throw new Error("PERMISSION_DENIED");
         }
       }
 
@@ -259,20 +253,15 @@ export default function useCall() {
         stream = await mediaDevices.getUserMedia(constraints);
       } catch (err) {
         console.warn("[Media] Retrying with basic constraints:", err.message);
-        try {
-          stream = await mediaDevices.getUserMedia({
-            audio: true,
-            video: isVideo,
-          });
-        } catch (err2) {
-          console.warn("[Media] getUserMedia failed:", err2);
-          return null;
-        }
+        // If this also fails, the error is thrown to the caller
+        stream = await mediaDevices.getUserMedia({
+          audio: true,
+          video: isVideo,
+        });
       }
 
       localStream.current = stream;
-      const url = stream.toURL();
-      setLocalStreamURL(url);
+      setLocalStreamURL(stream.toURL());
       setHasLocalStream(true);
       return stream;
     })();
@@ -281,7 +270,8 @@ export default function useCall() {
       return await mediaSetupPromise.current;
     } finally {
       mediaSetupPromise.current = null;
-    }  }, [call?.callType]);
+    }
+  }, [call?.callType]);
 
   const addTracksToPeer = useCallback(async () => {
     const stream = await setupMedia();
@@ -289,10 +279,9 @@ export default function useCall() {
 
     if (stream) {
       stream.getTracks().forEach((track) => {
-        const existingSenders = peer.getSenders();
-        const alreadyAdded = existingSenders.some(
-          (s) => s.track?.id === track.id,
-        );
+        const alreadyAdded = peer
+          .getSenders()
+          .some((s) => s.track?.id === track.id);
         if (!alreadyAdded) peer.addTrack(track, stream);
       });
     }
@@ -320,19 +309,23 @@ export default function useCall() {
 
       if (payload.offer) {
         console.log("[WebRTC] Received offer, creating answer...");
-        // ✅ CRITICAL FIX: ALWAYS call addTracksToPeer before creating the answer.
-        // If we skip this when pc.current exists but has no tracks yet,
-        // the answer SDP will have no audio/video m-lines → no media flows.
-        const peer = await addTracksToPeer();
-        if (!peer) {
-          console.error("[WebRTC] Failed to get peer connection for offer handling");
+        let peer;
+        try {
+          // ALWAYS add tracks before answering, or the answer has no media lines
+          peer = await addTracksToPeer();
+        } catch (e) {
+          failCall("Microphone/camera not available");
           return;
         }
+        if (!peer) return;
         try {
           await peer.setRemoteDescription(new RTCSessionDescription(payload.offer));
           const answer = await peer.createAnswer();
           await peer.setLocalDescription(answer);
-          console.log("[WebRTC] Answer created and sent. SDP has audio:", answer.sdp?.includes('m=audio'), "video:", answer.sdp?.includes('m=video'));
+          console.log(
+            "[WebRTC] Answer sent. audio:", answer.sdp?.includes("m=audio"),
+            "video:", answer.sdp?.includes("m=video"),
+          );
           socket.emit("call:signal", { callId: call?.id, payload: { answer } });
           await processQueuedCandidates();
         } catch (err) {
@@ -342,7 +335,7 @@ export default function useCall() {
         const peer = pc.current;
         if (!peer) return;
         if (peer.signalingState === "stable") {
-          console.warn("[WebRTC] Ignored redundant answer (peer already stable)");
+          console.warn("[WebRTC] Ignored redundant answer");
           return;
         }
         try {
@@ -358,7 +351,7 @@ export default function useCall() {
           try {
             await peer.addIceCandidate(new RTCIceCandidate(payload.candidate));
           } catch (err) {
-            // Ignore benign candidate errors (e.g. end-of-candidates)
+            // ignore benign candidate errors
           }
         } else {
           candidatesQueue.current.push(payload.candidate);
@@ -368,50 +361,60 @@ export default function useCall() {
 
     socket.on("call:signal", handleSignal);
     return () => socket.off("call:signal", handleSignal);
-  }, [call?.id, processQueuedCandidates, addTracksToPeer]);
+  }, [call?.id, processQueuedCandidates, addTracksToPeer, failCall]);
 
   const startCall = useCallback(async () => {
     const targetId = otherUserId();
     console.log("[startCall] fired. targetId:", targetId, "callId:", call?.id);
-    if (!targetId) { console.warn("[startCall] no targetId, aborting."); return; }
-    await addTracksToPeer();
-    const peer = pc.current;
-    if (!peer) { console.warn("[startCall] no PC after addTracksToPeer, aborting."); return; }
+    if (!targetId) {
+      console.warn("[startCall] no targetId, aborting.");
+      return;
+    }
     try {
-      console.log("[startCall] creating offer...");
-      const offer = await peer.createOffer();
+      await addTracksToPeer();
+    } catch (e) {
+      failCall("Microphone/camera not available");
+      return;
+    }
+    const peer = pc.current;
+    if (!peer) {
+      console.warn("[startCall] no PC after addTracksToPeer, aborting.");
+      return;
+    }
+    try {
+      const offer = await peer.createOffer({
+        offerToReceiveAudio: true,
+        offerToReceiveVideo: call?.callType === "video",
+      });
       await peer.setLocalDescription(offer);
-      console.log("[startCall] offer sent. callId:", call?.id, "audio:", offer.sdp?.includes("m=audio"), "video:", offer.sdp?.includes("m=video"));
+      console.log(
+        "[startCall] offer sent. callId:", call?.id,
+        "audio:", offer.sdp?.includes("m=audio"),
+        "video:", offer.sdp?.includes("m=video"),
+      );
       socket.emit("call:signal", { callId: call?.id, payload: { offer } });
     } catch (err) {
       console.error("[startCall] error:", err);
     }
-  }, [addTracksToPeer, otherUserId, call?.id]);
+  }, [addTracksToPeer, otherUserId, call?.id, call?.callType, failCall]);
 
   const acceptIncoming = useCallback(async () => {
-    // Pre-warm media ONLY — do NOT create the PC here.
-    // The offer signal handler creates the PC + adds tracks when the offer arrives.
-    // Creating the PC here causes a race: both this and the signal handler call
-    // addTracksToPeer() concurrently → two getUserMedia() calls → second one fails.
+    // Pre-warm media only. The PC is created when the offer arrives.
     console.log("[WebRTC] acceptIncoming: pre-warming media stream...");
-    await setupMedia();
-    console.log("[WebRTC] acceptIncoming: media ready, waiting for offer.");
-  }, [setupMedia]);
+    try {
+      await setupMedia();
+      console.log("[WebRTC] acceptIncoming: media ready, waiting for offer.");
+    } catch (e) {
+      failCall("Microphone/camera not available");
+    }
+  }, [setupMedia, failCall]);
 
   const toggleAudio = useCallback(() => {
-    if (localStream.current) {
-      localStream.current
-        .getAudioTracks()
-        .forEach((t) => (t.enabled = !t.enabled));
-    }
+    localStream.current?.getAudioTracks().forEach((t) => (t.enabled = !t.enabled));
   }, []);
 
   const toggleVideo = useCallback(() => {
-    if (localStream.current) {
-      localStream.current
-        .getVideoTracks()
-        .forEach((t) => (t.enabled = !t.enabled));
-    }
+    localStream.current?.getVideoTracks().forEach((t) => (t.enabled = !t.enabled));
   }, []);
 
   const toggleSpeaker = useCallback((isSpeaker) => {
@@ -421,12 +424,10 @@ export default function useCall() {
   }, []);
 
   const switchCamera = useCallback(() => {
-    if (localStream.current) {
-      const videoTrack = localStream.current.getVideoTracks()[0];
-      if (videoTrack) {
-        videoTrack._switchCamera();
-        isFrontCamera.current = !isFrontCamera.current;
-      }
+    const videoTrack = localStream.current?.getVideoTracks()[0];
+    if (videoTrack) {
+      videoTrack._switchCamera();
+      isFrontCamera.current = !isFrontCamera.current;
     }
   }, []);
 
@@ -444,12 +445,12 @@ export default function useCall() {
     toggleVideo,
     toggleSpeaker,
     switchCamera,
-    // ✅ Return state strings, not ref.current — these are reactive and always fresh
-    localStream: localStream.current,   // kept for any direct stream access needs
-    remoteStream: remoteStream.current, // kept for any direct stream access needs
-    localStreamURL,   // ← use this for RTCView
-    remoteStreamURL,  // ← use this for RTCView
+    localStream: localStream.current,
+    remoteStream: remoteStream.current,
+    localStreamURL,
+    remoteStreamURL,
     hasLocalStream,
     hasRemoteStream,
+    isConnected,
   };
 }

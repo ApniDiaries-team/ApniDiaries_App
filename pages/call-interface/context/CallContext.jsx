@@ -51,8 +51,10 @@ export const CallProvider = ({ children }) => {
   const [isReady, setIsReady] = useState(false);
 
   const hadPersistedState = useRef(false);
+  const callStatusRef = useRef(null);
   const currentUserId = user?.id;
-
+  
+  useEffect(() => { callStatusRef.current = callStatus; }, [callStatus]);
   // ── Restore saved call on mount ────────────────────────────────────────────
   useEffect(() => {
     const loadState = async () => {
@@ -141,7 +143,7 @@ export const CallProvider = ({ children }) => {
       setTimeout(() => {
         setCallStatus(null);
         if (socket.connected && currentUserId) {
-          socket.emit("setup", { userId: currentUserId });
+          // socket.emit("setup", { userId: currentUserId });
           socket.emit("heartbeat");
         }
       }, 2000);
@@ -177,7 +179,7 @@ export const CallProvider = ({ children }) => {
     const reRegisterOnline = () => {
       // Re-announce presence to server so the next call attempt doesn't see "user offline"
       if (socket.connected && currentUserId) {
-        socket.emit("setup", { userId: currentUserId });
+        // socket.emit("setup", { userId: currentUserId });
         socket.emit("heartbeat");
         console.log("[Socket] Re-registered online after call ended");
       }
@@ -196,7 +198,7 @@ export const CallProvider = ({ children }) => {
 
     const handleDisconnect = (reason) => {
       console.log("[Socket] Call context disconnected:", reason);
-      if (callStatus === "ringing" || callStatus === "active") {
+      if (callStatusRef.current === "ringing" || callStatusRef.current === "active") {
         setCall(null);
         setIncoming(null);
         setCallStatus(null);
@@ -301,7 +303,7 @@ export const CallProvider = ({ children }) => {
     if (!socket.connected) socket.connect();
 
     console.log("[Call] Emitting call:initiate →", { threadId, receiverId, callType, myId: currentUserId, socketId: socket.id, socketConnected: socket.connected });
-    socket.emit("call:initiate", { threadId, receiverId, callType });
+    socket.emit("call:initiate", { threadId: Number(threadId), receiverId: Number(receiverId), callType });
     setIsRestored(false);
     setCall({
       id: null, // will be filled by call:ringing event from server

@@ -1279,11 +1279,14 @@ const PostCard = ({ post, onPostDeleted }) => {
     } catch {}
   }
 
-  const onTextLayout = useCallback(
+  const maxLines = hasMedia ? 3 : 5
+
+  // Measures the FULL text (from the hidden copy) to decide if it overflows
+  const onMeasureLayout = useCallback(
     (e) => {
-      if (!expanded) setOverflow(e.nativeEvent.lines.length > (hasMedia ? 3 : 5))
+      setOverflow(e.nativeEvent.lines.length > maxLines)
     },
-    [expanded, hasMedia],
+    [maxLines],
   )
 
   // ── Menu ─────────────────────────────────────────────────────────────────────
@@ -1783,19 +1786,40 @@ const PostCard = ({ post, onPostDeleted }) => {
 
             <View style={{ paddingHorizontal: 16, paddingBottom: 12 }}>
               <TripPills trips={trips} />
-              <Text
-                onTextLayout={onTextLayout}
-                numberOfLines={expanded ? undefined : 3}
-                style={{
-                  fontSize: 13.5,
-                  lineHeight: 21,
-                  fontFamily: Fonts.inter.regular,
-                  color: textPrimary,
-                }}
-              >
-                <Text style={{ fontFamily: Fonts.inter.extrabold }}>{post?.user?.name?.split(' ')[0]} </Text>
-                {post?.content}
-              </Text>
+              <View>
+                {/* hidden copy: measures the full text */}
+                <Text
+                  onTextLayout={onMeasureLayout}
+                  pointerEvents='none'
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    right: 0,
+                    opacity: 0,
+                    fontSize: 13.5,
+                    lineHeight: 21,
+                    fontFamily: Fonts.inter.regular,
+                  }}
+                >
+                  <Text style={{ fontFamily: Fonts.inter.extrabold }}>{post?.user?.name?.split(' ')[0]} </Text>
+                  {post?.content}
+                </Text>
+
+                {/* visible text */}
+                <Text
+                  onPress={() => overflow && setExpanded((e) => !e)}
+                  numberOfLines={expanded ? undefined : 3}
+                  style={{
+                    fontSize: 13.5,
+                    lineHeight: 21,
+                    fontFamily: Fonts.inter.regular,
+                    color: textPrimary,
+                  }}
+                >
+                  <Text style={{ fontFamily: Fonts.inter.extrabold }}>{post?.user?.name?.split(' ')[0]} </Text>
+                  {post?.content}
+                </Text>
+              </View>
               {(overflow || expanded) && (
                 <Pressable onPress={() => setExpanded((e) => !e)} hitSlop={4}>
                   <Text
@@ -1949,19 +1973,38 @@ const PostCard = ({ post, onPostDeleted }) => {
             </View>
 
             <TripPills trips={trips} />
-            <Text
-              onTextLayout={onTextLayout}
-              numberOfLines={expanded ? undefined : 5}
-              style={{
-                fontSize: 14.5,
-                lineHeight: 24,
-                fontFamily: Fonts.inter.regular,
-                color: textPrimary,
-                marginBottom: 8,
-              }}
-            >
-              {post?.content}
-            </Text>
+            <View style={{ marginBottom: 8 }}>
+              {/* hidden copy: measures the full text */}
+              <Text
+                onTextLayout={onMeasureLayout}
+                pointerEvents='none'
+                style={{
+                  position: 'absolute',
+                  left: 0,
+                  right: 0,
+                  opacity: 0,
+                  fontSize: 14.5,
+                  lineHeight: 24,
+                  fontFamily: Fonts.inter.regular,
+                }}
+              >
+                {post?.content}
+              </Text>
+
+              {/* visible text */}
+              <Text
+                onPress={() => overflow && setExpanded((e) => !e)}
+                numberOfLines={expanded ? undefined : 5}
+                style={{
+                  fontSize: 14.5,
+                  lineHeight: 24,
+                  fontFamily: Fonts.inter.regular,
+                  color: textPrimary,
+                }}
+              >
+                {post?.content}
+              </Text>
+            </View>
             {(overflow || expanded) && (
               <Pressable onPress={() => setExpanded((e) => !e)} hitSlop={4} style={{ marginBottom: 12 }}>
                 <Text

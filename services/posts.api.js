@@ -1,12 +1,23 @@
 // React Native compatible — pure axios wrappers, no browser/DOM APIs used.
 import api from '../api/axios';
 
-export const getFeed = (page, cursor) => {
+const feedCache = new Map();
+export const getCachedFeed = (userId) => (userId ? feedCache.get(String(userId)) : null);
+
+export const getFeed = (page, cursor, userId) => {
   const params = new URLSearchParams();
   if (cursor) params.set('cursor', cursor);
   params.set('limit', '10');
-  return api.get(`api/posts?${params.toString()}`);
+  params.set('includeComments', 'false');
+  const request = api.get('api/posts?' + params.toString());
+  if (Number(page) === 1 && !cursor && userId) {
+    request.then((response) => feedCache.set(String(userId), response.data)).catch(() => {});
+  }
+  return request;
 };
+
+export const getNotificationPostById = (postId) =>
+  api.get(`api/posts/post/${encodeURIComponent(postId)}/notification`);
 
 export const toggleLike = (id) => api.post(`api/posts/${id}/like`);
 

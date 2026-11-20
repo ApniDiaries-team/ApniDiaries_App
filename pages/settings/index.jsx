@@ -471,6 +471,16 @@ const SettingsPage = () => {
             onChange={(v) => handleChange('emailPostInteractions', v)}
             isDarkMode={isDarkMode}
           />
+          <Pressable
+            onPress={() => router.push('/(protected)/pair-device')}
+            style={{ flexDirection: 'row', alignItems: 'center', gap: 12, marginTop: 8, padding: 14, borderRadius: 12, backgroundColor: isDarkMode ? '#1A1F29' : '#FFF1EC', borderWidth: 1, borderColor: isDarkMode ? 'rgba(237,137,54,0.35)' : '#E1BFB2' }}
+          >
+            <Icon name="Smartphone" size={17} color={isDarkMode ? '#ED8936' : '#A23F00'} />
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: textPrimary, fontFamily: Fonts.inter.semibold, fontSize: 13 }}>Pair this phone with a browser</Text>
+              <Text style={{ color: textSecondary, fontFamily: Fonts.inter.regular, fontSize: 11, marginTop: 3 }}>Scan the QR code on your signed-in website to prevent duplicate alerts.</Text>
+            </View>
+          </Pressable>
         </Section>
 
         {/* ── Discovery Settings ── */}

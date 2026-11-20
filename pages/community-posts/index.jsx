@@ -1,4 +1,4 @@
-import { useFocusEffect, useRouter } from "expo-router";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { MapPin, Plus, Search, X } from "lucide-react-native";
 import {
   useCallback,
@@ -22,7 +22,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Fonts } from "../../constants/theme";
 import { AppContext } from "../../context/AppContext";
 import { useDarkMode } from "../../context/DarkModeContext";
-import { getCityPostCounts, getFeed } from "../../services/posts.api";
+import { getCachedFeed, getCityPostCounts, getFeed, getNotificationPostById } from "../../services/posts.api";
 import PostCard, { AudioManager } from "./components/PostCard"; // ← ADD: import AudioManager
 
 const S = "#A23F00";
@@ -150,15 +150,18 @@ const LoadingDots = () => {
 
 const CommunityPosts = () => {
   const router = useRouter();
+  const params = useLocalSearchParams();
+  const requestedPostId = Array.isArray(params.postId) ? params.postId[0] : params.postId;
   const { user } = useContext(AppContext);
   const { isDarkMode } = useDarkMode();
   const dk = isDarkMode;
   const insets = useSafeAreaInsets();
 
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(() => getCachedFeed(user?.id)?.posts || []);
+  const [linkedPost, setLinkedPost] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMore, setHasMore] = useState(() => getCachedFeed(user?.id)?.hasMore ?? true);
+  const [nextCursor, setNextCursor] = useState(() => getCachedFeed(user?.id)?.nextCursor || null);
   const [cities, setCities] = useState([]);
   const [totalPosts, setTotalPosts] = useState(0);
   const [selectedCity, setSelectedCity] = useState("all");
@@ -168,6 +171,28 @@ const CommunityPosts = () => {
 
   const searchRef = useRef(null);
   const loadingRef = useRef(false);
+
+  useEffect(() => {
+    if (!requestedPostId) {
+      setLinkedPost(null);
+      return;
+    }
+    const cachedPost = posts.find((post) => String(post.id) === String(requestedPostId));
+    if (cachedPost) {
+      setLinkedPost(cachedPost);
+      return;
+    }
+    let active = true;
+    setLinkedPost(null);
+    getNotificationPostById(requestedPostId)
+      .then((response) => {
+        if (active && response.data?.success) setLinkedPost(response.data.post);
+      })
+      .catch(() => {
+        if (active) setLinkedPost(null);
+      });
+    return () => { active = false; };
+  }, [posts, requestedPostId]);
 
   // ✅ Stop all audio when leaving the community feed screen
   useFocusEffect(
@@ -216,7 +241,7 @@ const CommunityPosts = () => {
     loadingRef.current = true;
     setLoading(true);
     try {
-      const res = await getFeed(1, cursor);
+      const res = await getFeed(1, cursor, user?.id);
       const incoming = res.data?.posts || [];
       if (reset) setPosts(incoming);
       else setPosts((prev) => [...prev, ...incoming]);
@@ -227,16 +252,18 @@ const CommunityPosts = () => {
       loadingRef.current = false;
       setLoading(false);
     }
-  }, []);
+  }, [user?.id]);
 
-  useEffect(() => {
-    loadPosts(null, true);
-  }, []);
-
+  useFocusEffect(
+    useCallback(() => {
+      loadPosts(null, true);
+    }, [loadPosts]),
+  );
   const removePost = (id) => setPosts((p) => p.filter((x) => x.id !== id));
 
   // ── Filter / sort ────────────────────────────────────────────────────────────
   const filtered = useMemo(() => {
+    if (requestedPostId) return linkedPost ? [linkedPost] : [];
     let out = posts;
     if (selectedCity !== "all") {
       const q = selectedCity.toLowerCase();
@@ -274,7 +301,7 @@ const CommunityPosts = () => {
         p?.trip_types?.some((t) => t?.toLowerCase() === "spiritual"),
       );
     return out;
-  }, [posts, selectedCity, searchQuery, mood]);
+  }, [posts, selectedCity, searchQuery, mood, requestedPostId, linkedPost]);
 
   const renderPost = useCallback(
     ({ item }) => <PostCard post={item} onPostDeleted={removePost} />,
@@ -725,7 +752,7 @@ const CommunityPosts = () => {
         removeClippedSubviews={Platform.OS === "android"}
         maxToRenderPerBatch={5}
         windowSize={10}
-        initialNumToRender={4}
+        initialNumToRender={3}
         style={{ backgroundColor: bg }}
         // ── ADD: these 2 props wire up AudioManager ──────────────────────────
         viewabilityConfig={viewabilityConfig}
@@ -733,29 +760,7 @@ const CommunityPosts = () => {
       // ────────────────────────────────────────────────────────────────────
       />
 
-      {/* ── FAB ──────────────────────────────────────────────────────────────── */}
-      <Pressable
-        onPress={() => router.push("/create-post")}
-        style={{
-          position: "absolute",
-          bottom: insets.bottom + 20,
-          right: 20,
-          width: 56,
-          height: 56,
-          borderRadius: 28,
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: S,
-          shadowColor: S,
-          shadowOffset: { width: 0, height: 8 },
-          shadowOpacity: 0.45,
-          shadowRadius: 16,
-          elevation: 8,
-        }}
-      >
-        <Plus size={24} color="#fff" strokeWidth={2.5} />
-      </Pressable>
-    </View>
+          </View>
   );
 };
 

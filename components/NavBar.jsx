@@ -211,7 +211,16 @@ const NavBar = () => {
           accessibilityLabel="Go to home"
           style={{ height: 46, justifyContent: "center" }}
         >
-          <BrandLogo isDarkMode={isDarkMode} isLoggedIn={isUserLoggedIn} size={46} />
+          <Text
+            style={{
+              color: isDarkMode ? "#FFF8F6" : "#A23F00",
+              fontFamily: Fonts.inter.bold,
+              fontSize: 21,
+              letterSpacing: -0.7,
+            }}
+          >
+            Apni Diaries
+          </Text>
         </Pressable>
 
         {/* Right actions */}

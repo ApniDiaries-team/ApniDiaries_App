@@ -13,6 +13,7 @@ import { Palette } from "../constants/theme";
 import { useDarkMode } from "../context/DarkModeContext";
 import "../global.css";
 import { CallProvider } from "../pages/call-interface/context/CallContext";
+import PushNotificationBridge from "../components/PushNotificationBridge";
 
 function AppStatusBar({ pathname }: { pathname: string }) {
   const { isDarkMode } = useDarkMode();
@@ -42,6 +43,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <DarkModeProvider>
         <AppContextProvider>
+          <PushNotificationBridge />
           <NotificationProvider>
             <ScrollProvider>
               <CallProvider>
@@ -51,8 +53,8 @@ export default function RootLayout() {
                     screenOptions={{
                       headerShown: !shouldHideNav,
                       header: () => <NavBar />,
-                      animation: "slide_from_right",
-                      animationDuration: 220,
+                      animation: "fade_from_bottom",
+                      animationDuration: 190,
                       gestureEnabled: true,
                     }}
                   >

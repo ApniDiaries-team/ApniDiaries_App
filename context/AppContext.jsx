@@ -698,6 +698,7 @@ const AppContextProvider = ({ children }) => {
   // ── Logout ────────────────────────────────────────────────────────────────
   const logout = async () => {
     const userId = user?.id;
+    await removePushSubscription().catch(() => { });
     try {
       await api.post("/api/user/logout", {}, { withCredentials: true });
     } catch {
@@ -709,31 +710,47 @@ const AppContextProvider = ({ children }) => {
       await AsyncStorage.removeItem("apniDiariesUser");
       await AsyncStorage.removeItem("token");
       await clearCachedPassword();
-      removePushSubscription().catch(() => { });
     }
   };
 
   // ── Bootstrap ─────────────────────────────────────────────────────────────
   useEffect(() => {
+    let mounted = true
+
     const initAuth = async () => {
+      let cachedUser = null
       try {
-        const saved = await AsyncStorage.getItem("apniDiariesUser");
+        const saved = await AsyncStorage.getItem("apniDiariesUser")
         if (saved) {
-          setUser(JSON.parse(saved));
-          await checkAuth(null, true);
-        } else {
-          await checkAuth(null, false);
+          cachedUser = JSON.parse(saved)
+          if (mounted && cachedUser?.id) {
+            // Show the cached session immediately while auth and key restoration run in the background.
+            setUser(cachedUser)
+            setIsBootstrapped(true)
+            setIsLoading(false)
+          }
         }
+
+        if (cachedUser?.id) {
+          await checkAuth(null, true)
+          return
+        }
+
+        await checkAuth(null, false)
       } catch {
-        await AsyncStorage.removeItem("apniDiariesUser");
-        await checkAuth(null, false);
+        await AsyncStorage.removeItem("apniDiariesUser").catch(() => {})
+        await checkAuth(null, false)
       } finally {
-        setIsBootstrapped(true);
-        setIsLoading(false);
+        if (mounted) {
+          setIsBootstrapped(true)
+          setIsLoading(false)
+        }
       }
-    };
-    initAuth();
-  }, []);
+    }
+
+    initAuth()
+    return () => { mounted = false }
+  }, [])
 
   return (
     <AppContext.Provider

@@ -1,4 +1,5 @@
 import { useAudioPlayer } from 'expo-audio'
+import { Image as CachedImage } from 'expo-image'
 import { useRouter } from 'expo-router'
 import {
   Bookmark,
@@ -12,6 +13,7 @@ import {
   Music2,
   Play,
   Send,
+  Star,
   Share2,
   Trash2,
   UserPlus,
@@ -240,6 +242,27 @@ AppState.addEventListener('change', (nextState) => {
   if (nextState === 'background' || nextState === 'inactive') {
     AudioManager.pauseAll()
   }
+})
+
+const PostAudioController = memo(({ postId, musicUrl, onMutedChange, onPlayingChange }) => {
+  const player = useAudioPlayer(musicUrl)
+
+  useEffect(() => {
+    if (!player) return
+
+    player.loop = true
+    player.muted = true
+    player.volume = 0.8
+    AudioManager.register(postId, player, onMutedChange, onPlayingChange)
+
+    return () => {
+      AudioManager.unregister(postId)
+      onPlayingChange(false)
+      onMutedChange(true)
+    }
+  }, [musicUrl, onMutedChange, onPlayingChange, player, postId])
+
+  return null
 })
 
 // ─── Trip Pills ───────────────────────────────────────────────────────────────
@@ -481,7 +504,7 @@ const MediaCarousel = ({ urls = [], onTap, onDoubleTap, musicMuted, hasMusicName
           </View>
         </View>
       ) : (
-        <Image source={{ uri: cur }} style={{ width: '100%', height: '100%' }} resizeMode='cover' />
+        <CachedImage source={{ uri: cur }} style={{ width: '100%', height: '100%' }} contentFit='cover' cachePolicy='memory-disk' transition={120} />
       )}
 
       {n > 1 && index > 0 && (
@@ -1037,7 +1060,7 @@ const CommentRow = ({ comment, onPressUser, isDarkMode, canDelete, onDelete }) =
 }
 
 // ─── PostCard ─────────────────────────────────────────────────────────────────
-const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
+const PostCard = ({ post, onPostDeleted }) => {
   const router = useRouter()
   const { user } = useContext(AppContext)
   const { isDarkMode: dk } = useDarkMode()
@@ -1046,10 +1069,12 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
   const [liked, setLiked] = useState(post?.isLiked || false)
   const [likeCount, setLikeCount] = useState(post?.likeCount ?? post?.likes?.length ?? 0)
   const [likeLoading, setLikeLoading] = useState(false)
-  const [likeAnim] = useState(new Animated.Value(1))
+  const likeAnim = useRef(new Animated.Value(1)).current
+  const likeBurstProgress = useRef(new Animated.Value(0)).current
+  const [showLikeBurst, setShowLikeBurst] = useState(false)
 
   const [comments, setComments] = useState([])
-  const [commentCount, setCommentCount] = useState(post?.comments?.length ?? 0)
+  const [commentCount, setCommentCount] = useState(post?.commentCount ?? post?.comments?.length ?? 0)
   const [commentText, setCommentText] = useState('')
   const [showComments, setShowComments] = useState(false)
   const [commentLoading, setCommentLoading] = useState(false)
@@ -1062,8 +1087,6 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
   const [showLikes, setShowLikes] = useState(false)
 
   // ── Audio state ─────────────────────────────────────────────────────────────
-  const soundRef = useRef(null)
-  const loadedRef = useRef(false)
   const [musicPlaying, setMusicPlaying] = useState(false)
   const [musicMuted, setMusicMuted] = useState(true)
 
@@ -1072,23 +1095,21 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
   const translateAnim = useRef(new Animated.Value(18)).current
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      Animated.parallel([
-        Animated.timing(revealAnim, {
-          toValue: 1,
-          duration: 460,
-          useNativeDriver: true,
-        }),
-        Animated.timing(translateAnim, {
-          toValue: 0,
-          duration: 460,
-          useNativeDriver: true,
-        }),
-      ]).start()
-    }, 50)
-    return () => clearTimeout(timer)
-  }, [])
-
+    const animation = Animated.parallel([
+      Animated.timing(revealAnim, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(translateAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ])
+    animation.start()
+    return () => animation.stop()
+  }, [revealAnim, translateAnim])
   // ── Derived ──────────────────────────────────────────────────────────────────
   const isOwner = String(myId) === String(post?.user?.id)
   const city = post?.destination || post?.city || post?.location
@@ -1132,55 +1153,10 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
       .slice(0, 2)
       .toUpperCase() || '??'
 
-  // ── Load audio ONCE, register with AudioManager ───────────────────────────
-  const player = useAudioPlayer(musicUrl || null)
-
-  useEffect(() => {
-    if (!musicUrl || !player) return
-
-    player.loop = true
-    player.muted = true
-    player.volume = 0.8
-
-    AudioManager.register(post.id, player, setMusicMuted, setMusicPlaying)
-    loadedRef.current = true
-
-    return () => {
-      loadedRef.current = false
-      AudioManager.unregister(post.id)
-      setMusicPlaying(false)
-      setMusicMuted(true)
-    }
-  }, [musicUrl, player, post.id])
-
-  // ── Visibility change from parent FlatList (via onViewableItemsChanged) ────
-  //
-  // Your FeedScreen / parent should pass `onViewableChange` prop like:
-  //   viewabilityConfig={{ itemVisiblePercentThreshold: 50 }}
-  //   onViewableItemsChanged={({ viewableItems }) => {
-  //     // call each PostCard's onViewableChange(isVisible)
-  //   }}
-  //
-  // OR use the useEffect below with a fallback IntersectionObserver-style
-  // polling if you can't modify the parent. We handle BOTH approaches.
-  useEffect(() => {
-    if (onViewableChange === undefined) return
-    if (!loadedRef.current) return
-
-    if (onViewableChange) {
-      AudioManager.onCardVisible(post.id)
-    } else {
-      AudioManager.onCardHidden(post.id)
-    }
-  }, [onViewableChange, post.id])
-
-  // ── Tap to toggle mute (via image tap OR music pill tap) ─────────────────
   const handleMusicMuteToggle = async () => {
-    if (!musicUrl || !loadedRef.current) return
+    if (!musicUrl) return
     await AudioManager.onUserTapToggle(post.id)
-    // setMusicMuted / setMusicPlaying are called inside AudioManager
   }
-
   // ── Navigation ──────────────────────────────────────────────────────────────
   const goProfile = () => {
     if (!post?.user?.id) return
@@ -1202,28 +1178,26 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
   }
 
   // ── Like ────────────────────────────────────────────────────────────────────
+  const animateLike = () => {
+    likeAnim.stopAnimation()
+    likeBurstProgress.stopAnimation()
+    likeAnim.setValue(0.72)
+    likeBurstProgress.setValue(0)
+    setShowLikeBurst(true)
+    Animated.parallel([
+      Animated.sequence([
+        Animated.spring(likeAnim, { toValue: 1.42, useNativeDriver: true, friction: 3, tension: 220 }),
+        Animated.spring(likeAnim, { toValue: 1, useNativeDriver: true, friction: 4, tension: 160 }),
+      ]),
+      Animated.timing(likeBurstProgress, { toValue: 1, duration: 520, useNativeDriver: true }),
+    ]).start(({ finished }) => {
+      if (finished) setShowLikeBurst(false)
+    })
+  }
   const handleLike = async () => {
     if (likeLoading) return
     setLikeLoading(true)
-    if (!liked) {
-      Animated.sequence([
-        Animated.spring(likeAnim, {
-          toValue: 1.55,
-          useNativeDriver: true,
-          speed: 40,
-        }),
-        Animated.spring(likeAnim, {
-          toValue: 0.88,
-          useNativeDriver: true,
-          speed: 40,
-        }),
-        Animated.spring(likeAnim, {
-          toValue: 1.08,
-          useNativeDriver: true,
-          speed: 40,
-        }),
-      ]).start()
-    }
+    if (!liked) animateLike()
     const prev = { liked, likeCount }
     setLiked(!liked)
     setLikeCount((c) => (liked ? c - 1 : c + 1))
@@ -1425,9 +1399,27 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
           borderRadius: 12,
         }}
       >
-        <Animated.View style={{ transform: [{ scale: likeAnim }] }}>
-          <Heart size={compact ? 19 : 24} color={liked ? '#ef4444' : subColor} fill={liked ? '#ef4444' : 'none'} />
-        </Animated.View>
+                <View style={{ width: 34, height: 32, alignItems: 'center', justifyContent: 'center', overflow: 'visible' }}>
+          {showLikeBurst && (
+            <Animated.View pointerEvents='none' style={{ position: 'absolute', width: 26, height: 26, borderRadius: 13, borderWidth: 1.5, borderColor: '#ff8a70', opacity: likeBurstProgress.interpolate({ inputRange: [0, 0.25, 1], outputRange: [0, 0.8, 0] }), transform: [{ scale: likeBurstProgress.interpolate({ inputRange: [0, 1], outputRange: [0.45, 1.7] }) }] }} />
+          )}
+          {showLikeBurst && [
+            { x: -14, y: -13, icon: 'heart', color: '#ff735c' },
+            { x: 0, y: -20, icon: 'star', color: '#ffbf47' },
+            { x: 14, y: -13, icon: 'heart', color: '#f04f79' },
+          ].map((spark, index) => (
+            <Animated.View key={index} pointerEvents='none' style={{ position: 'absolute', opacity: likeBurstProgress.interpolate({ inputRange: [0, 0.2, 1], outputRange: [0, 1, 0] }), transform: [
+              { translateX: likeBurstProgress.interpolate({ inputRange: [0, 1], outputRange: [0, spark.x] }) },
+              { translateY: likeBurstProgress.interpolate({ inputRange: [0, 1], outputRange: [0, spark.y] }) },
+              { scale: likeBurstProgress.interpolate({ inputRange: [0, 0.3, 1], outputRange: [0.3, 1, 0.5] }) },
+            ] }}>
+              {spark.icon === 'star' ? <Star size={9} color={spark.color} fill={spark.color} strokeWidth={1.5} /> : <Heart size={8} color={spark.color} fill={spark.color} strokeWidth={1.5} />}
+            </Animated.View>
+          ))}
+          <Animated.View style={{ transform: [{ scale: likeAnim }] }}>
+            <Heart size={compact ? 19 : 24} color={liked ? '#ef4444' : subColor} fill={liked ? '#ef4444' : 'none'} />
+          </Animated.View>
+        </View>
         {compact && likeCount > 0 && (
           <Pressable onPress={() => setShowLikes(true)} hitSlop={8}>
             <Text
@@ -1619,6 +1611,14 @@ const PostCard = ({ post, onPostDeleted, onViewableChange }) => {
   // ════════════════════════════════════════════════════════════════════════════
   return (
     <>
+      {musicUrl ? (
+        <PostAudioController
+          postId={post.id}
+          musicUrl={musicUrl}
+          onMutedChange={setMusicMuted}
+          onPlayingChange={setMusicPlaying}
+        />
+      ) : null}
       <Animated.View
         style={{
           opacity: revealAnim,

@@ -1,10 +1,13 @@
+import { Search, X } from "lucide-react-native";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Pressable,
   Alert,
   ScrollView,
   Text,
+  TextInput,
   useWindowDimensions,
   View,
 } from "react-native";
@@ -57,6 +60,7 @@ const CityFriendList = () => {
   };
 
   const [activeFilter, setActiveFilter] = useState("all");
+  const [friendSearch, setFriendSearch] = useState("");
   const [sortBy, setSortBy] = useState("recent");
   const [selectedCity, setSelectedCity] = useState(cityId || "all");
   const [selectedFriend, setSelectedFriend] = useState(null);
@@ -145,6 +149,16 @@ const CityFriendList = () => {
     if (selectedCity !== "all") {
       filtered = filtered.filter((f) => f.cityId === selectedCity);
     }
+    const normalizedQuery = friendSearch.trim().toLowerCase();
+    if (normalizedQuery) {
+      filtered = filtered.filter((friend) =>
+        [friend.name, friend.username, friend.userName, friend.handle, friend.currentCity, friend.cityName]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(normalizedQuery),
+      );
+    }
 
     filtered.sort((a, b) => {
       const aUnread = unreadCounts[a.id] || 0;
@@ -165,7 +179,7 @@ const CityFriendList = () => {
     });
 
     setFilteredFriends(filtered);
-  }, [activeFilter, sortBy, selectedCity, friends, unreadCounts]);
+  }, [activeFilter, sortBy, selectedCity, friends, unreadCounts, friendSearch]);
 
   // ── Fetch trips ───────────────────────────────────────────────────────────
   const fetchAllTrips = async () => {
@@ -439,13 +453,15 @@ const CityFriendList = () => {
     <View style={{ flex: 1, backgroundColor: colors.bgPrimary }}>
       <ScrollView
         style={{ flex: 1 }}
-        contentContainerStyle={{ paddingBottom: 24 }}
+        contentContainerStyle={{ paddingBottom: 120 }}
+        keyboardShouldPersistTaps='handled'
+        keyboardDismissMode='on-drag'
       >
         <View
           style={{
             maxWidth: 1280,
-            width: "100%",
-            alignSelf: "center",
+            width: '100%',
+            alignSelf: 'center',
             paddingHorizontal: isDesktop ? 64 : 20,
             paddingTop: width >= 768 ? 56 : 40,
             paddingBottom: width >= 768 ? 56 : 40,
@@ -464,21 +480,77 @@ const CityFriendList = () => {
             Network
           </Text>
 
-          <View style={{ paddingBottom: 32, borderBottomWidth: 1, borderBottomColor: isDarkMode ? "rgba(255,255,255,0.1)" : colors.border }}>
+          <View style={{ paddingBottom: 32, borderBottomWidth: 1, borderBottomColor: isDarkMode ? 'rgba(255,255,255,0.1)' : colors.border }}>
             <StatsBar stats={stats} onStatClick={handleStatClick} />
           </View>
 
-          <View style={{ flexDirection: isDesktop ? "row" : "column", alignItems: "flex-start", columnGap: 48, rowGap: 48, marginTop: 40 }}>
+          <View style={{ flexDirection: isDesktop ? 'row' : 'column', alignItems: 'flex-start', columnGap: 48, rowGap: 48, marginTop: 40 }}>
             {/* Recent Connections */}
-            <View style={{ flex: isDesktop ? 1 : undefined, width: isDesktop ? undefined : "100%" }}>
-              <Text style={{ fontFamily: Fonts.playfair.bold, fontSize: 24, color: colors.textPrimary, paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: isDarkMode ? "rgba(255,255,255,0.1)" : colors.border }}>
+            <View style={{ flex: isDesktop ? 1 : undefined, width: isDesktop ? undefined : '100%' }}>
+              <Text
+                style={{
+                  fontFamily: Fonts.playfair.bold,
+                  fontSize: 24,
+                  color: colors.textPrimary,
+                  paddingBottom: 0,
+                }}
+              >
                 Recent Connections
               </Text>
+              <View
+                style={{
+                  minHeight: 50,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: 8,
+                  marginBottom: 0,
+                  paddingHorizontal: 14,
+                  borderRadius: 16,
+                  borderWidth: 1,
+                  borderColor: friendSearch ? ORANGE : colors.border,
+                  backgroundColor: colors.bgCard,
+                }}
+              >
+                <Search size={18} color={colors.textSecondary} strokeWidth={2} />
+                <TextInput
+                  value={friendSearch}
+                  onChangeText={setFriendSearch}
+                  placeholder='Search friends by name or username'
+                  placeholderTextColor={colors.textSecondary}
+                  autoCapitalize='none'
+                  autoCorrect={false}
+                  returnKeyType='search'
+                  style={{
+                    flex: 1,
+                    minWidth: 0,
+                    paddingHorizontal: 10,
+                    paddingVertical: 10,
+                    color: colors.textPrimary,
+                    fontFamily: Fonts.inter.regular,
+                    fontSize: 14,
+                  }}
+                />
+                {friendSearch.length > 0 && (
+                  <Pressable
+                    onPress={() => setFriendSearch('')}
+                    accessibilityRole='button'
+                    accessibilityLabel='Clear friend search'
+                    hitSlop={8}
+                    style={{ width: 32, height: 32, alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <X size={17} color={colors.textSecondary} strokeWidth={2} />
+                  </Pressable>
+                )}
+              </View>
+
+              <View style={{ height: 1, marginTop: 12, marginBottom: 12, backgroundColor: isDarkMode ? 'rgba(255,255,255,0.1)' : colors.border }} />
 
               {loadingMessages ? (
-                <View style={{ paddingVertical: 64, alignItems: "center", justifyContent: "center" }}>
-                  <ActivityIndicator size="small" color={ORANGE} />
-                  <Text style={{ marginTop: 12, fontSize: 14, fontFamily: Fonts.inter.regular, color: colors.textSecondary }}>Loading connections…</Text>
+                <View style={{ paddingVertical: 64, alignItems: 'center', justifyContent: 'center' }}>
+                  <ActivityIndicator size='small' color={ORANGE} />
+                  <Text style={{ marginTop: 12, fontSize: 14, fontFamily: Fonts.inter.regular, color: colors.textSecondary }}>
+                    Loading connections…
+                  </Text>
                 </View>
               ) : filteredFriends.length > 0 ? (
                 <View>
@@ -493,6 +565,15 @@ const CityFriendList = () => {
                     />
                   ))}
                 </View>
+              ) : friendSearch.trim() ? (
+                <View style={{ alignItems: 'center', paddingVertical: 36, paddingHorizontal: 16 }}>
+                  <Text style={{ fontFamily: Fonts.inter.medium, fontSize: 14, color: colors.textSecondary, textAlign: 'center', marginBottom: 12 }}>
+                    No friends match "{friendSearch.trim()}"
+                  </Text>
+                  <Pressable onPress={() => setFriendSearch('')} hitSlop={8}>
+                    <Text style={{ fontFamily: Fonts.inter.semibold, fontSize: 14, color: ORANGE }}>Clear search</Text>
+                  </Pressable>
+                </View>
               ) : (
                 <View style={{ paddingTop: 24 }}>
                   <EmptyState filterType={activeFilter} onResetFilters={handleResetFilters} />
@@ -502,7 +583,7 @@ const CityFriendList = () => {
 
             {/* Suggested sidebar; on phones it naturally flows below connections. */}
             {suggestedFriends.length > 0 && (
-              <View style={{ width: isDesktop ? 340 : "100%" }}>
+              <View style={{ width: isDesktop ? 340 : '100%' }}>
                 <SuggestedFriends suggestions={suggestedFriends} onAddFriend={handleAddFriend} />
               </View>
             )}
@@ -517,19 +598,11 @@ const CityFriendList = () => {
         onAction={handleQuickAction}
       />
 
-      <TripCalendarModal
-        isOpen={isCalendarOpen}
-        onClose={() => setIsCalendarOpen(false)}
-        trips={allTrips}
-      />
+      <TripCalendarModal isOpen={isCalendarOpen} onClose={() => setIsCalendarOpen(false)} trips={allTrips} />
 
-      <PrivateAccountModal
-        isOpen={isPrivateModalOpen}
-        onClose={() => setIsPrivateModalOpen(false)}
-        username={selectedFriend?.name}
-      />
+      <PrivateAccountModal isOpen={isPrivateModalOpen} onClose={() => setIsPrivateModalOpen(false)} username={selectedFriend?.name} />
     </View>
-  );
+  )
 };
 
 export default CityFriendList;

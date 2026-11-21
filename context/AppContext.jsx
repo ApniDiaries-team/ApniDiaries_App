@@ -667,12 +667,17 @@ const AppContextProvider = ({ children }) => {
         await clearCachedPassword();
         return false;
       }
-    } catch {
-      if (!silent) {
+    } catch (error) {
+      const invalidSession = [401, 404].includes(error?.response?.status);
+      if (invalidSession || !silent) {
+        const staleUserId = user?.id;
         setUser(null);
         setE2eeReady(false);
         setKeysNeedPassword(false);
         await AsyncStorage.removeItem("apniDiariesUser");
+        await AsyncStorage.removeItem("token");
+        await clearCachedPassword();
+        if (staleUserId) await clearUserKeysLocally(staleUserId).catch(() => { });
       }
       return false;
     } finally {
